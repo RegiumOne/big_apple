@@ -1,5 +1,5 @@
 import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/overlay/app_overlay.dart';
+import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/widgets/loading_widget.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';

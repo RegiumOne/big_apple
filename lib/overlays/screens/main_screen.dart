@@ -1,5 +1,5 @@
 import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/overlay/app_overlay.dart';
+import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/widgets/background_image_widget.dart';
 import 'package:big_apple/widgets/elevated_button_widget.dart';
@@ -36,10 +36,7 @@ class MainScreen extends StatelessWidget {
             child: Column(
               children: [
                 ElevatedButtonWidget(
-                  onPressed: () {
-                    (game as BigAppleGame).startGame();
-                    game.overlays.remove(Overlays.main);
-                  },
+                  onPressed: _start,
                   child: TextWidget(
                     'Start',
                     style: theme.textTheme.labelLarge!.copyWith(
@@ -73,5 +70,11 @@ class MainScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _start() {
+    (game as BigAppleGame).startGame();
+    game.overlays.remove(Overlays.main);
+    game.overlays.add(Overlays.hud);
   }
 }
