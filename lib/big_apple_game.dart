@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:big_apple/components/app_camera_component.dart';
 import 'package:big_apple/main_world.dart';
+import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
@@ -10,9 +11,9 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
-  late final AppCameraComponent cam;
+  AppCameraComponent? cam;
 
-  late World level;
+  World? level;
 
   double get worldWidth => 4200;
   double get worldHeight => 670;
@@ -25,7 +26,6 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
 
   @override
   FutureOr<void> onLoad() async {
-    // _initCamera();
     await super.onLoad();
   }
 
@@ -37,11 +37,19 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
 
     cam = AppCameraComponent(world: level);
     final bounds = Rectangle.fromLTWH(0, 0, worldWidth, worldHeight);
-    cam.setBounds(bounds);
+    cam?.setBounds(bounds);
     final initialPosition = Vector2(worldCenterWidth, worldCenterHeight);
-    cam.viewfinder.position = initialPosition;
+    cam?.viewfinder.position = initialPosition;
 
-    addAll([cam, level]);
+    if (cam != null && level != null) {
+      addAll([cam!, level!]);
+    }
+  }
+
+  void reset() {
+    if (cam != null && level != null) {
+      removeAll([cam!, level!]);
+    }
   }
 
   void startGame() {
@@ -50,11 +58,33 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    cam.onPanUpdate(info);
+    cam?.onPanUpdate(info);
   }
 
   @override
   void onDoubleTapDown(TapDownInfo info) {
-    cam.onDoubleTapDown(info);
+    cam?.onDoubleTapDown(info);
+  }
+
+  @override
+  void lifecycleStateChange(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        if (!(overlays.isActive(Overlays.pause))) {
+          resumeEngine();
+        }
+        break;
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+        if (overlays.isActive(Overlays.hud)) {
+          overlays.remove(Overlays.hud);
+          overlays.add(Overlays.pause);
+        }
+        pauseEngine();
+        break;
+    }
+    super.lifecycleStateChange(state);
   }
 }
