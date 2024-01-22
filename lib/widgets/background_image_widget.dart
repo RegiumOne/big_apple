@@ -2,11 +2,12 @@ import 'package:big_apple/generated/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundImageWidget extends StatelessWidget {
-  final Widget child;
   const BackgroundImageWidget({
-    Key? key,
+    super.key,
     this.child = const SizedBox.shrink(),
-  }) : super(key: key);
+  });
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,7 @@ class BackgroundImageWidget extends StatelessWidget {
           child: DecoratedBox(
             position: DecorationPosition.foreground,
             decoration: const BoxDecoration(color: Color(0x6615171F)),
-            child: Image.asset(
-              Assets.images.background.path,
-              fit: BoxFit.cover,
-            ),
+            child: Assets.images.background.image(fit: BoxFit.cover),
           ),
         ),
         child,

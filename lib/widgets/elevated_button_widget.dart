@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class ElevatedButtonWidget extends StatelessWidget {
   const ElevatedButtonWidget({
-    Key? key,
+    super.key,
     this.minWidth = 0.0,
     this.minHeight = 0.0,
     this.maxWidth = double.infinity,
@@ -11,7 +11,7 @@ class ElevatedButtonWidget extends StatelessWidget {
     required this.onPressed,
     required this.child,
     this.alignment,
-  }) : super(key: key);
+  });
 
   final double minWidth;
   final double minHeight;
