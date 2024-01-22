@@ -24,4 +24,4 @@ jobs:
         run: dart run build_runner build
 
       - name: Analyze code
-        run: dart analyze
+        run: dart analyze --fatal-infos
