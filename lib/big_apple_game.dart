@@ -25,7 +25,7 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
 
   @override
   FutureOr<void> onLoad() async {
-    _initCamera();
+    // _initCamera();
     await super.onLoad();
   }
 
@@ -42,6 +42,10 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
     cam.viewfinder.position = initialPosition;
 
     addAll([cam, level]);
+  }
+
+  void startGame() {
+    _initCamera();
   }
 
   @override
