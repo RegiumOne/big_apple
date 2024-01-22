@@ -4,18 +4,16 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 
 class AppCameraComponent extends CameraComponent {
-  final double moveSpeed;
-  final double maxZoom;
-  final double minZoom;
-
   AppCameraComponent({
-    World? world,
+    super.world,
     this.moveSpeed = 2,
     this.maxZoom = 2,
     this.minZoom = 1,
-  }) : super(
-          world: world,
-        );
+  });
+
+  final double moveSpeed;
+  final double maxZoom;
+  final double minZoom;
 
   void onPanUpdate(DragUpdateInfo info) {
     final currentPosition = viewfinder.position;

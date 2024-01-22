@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class TextWidget extends StatelessWidget {
   const TextWidget(
     this.text, {
-    Key? key,
+    super.key,
     required this.style,
     this.textAlign,
     this.maxLines,
     this.overflow,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle style;

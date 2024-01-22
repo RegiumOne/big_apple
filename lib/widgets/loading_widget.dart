@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({
-    Key? key,
+    super.key,
     this.size,
     this.progressColor,
-  }) : super(key: key);
+  });
 
   final double? size;
   final Color? progressColor;
