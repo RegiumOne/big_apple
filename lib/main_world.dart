@@ -19,8 +19,35 @@ class MainWorld extends World {
 
   @override
   FutureOr<void> onLoad() async {
-    final homeMap = await TiledComponent.load('map.tmx', Vector2(tileWidth, tileHeight));
+    TiledComponent homeMap = await TiledComponent.load('map.tmx', Vector2(tileWidth, tileHeight));
     add(homeMap);
-    return super.onLoad();
+    _addMill(homeMap);
+  }
+
+  void _addMill(TiledComponent tiledMap) async {
+    ObjectGroup? objGroup = tiledMap.tileMap.getLayer<ObjectGroup>('Mill');
+    if (objGroup?.objects.isNotEmpty != true) return;
+
+    TiledObject obj = objGroup!.objects.first;
+
+    final comp = MillObject(
+      position: Vector2(obj.x, obj.y),
+      size: Vector2(tileWidth, tileWidth),
+      sprite: await Sprite.load('mill.png'),
+    );
+
+    add(comp);
+  }
+}
+
+class MillObject extends SpriteComponent {
+  MillObject({
+    required Vector2 position,
+    required Vector2 size,
+    required Sprite sprite,
+  }) {
+    this.sprite = sprite;
+    this.position = position;
+    this.size = size;
   }
 }
