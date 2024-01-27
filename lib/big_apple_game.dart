@@ -38,7 +38,7 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
     cam = AppCameraComponent(world: level);
     final bounds = Rectangle.fromLTWH(0, 0, worldWidth, worldHeight);
     cam?.setBounds(bounds);
-    final initialPosition = Vector2(worldCenterWidth, worldCenterHeight);
+    final initialPosition = Vector2(0, 0);
     cam?.viewfinder.position = initialPosition;
 
     if (cam != null && level != null) {
