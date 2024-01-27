@@ -15,8 +15,8 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
 
   World? level;
 
-  double get worldWidth => 4200;
-  double get worldHeight => 670;
+  double get worldWidth => 2350;
+  double get worldHeight => 1800;
 
   double get worldCenterWidth => worldWidth / 2;
   double get worldCenterHeight => worldHeight / 2;
