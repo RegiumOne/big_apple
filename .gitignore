@@ -45,3 +45,4 @@ app.*.map.json
 
 lib/generated
 pubspec.lock
+.fvm/flutter_sdk
