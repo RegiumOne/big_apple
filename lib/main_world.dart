@@ -1,30 +1,42 @@
 import 'dart:async';
 
+import 'package:big_apple/components/mill_object.dart';
+import 'package:big_apple/components/zone_component.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 class MainWorld extends World {
   MainWorld({
-    required this.worldWidth,
-    required this.worldHeight,
-    this.tileWidth = 128,
-    this.tileHeight = 64,
-  });
-  late TiledComponent level;
+    double tileWidth = 128,
+    double tileHeight = 64,
+  }) : tileSize = Vector2(tileWidth, tileHeight);
 
-  final double worldWidth;
-  final double worldHeight;
-  final double tileWidth;
-  final double tileHeight;
+  final Vector2 tileSize;
+
+  double get worldWidth => _worldWidth;
+  double get worldHeight => _worldHeight;
+  int get columnCount => (_worldWidth / tileSize.x).floor();
+  int get rowCount => (_worldHeight / tileSize.y * 2).floor();
+
+  double _worldWidth = -1;
+  double _worldHeight = -1;
+
+  late TiledComponent<FlameGame<World>> tiledMap;
 
   @override
   FutureOr<void> onLoad() async {
-    TiledComponent homeMap = await TiledComponent.load('map.tmx', Vector2(tileWidth, tileHeight));
-    add(homeMap);
-    _addMill(homeMap);
+    tiledMap = await TiledComponent.load('map.tmx', tileSize);
+
+    _worldWidth = tiledMap.width;
+    _worldHeight = tiledMap.height;
+
+    await add(tiledMap);
+    await _addMill();
+    await _initZones();
   }
 
-  void _addMill(TiledComponent tiledMap) async {
+  Future<void> _addMill() async {
     ObjectGroup? objGroup = tiledMap.tileMap.getLayer<ObjectGroup>('Mill');
     if (objGroup?.objects.isNotEmpty != true) return;
 
@@ -32,22 +44,42 @@ class MainWorld extends World {
 
     final comp = MillObject(
       position: Vector2(obj.x, obj.y),
-      size: Vector2(tileWidth, tileWidth),
+      size: Vector2.all(tileSize.x),
       sprite: await Sprite.load('mill.png'),
     );
 
-    add(comp);
+    await add(comp);
   }
-}
 
-class MillObject extends SpriteComponent {
-  MillObject({
-    required Vector2 position,
-    required Vector2 size,
-    required Sprite sprite,
-  }) {
-    this.sprite = sprite;
-    this.position = position;
-    this.size = size;
+  Future<void> _initZones() async {
+    TileLayer? backgroundLayer = tiledMap.tileMap.getLayer('Background');
+    if (backgroundLayer == null || backgroundLayer.data == null) return;
+
+    int rowCount = backgroundLayer.height;
+    int columnCount = backgroundLayer.width;
+
+    if (rowCount != backgroundLayer.height || columnCount != backgroundLayer.width) {
+      throw Exception('Map size does not match the number of tiles');
+    }
+
+    for (int row = 0; row < rowCount; row++) {
+      for (int column = 0; column < columnCount; column++) {
+        int tile = backgroundLayer.data![row * columnCount + column];
+        if (tile == 0) continue;
+
+        bool isEven = row % 2 == 0;
+
+        double x = column * tileSize.x + (isEven ? 0 : tileSize.x / 2);
+        double y = row * tileSize.y / 2;
+
+        Vector2 position = Vector2(x, y);
+        Vector2 size = Vector2(tileSize.x / 2, tileSize.y);
+        ZoneComponent zoneComponent = ZoneComponent(tileSize: Vector2.all(tileSize.x))
+          ..position = position + Vector2(32, 0)
+          ..anchor = Anchor.topLeft
+          ..size = size;
+        add(zoneComponent);
+      }
+    }
   }
 }

@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:big_apple/components/app_camera_component.dart';
 import 'package:big_apple/main_world.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
@@ -13,13 +12,7 @@ import 'package:flutter/material.dart';
 class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
   AppCameraComponent? cam;
 
-  World? level;
-
-  double get worldWidth => 4200;
-  double get worldHeight => 670;
-
-  double get worldCenterWidth => worldWidth / 2;
-  double get worldCenterHeight => worldHeight / 2;
+  MainWorld? level;
 
   @override
   Color backgroundColor() => const Color(0xFF1E88E5);
@@ -29,20 +22,21 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
     await super.onLoad();
   }
 
-  void _initCamera() {
-    level = MainWorld(
-      worldHeight: worldHeight,
-      worldWidth: worldWidth,
-    );
+  void _initCamera() async {
+    level = MainWorld();
+
+    if (level == null) return;
+    
+    await add(level!);
 
     cam = AppCameraComponent(world: level);
-    final bounds = Rectangle.fromLTWH(0, 0, worldWidth, worldHeight);
+    final bounds = Rectangle.fromLTWH(0, 0, level!.worldWidth, level!.worldHeight);
     cam?.setBounds(bounds);
     final initialPosition = Vector2(0, 0);
     cam?.viewfinder.position = initialPosition;
 
     if (cam != null && level != null) {
-      addAll([cam!, level!]);
+      addAll([cam!]);
     }
   }
 
