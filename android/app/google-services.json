@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304727663020",
+    "project_id": "big-apple-game",
+    "storage_bucket": "big-apple-game.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304727663020:android:0d4265a63080138b631a09",
+        "android_client_info": {
+          "package_name": "one.regium.big_apple"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBySwP-7OiC9yvR7JC_LO-qHNLpKFkU2_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

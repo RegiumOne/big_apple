@@ -41,6 +41,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/keystore-release.properties
 
 lib/generated
 pubspec.lock
+.fvm/flutter_sdk
