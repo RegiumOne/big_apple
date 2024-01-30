@@ -1,25 +1,43 @@
 import 'package:big_apple/big_apple_game.dart';
+import 'package:big_apple/blocs/money/money_bloc.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/widgets/loading_widget.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final game = GameWidget<BigAppleGame>.controlled(
-      gameFactory: () => BigAppleGame(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => MoneyBloc()),
+      ],
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Big Apple',
+        home: Scaffold(
+          body: _Game(),
+        ),
+      ),
+    );
+  }
+}
+
+class _Game extends StatelessWidget {
+  const _Game();
+
+  @override
+  Widget build(BuildContext context) {
+    return GameWidget<BigAppleGame>.controlled(
+      gameFactory: () => BigAppleGame(
+        moneyBloc: context.read<MoneyBloc>(),
+      ),
       loadingBuilder: (context) => const _LoadingWidget(),
       overlayBuilderMap: AppOverlay.overlayBuilderMap,
       initialActiveOverlays: AppOverlay.initialActiveOverlays,
-    );
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Big Apple',
-      home: Scaffold(body: game),
     );
   }
 }
