@@ -1,10 +1,12 @@
+import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/components/mill_object.dart';
 import 'package:big_apple/main_world.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-class ZoneComponent extends PositionComponent with TapCallbacks, HasWorldReference<MainWorld> {
+class ZoneComponent extends PositionComponent
+    with TapCallbacks, HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
   ZoneComponent({
     required this.tileSize,
   }) {
@@ -53,7 +55,7 @@ class ZoneComponent extends PositionComponent with TapCallbacks, HasWorldReferen
     final mill = MillObject(
       position: objectPosition,
       size: tileSize,
-      sprite: await Sprite.load('mill.png'),
+      sprite: Sprite(game.images.fromCache('mill.png')),
     );
     await world.add(mill);
   }

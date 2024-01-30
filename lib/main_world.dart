@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/components/mill_object.dart';
 import 'package:big_apple/components/zone_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-class MainWorld extends World {
+class MainWorld extends World with HasGameReference<BigAppleGame> {
   MainWorld({
     double tileWidth = 128,
     double tileHeight = 64,
@@ -45,7 +46,7 @@ class MainWorld extends World {
     final comp = MillObject(
       position: Vector2(obj.x, obj.y),
       size: Vector2.all(tileSize.x),
-      sprite: await Sprite.load('mill.png'),
+      sprite: Sprite(game.images.fromCache('mill.png')),
     );
 
     await add(comp);
