@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:big_apple/blocs/money/money_bloc.dart';
 import 'package:big_apple/components/app_camera_component.dart';
 import 'package:big_apple/main_world.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
@@ -10,6 +11,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
+  BigAppleGame({
+    required this.moneyBloc,
+  });
+
+  final MoneyBloc moneyBloc;
+
   AppCameraComponent? cam;
 
   MainWorld? level;
