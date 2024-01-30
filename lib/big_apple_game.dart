@@ -19,14 +19,19 @@ class BigAppleGame extends FlameGame with PanDetector, DoubleTapDetector {
 
   @override
   FutureOr<void> onLoad() async {
+    await _cacheImages();
     await super.onLoad();
+  }
+
+  Future<void> _cacheImages() async {
+    await images.loadAll(['mill.png']);
   }
 
   void _initCamera() async {
     level = MainWorld();
 
     if (level == null) return;
-    
+
     await add(level!);
 
     cam = AppCameraComponent(world: level);
