@@ -2,6 +2,7 @@ class AppDimension {
   AppDimension._();
 
   /// Sizes
+  static const double s4 = 4;
   static const double s10 = 10;
   static const double s16 = 16;
   static const double s32 = 32;

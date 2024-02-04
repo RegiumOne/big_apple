@@ -1,5 +1,6 @@
 import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/blocs/money/money_bloc.dart';
+import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/di/injector.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/widgets/loading_widget.dart';
 import 'package:flame/game.dart';
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => MoneyBloc()),
+        BlocProvider(create: (context) => inject<GameBloc>()),
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -33,7 +34,7 @@ class _Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return GameWidget<BigAppleGame>.controlled(
       gameFactory: () => BigAppleGame(
-        moneyBloc: context.read<MoneyBloc>(),
+        gameBloc: context.read<GameBloc>(),
       ),
       loadingBuilder: (context) => const _LoadingWidget(),
       overlayBuilderMap: AppOverlay.overlayBuilderMap,

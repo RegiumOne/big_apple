@@ -1,6 +1,9 @@
 import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/components/mill_object.dart';
-import 'package:big_apple/main_world.dart';
+import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/components/building_component.dart';
+import 'package:big_apple/data/models/building.dart';
+import 'package:big_apple/data/models/enum/building_type.dart';
+import 'package:big_apple/components/world/main_world.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
@@ -52,10 +55,16 @@ class ZoneComponent extends PositionComponent
     //   return;
     // }
 
-    final mill = MillObject(
-      position: objectPosition,
+    final building = Building(
+      coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),
+      type: BuildingType.mill,
+    );
+
+    game.gameBloc.add(GameAddBuildingEvent(building));
+
+    final mill = BuildingComponent(
+      building: building,
       size: tileSize,
-      sprite: Sprite(game.images.fromCache('mill.png')),
     );
     await world.add(mill);
   }

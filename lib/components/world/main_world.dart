@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/components/mill_object.dart';
+import 'package:big_apple/components/building_component.dart';
 import 'package:big_apple/components/zone_component.dart';
+import 'package:big_apple/data/models/building.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-class MainWorld extends World with HasGameReference<BigAppleGame> {
+class MainWorld extends World {
   MainWorld({
     double tileWidth = 128,
     double tileHeight = 64,
@@ -33,23 +33,7 @@ class MainWorld extends World with HasGameReference<BigAppleGame> {
     _worldHeight = tiledMap.height;
 
     await add(tiledMap);
-    await _addMill();
     await _initZones();
-  }
-
-  Future<void> _addMill() async {
-    ObjectGroup? objGroup = tiledMap.tileMap.getLayer<ObjectGroup>('Mill');
-    if (objGroup?.objects.isNotEmpty != true) return;
-
-    TiledObject obj = objGroup!.objects.first;
-
-    final comp = MillObject(
-      position: Vector2(obj.x, obj.y),
-      size: Vector2.all(tileSize.x),
-      sprite: Sprite(game.images.fromCache('mill.png')),
-    );
-
-    await add(comp);
   }
 
   Future<void> _initZones() async {
@@ -81,6 +65,16 @@ class MainWorld extends World with HasGameReference<BigAppleGame> {
           ..size = size;
         add(zoneComponent);
       }
+    }
+  }
+
+  Future<void> initBuildings(List<Building> buidlings) async {
+    for (var buidling in buidlings) {
+      final buildingComponent = BuildingComponent(
+        building: buidling,
+        size: Vector2.all(tileSize.x),
+      );
+      add(buildingComponent);
     }
   }
 }

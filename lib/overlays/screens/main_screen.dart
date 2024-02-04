@@ -4,7 +4,6 @@ import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/widgets/background_image_widget.dart';
 import 'package:big_apple/widgets/elevated_button_widget.dart';
 import 'package:big_apple/widgets/text_widget.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -13,7 +12,7 @@ class MainScreen extends StatelessWidget {
     required this.game,
   });
 
-  final FlameGame game;
+  final AppGame game;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +72,7 @@ class MainScreen extends StatelessWidget {
   }
 
   void _start() {
-    (game as BigAppleGame).startGame();
+    game.startGame();
     game.overlays.remove(Overlays.main);
     game.overlays.add(Overlays.hud);
   }

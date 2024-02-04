@@ -46,3 +46,12 @@ app.*.map.json
 lib/generated
 pubspec.lock
 .fvm/flutter_sdk
+
+*.g.dart
+*.gr.dart
+*.gen.dart
+*.config.dart
+**/injection.config.dart
+.vscode/settings.json
+
+Podfile.lock
