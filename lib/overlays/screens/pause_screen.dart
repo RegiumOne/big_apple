@@ -5,7 +5,6 @@ import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/widgets/elevated_button_widget.dart';
 import 'package:big_apple/widgets/text_widget.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class PauseScreen extends StatelessWidget {
@@ -14,7 +13,7 @@ class PauseScreen extends StatelessWidget {
     required this.game,
   });
 
-  final FlameGame game;
+  final AppGame game;
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +79,13 @@ class PauseScreen extends StatelessWidget {
   }
 
   void _resume() {
-    game.overlays.remove(Overlays.pause);
-    game.overlays.add(Overlays.hud);
-    game.resumeEngine();
+    game.resumeGame();
   }
 
   void _exit() {
     game.overlays.remove(Overlays.pause);
     game.overlays.add(Overlays.main);
     game.resumeEngine();
-    (game as BigAppleGame).reset();
+    game.endGame();
   }
 }
