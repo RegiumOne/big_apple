@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:big_apple/components/building_component.dart';
 import 'package:big_apple/components/zone_component.dart';
-import 'package:big_apple/data/models/building.dart';
+import 'package:big_apple/data/dto/building.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -33,7 +33,7 @@ class MainWorld extends World {
     _worldHeight = tiledMap.height;
 
     await add(tiledMap);
-    await _initZones();
+    _initZones();
   }
 
   Future<void> _initZones() async {
@@ -69,8 +69,8 @@ class MainWorld extends World {
   }
 
   Future<void> initBuildings(List<Building> buidlings) async {
-    for (var buidling in buidlings) {
-      final buildingComponent = BuildingComponent(
+    for (Building buidling in buidlings) {
+      BuildingComponent buildingComponent = BuildingComponent(
         building: buidling,
         size: Vector2.all(tileSize.x),
       );

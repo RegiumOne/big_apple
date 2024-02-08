@@ -33,9 +33,7 @@ class _Game extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget<BigAppleGame>.controlled(
-      gameFactory: () => BigAppleGame(
-        gameBloc: context.read<GameBloc>(),
-      ),
+      gameFactory: () => BigAppleGame(context.read<GameBloc>()),
       loadingBuilder: (context) => const _LoadingWidget(),
       overlayBuilderMap: AppOverlay.overlayBuilderMap,
       initialActiveOverlays: AppOverlay.initialActiveOverlays,

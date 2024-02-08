@@ -4,14 +4,14 @@ class TextWidget extends StatelessWidget {
   const TextWidget(
     this.text, {
     super.key,
-    required this.style,
+    this.style,
     this.textAlign,
     this.maxLines,
     this.overflow,
   });
 
   final String text;
-  final TextStyle style;
+  final TextStyle? style;
   final TextAlign? textAlign;
   final int? maxLines;
   final TextOverflow? overflow;
@@ -20,7 +20,7 @@ class TextWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: style.copyWith(decorationColor: style.color),
+      style: style?.copyWith(decorationColor: style?.color),
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,

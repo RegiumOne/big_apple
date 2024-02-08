@@ -22,6 +22,7 @@ analyzer:
 
 linter:
   rules:
+    always_use_package_imports: true
     sort_pub_dependencies: true
     prefer_interpolation_to_compose_strings: true
     recursive_getters: true

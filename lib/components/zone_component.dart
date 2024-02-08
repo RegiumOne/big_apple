@@ -1,8 +1,8 @@
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/blocs/game/game_bloc.dart';
 import 'package:big_apple/components/building_component.dart';
-import 'package:big_apple/data/models/building.dart';
-import 'package:big_apple/data/models/enum/building_type.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:big_apple/components/world/main_world.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -10,9 +10,7 @@ import 'package:flutter/material.dart';
 
 class ZoneComponent extends PositionComponent
     with TapCallbacks, HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
-  ZoneComponent({
-    required this.tileSize,
-  }) {
+  ZoneComponent({required this.tileSize}) {
     // debugMode = true;
   }
 

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:big_apple/big_apple_game.dart';
+import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/widgets/elevated_button_widget.dart';
@@ -13,7 +13,7 @@ class PauseScreen extends StatelessWidget {
     required this.game,
   });
 
-  final AppGame game;
+  final CommonGame game;
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +83,8 @@ class PauseScreen extends StatelessWidget {
   }
 
   void _exit() {
-    game.overlays.remove(Overlays.pause);
-    game.overlays.add(Overlays.main);
+    game.overlays.remove(Overlays.pause.name);
+    game.overlays.add(Overlays.main.name);
     game.resumeEngine();
     game.endGame();
   }

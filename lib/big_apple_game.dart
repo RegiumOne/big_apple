@@ -1,30 +1,23 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:big_apple/blocs/game/game_bloc.dart';
-import 'package:big_apple/components/app_camera_component.dart';
-import 'package:big_apple/data/models/building.dart';
-import 'package:big_apple/data/models/enum/building_type.dart';
-import 'package:big_apple/components/world/main_world.dart';
-import 'package:big_apple/overlays/app_overlay.dart';
-import 'package:big_apple/resources/values/app_duration.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 
-abstract class AppGame extends FlameGame {
-  void startGame({bool isNewGame = false});
-  void endGame();
-  void pauseGame();
-  void resumeGame();
-  void initBuildings(List<Building> buildings);
-}
+import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/components/app_camera_component.dart';
+import 'package:big_apple/components/world/main_world.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:big_apple/overlays/app_overlay.dart';
+import 'package:big_apple/resources/values/app_duration.dart';
 
-class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
-  BigAppleGame({
-    required this.gameBloc,
-  });
+class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {
+  BigAppleGame(this.gameBloc);
 
   final GameBloc gameBloc;
 
@@ -96,9 +89,9 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
 
   @override
   void pauseGame() {
-    if (overlays.isActive(Overlays.hud)) {
-      overlays.remove(Overlays.hud);
-      overlays.add(Overlays.pause);
+    if (overlays.isActive(Overlays.hud.name)) {
+      overlays.remove(Overlays.hud.name);
+      overlays.add(Overlays.pause.name);
     }
     pauseEngine();
     _saveGameTimer?.cancel();
@@ -106,11 +99,11 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
 
   @override
   void resumeGame() {
-    if (!(overlays.isActive(Overlays.pause))) {
+    if (!(overlays.isActive(Overlays.pause.name))) {
       resumeEngine();
     } else {
-      overlays.add(Overlays.hud);
-      overlays.remove(Overlays.pause);
+      overlays.add(Overlays.hud.name);
+      overlays.remove(Overlays.pause.name);
       resumeEngine();
     }
     _startSaveTimer();

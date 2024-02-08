@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:big_apple/data/models/enum/building_type.dart';
+import 'package:big_apple/data/dto/enum/building_type.dart';
 
 part 'building.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Building {
   const Building({
     required this.coordinates,
@@ -13,10 +13,10 @@ class Building {
 
   factory Building.fromJson(Map<String, dynamic> json) => _$BuildingFromJson(json);
 
-  Map<String, dynamic> toJson() => _$BuildingToJson(this);
-
   final Coordinates coordinates;
   final BuildingType type;
+
+  Map<String, dynamic> toJson() => _$BuildingToJson(this);
 
   Building copyWith({
     Coordinates? coordinates,
@@ -35,8 +35,8 @@ class Coordinates {
 
   factory Coordinates.fromJson(Map<String, dynamic> json) => _$CoordinatesFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CoordinatesToJson(this);
-
   final double x;
   final double y;
+
+  Map<String, dynamic> toJson() => _$CoordinatesToJson(this);
 }

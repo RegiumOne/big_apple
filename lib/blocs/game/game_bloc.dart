@@ -1,5 +1,5 @@
-import 'package:big_apple/data/models/building.dart';
-import 'package:big_apple/data/repositories/game_repository.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/domain/repositories/game_repository.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -11,20 +11,10 @@ part 'game_state.dart';
 @injectable
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc(this._gameRepository) : super(const GameInitialState()) {
-    on<GameIncreaseMoneyEvent>(
-      _increaseMoney,
-    );
-    on<GameAddBuildingEvent>(
-      _addBuilding,
-    );
-    on<GameSaveEvent>(
-      _save,
-      transformer: restartable(),
-    );
-    on<GameLoadEvent>(
-      _load,
-      transformer: restartable(),
-    );
+    on<GameIncreaseMoneyEvent>(_increaseMoney);
+    on<GameAddBuildingEvent>(_addBuilding);
+    on<GameSaveEvent>(_save, transformer: restartable());
+    on<GameLoadEvent>(_load, transformer: restartable());
   }
 
   final GameRepository _gameRepository;

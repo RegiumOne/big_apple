@@ -1,20 +1,7 @@
 import 'package:big_apple/data/datasources/local/data_providers/game_data_provider.dart';
-import 'package:big_apple/data/models/building.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/domain/repositories/game_repository.dart';
 import 'package:injectable/injectable.dart';
-
-abstract class GameRepository {
-  double getMoney();
-
-  Future<bool> setMoney(double money);
-
-  List<Building> getBuildings();
-
-  Future<bool> setBuildings(List<Building> buildings);
-
-  DateTime? getLastSaveDateTime();
-
-  Future<bool> setLastSaveDateTime(DateTime dateTime);
-}
 
 @Injectable(as: GameRepository)
 class GameRepositoryImpl implements GameRepository {

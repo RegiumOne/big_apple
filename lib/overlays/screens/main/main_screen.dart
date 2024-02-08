@@ -1,4 +1,4 @@
-import 'package:big_apple/big_apple_game.dart';
+import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/widgets/background_image_widget.dart';
@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
     required this.game,
   });
 
-  final AppGame game;
+  final CommonGame game;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,7 @@ class MainScreen extends StatelessWidget {
         children: [
           TextWidget(
             'Big Apple',
-            style: theme.textTheme.displayLarge!.copyWith(
-              color: theme.colorScheme.onPrimary,
-            ),
+            style: theme.textTheme.displayLarge?.copyWith(color: theme.colorScheme.onPrimary),
           ),
           SizedBox(height: MediaQuery.sizeOf(context).height * 0.1),
           ConstrainedBox(
@@ -73,7 +71,7 @@ class MainScreen extends StatelessWidget {
 
   void _start() {
     game.startGame();
-    game.overlays.remove(Overlays.main);
-    game.overlays.add(Overlays.hud);
+    game.overlays.remove(Overlays.main.name);
+    game.overlays.add(Overlays.hud.name);
   }
 }
