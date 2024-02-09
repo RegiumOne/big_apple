@@ -10,6 +10,13 @@ enum BuildingType {
     }
   }
 
+  double get cost {
+    switch (this) {
+      case BuildingType.mill:
+        return 100;
+    }
+  }
+
   String get image {
     String result = '';
     switch (this) {
