@@ -35,7 +35,14 @@ class Hud extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: BlocBuilder<GameBloc, GameState>(
                 builder: (context, state) {
-                  return Text('Money: ${state.money}');
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Money: ${state.money}'),
+                      const SizedBox(width: AppDimension.s16),
+                      Text('Builders: ${state.availableBuilders.length}/${state.builders.length}'),
+                    ],
+                  );
                 },
               ),
             ),
