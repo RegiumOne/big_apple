@@ -1,5 +1,6 @@
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/common/app/theme.dart';
 import 'package:big_apple/di/injector.dart';
 import 'package:big_apple/overlays/app_overlay.dart';
 import 'package:big_apple/widgets/loading_widget.dart';
@@ -16,10 +17,11 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => inject<GameBloc>()),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
+        theme: appTheme,
         debugShowCheckedModeBanner: false,
         title: 'Big Apple',
-        home: Scaffold(
+        home: const Scaffold(
           body: _Game(),
         ),
       ),
