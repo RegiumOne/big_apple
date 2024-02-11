@@ -1,9 +1,9 @@
 import 'package:big_apple/common/game/common_game.dart';
-import 'package:big_apple/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
-import 'package:big_apple/widgets/background_image_widget.dart';
-import 'package:big_apple/widgets/elevated_button_widget.dart';
-import 'package:big_apple/widgets/text_widget.dart';
+import 'package:big_apple/presentation/widgets/background_image_widget.dart';
+import 'package:big_apple/presentation/widgets/elevated_button_widget.dart';
+import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {

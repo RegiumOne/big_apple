@@ -7,13 +7,13 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/game/common_game.dart';
-import 'package:big_apple/components/app_camera_component.dart';
-import 'package:big_apple/components/world/main_world.dart';
+import 'package:big_apple/common/components/app_camera_component.dart';
+import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
-import 'package:big_apple/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
 class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {

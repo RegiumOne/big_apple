@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 import 'package:flame/components.dart';

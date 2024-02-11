@@ -1,9 +1,9 @@
 import 'package:big_apple/common/game/common_game.dart';
-import 'package:big_apple/overlays/hud/hud.dart';
-import 'package:big_apple/overlays/listener_overlay.dart';
-import 'package:big_apple/overlays/screens/main/main_screen.dart';
-import 'package:big_apple/overlays/screens/pause/pause_screen.dart';
-import 'package:big_apple/overlays/screens/shop/shop_screen.dart';
+import 'package:big_apple/presentation/overlays/hud/hud.dart';
+import 'package:big_apple/presentation/overlays/listener_overlay.dart';
+import 'package:big_apple/presentation/overlays/screens/main/main_screen.dart';
+import 'package:big_apple/presentation/overlays/screens/pause/pause_screen.dart';
+import 'package:big_apple/presentation/screens/shop/shop_screen.dart';
 import 'package:flutter/material.dart';
 
 enum Overlays {

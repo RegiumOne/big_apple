@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:big_apple/components/building_component.dart';
-import 'package:big_apple/components/zone_component.dart';
+import 'package:big_apple/common/components/building_component.dart';
+import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';

@@ -1,4 +1,4 @@
-import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

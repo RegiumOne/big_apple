@@ -1,8 +1,8 @@
-import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/extensions/date_time_extension.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
-import 'package:big_apple/widgets/text_widget.dart';
+import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
