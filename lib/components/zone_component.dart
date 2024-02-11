@@ -58,6 +58,9 @@ class ZoneComponent extends PositionComponent
       type: BuildingType.mill,
     );
 
+    final money = game.gameBloc.state.money - building.type.cost;
+    if (money < 0) return;
+
     game.gameBloc.add(GameAddBuildingEvent(building));
 
     final mill = BuildingComponent(

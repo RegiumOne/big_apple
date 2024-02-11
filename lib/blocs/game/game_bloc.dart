@@ -36,9 +36,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     GameAddBuildingEvent event,
     Emitter<GameState> emit,
   ) async {
+    final money = state.money - event.building.type.cost;
+    if (money < 0) return;
+
     emit(
       GameIdleState(
-        money: state.money,
+        money: money,
         buildings: [...state.buildings, event.building],
         lastSaveDateTime: state.lastSaveDateTime,
       ),
