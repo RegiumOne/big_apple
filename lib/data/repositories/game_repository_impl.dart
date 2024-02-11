@@ -1,4 +1,5 @@
 import 'package:big_apple/data/datasources/local/data_providers/game_data_provider.dart';
+import 'package:big_apple/data/dto/builder.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/domain/repositories/game_repository.dart';
 import 'package:injectable/injectable.dart';
@@ -26,4 +27,10 @@ class GameRepositoryImpl implements GameRepository {
 
   @override
   Future<bool> setLastSaveDateTime(DateTime dateTime) => _gameDataProvider.setLastSaveDateTime(dateTime);
+
+  @override
+  List<Builder> getBuilders() => _gameDataProvider.getBuilders();
+
+  @override
+  Future<bool> setBuilders(List<Builder> builders) => _gameDataProvider.setBuilders(builders);
 }

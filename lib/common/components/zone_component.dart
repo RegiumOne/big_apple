@@ -53,13 +53,16 @@ class ZoneComponent extends PositionComponent
     //   return;
     // }
 
+    const type = BuildingType.mill;
+
     final building = Building(
       coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),
-      type: BuildingType.mill,
+      type: type,
+      constructionTimeLeft: type.constructionTimeInSeconds,
     );
 
     final money = game.gameBloc.state.money - building.type.cost;
-    if (money < 0) return;
+    if (money < 0 || game.gameBloc.state.availableBuilders.isEmpty) return;
 
     game.gameBloc.add(GameAddBuildingEvent(building));
 

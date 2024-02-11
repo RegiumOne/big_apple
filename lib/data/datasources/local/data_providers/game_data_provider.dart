@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:big_apple/data/dto/builder.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:injectable/injectable.dart';
@@ -10,6 +11,7 @@ class _GameDataProviderKeys {
 
   static const moneyKey = 'money_key';
   static const buildingsKey = 'buildings_key';
+  static const buildersKey = 'builders_key';
   static const lastSaveDateTimeKey = 'last_save_date_time_key';
 }
 
@@ -42,6 +44,22 @@ class GameDataProvider {
     try {
       final buildingsString = buildings.map((e) => json.encode(e.toJson())).toList();
       return await _sharedPreferences.setStringList(_GameDataProviderKeys.buildingsKey, buildingsString);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  List<Builder> getBuilders() {
+    final List<String>? buildersString = _sharedPreferences.getStringList(_GameDataProviderKeys.buildersKey);
+    if (buildersString == null) return List.generate(2, (index) => const Builder(isBusy: false));
+    final builders = buildersString.map((e) => Builder.fromJson(json.decode(e))).toList();
+    return builders;
+  }
+
+  Future<bool> setBuilders(List<Builder> builders) async {
+    try {
+      final buildersString = builders.map((e) => json.encode(e.toJson())).toList();
+      return await _sharedPreferences.setStringList(_GameDataProviderKeys.buildersKey, buildersString);
     } catch (e) {
       return false;
     }

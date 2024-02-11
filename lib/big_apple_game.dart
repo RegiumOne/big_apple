@@ -117,7 +117,7 @@ class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {
 
   Future<void> _cacheImages() async {
     await images.loadAll([
-      ...BuildingType.values.map((e) => e.image),
+      ...BuildingType.values.expand((e) => e.allImages),
     ]);
   }
 
