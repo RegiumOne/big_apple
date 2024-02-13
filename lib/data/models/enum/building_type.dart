@@ -6,7 +6,7 @@ enum BuildingType {
   double get moneyPerUnitOfTime {
     switch (this) {
       case BuildingType.mill:
-        return 100;
+        return 12;
     }
   }
 

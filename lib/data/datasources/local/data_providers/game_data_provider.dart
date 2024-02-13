@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:big_apple/data/models/builder.dart';
 import 'package:big_apple/data/models/building.dart';
-import 'package:big_apple/data/models/enum/building_type.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +21,7 @@ class GameDataProvider {
   final SharedPreferences _sharedPreferences;
 
   double getMoney() {
-    return _sharedPreferences.getDouble(_GameDataProviderKeys.moneyKey) ?? BuildingType.mill.cost;
+    return _sharedPreferences.getDouble(_GameDataProviderKeys.moneyKey) ?? 1000;
   }
 
   Future<bool> setMoney(double money) async {
