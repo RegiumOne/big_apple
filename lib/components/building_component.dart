@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/blocs/game/game_bloc.dart';
+import 'package:big_apple/common/extensions/int_extension.dart';
 import 'package:big_apple/data/models/building.dart';
+import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -43,30 +45,28 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
 
   @override
   void render(Canvas canvas) {
+    const padding = AppDimension.s4;
     if (_isUnderConstruction) {
-      final progressBarPaint = Paint()..color = Colors.yellow;
-      final backgroundBarPaint = Paint()..color = Colors.grey;
       final progress = (building.constructionTimeLeft / building.type.constructionTimeInSeconds).clamp(0.0, 1.0);
       const barHeight = 14.0;
       final barWidth = size.x;
       const borderRadius = Radius.circular(100);
-
-      final backgroundBarRRect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, -barHeight, barWidth, barHeight),
-        borderRadius,
-      );
-      final progressBarRRect = RRect.fromRectAndRadius(
-        Rect.fromLTWH(0, -barHeight, barWidth * (1.0 - progress), barHeight),
-        borderRadius,
+      final gradient = LinearGradient(
+        colors: const [Colors.yellow, Colors.grey],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        stops: [1 - progress, 1 - progress],
       );
 
-      canvas.drawRRect(backgroundBarRRect, backgroundBarPaint);
+      final rect = Rect.fromLTWH(padding, -barHeight, barWidth - padding, barHeight);
+      final progressBarPaint = Paint()..shader = gradient.createShader(rect);
+      final progressBarRRect = RRect.fromRectAndRadius(rect, borderRadius);
       canvas.drawRRect(progressBarRRect, progressBarPaint);
 
-      final percentage = ((1.0 - progress) * 100).toStringAsFixed(0);
+      final timeText = building.constructionTimeLeft.toInt().toTimeText();
       final textPainter = TextPainter(
         text: TextSpan(
-          text: "$percentage%",
+          text: timeText,
           style: const TextStyle(color: Colors.black, fontSize: 14, height: 1),
         ),
         textDirection: TextDirection.ltr,
