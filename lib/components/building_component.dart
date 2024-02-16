@@ -13,6 +13,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
   BuildingComponent({
     required this.building,
     required super.size,
+    super.anchor = Anchor.center,
   }) : super(
           priority: building.coordinates.y.toInt() + 100,
           position: Vector2(building.coordinates.x, building.coordinates.y),
