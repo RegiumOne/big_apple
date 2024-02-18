@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
@@ -26,6 +27,8 @@ class MainWorld extends World {
   double _worldHeight = -1;
 
   late TiledComponent<FlameGame<World>> tiledMap;
+
+  final List<Vector2> _initialBusyCoordinates = [];
 
   @override
   FutureOr<void> onLoad() async {
@@ -61,11 +64,24 @@ class MainWorld extends World {
 
         Vector2 position = Vector2(x, y);
         Vector2 size = Vector2(tileSize.x / 2, tileSize.y);
-        ZoneComponent zoneComponent = ZoneComponent(tileSize: Vector2.all(tileSize.x))
+
+        //it is important that _initialBusyCoordinates are initialized first in the initBuildings method, otherwise you need to check in initBuildings too if _initZones is initialized first
+        final checkPosition = _initialBusyCoordinates.firstWhereOrNull(
+          (element) => (element - Vector2(64, 0)) == position,
+        );
+
+        if (checkPosition != null) {
+          log('Busy position: $position');
+        }
+
+        ZoneComponent zoneComponent = ZoneComponent(
+          tileSize: Vector2.all(tileSize.x),
+          isAvailable: checkPosition == null,
+        )
           ..position = position + Vector2(32, 0)
           ..anchor = Anchor.topLeft
           ..size = size;
-        add(zoneComponent);
+        await add(zoneComponent);
       }
     }
   }
@@ -86,7 +102,10 @@ class MainWorld extends World {
         building: buidling,
         size: Vector2.all(tileSize.x),
       );
-      add(buildingComponent);
+
+      _initialBusyCoordinates.add(buildingComponent.position);
+
+      await add(buildingComponent);
     }
   }
 }

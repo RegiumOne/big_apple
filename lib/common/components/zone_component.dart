@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/components/building_component.dart';
@@ -10,11 +12,15 @@ import 'package:flutter/material.dart';
 
 class ZoneComponent extends PositionComponent
     with TapCallbacks, HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
-  ZoneComponent({required this.tileSize}) {
+  ZoneComponent({
+    required this.tileSize,
+    required this.isAvailable,
+  }) {
     // debugMode = true;
   }
 
   final Vector2 tileSize;
+  bool isAvailable;
 
   final _paint = Paint();
   bool _isPressed = false;
@@ -42,14 +48,12 @@ class ZoneComponent extends PositionComponent
   }
 
   Future<void> addBuilding(BuildingType type) async {
-    final objectPosition = position - Vector2(32, tileSize.y / 2);
-
-    // TODO(Sasha071201): through componentsAtPoint you can prevent objects from being created nearby
-    // Iterable<Component> components = world.componentsAtPoint(objectPosition);
-    // if (components.isNotEmpty && components.first is MillObject) {
-    //   log('There is already a mill here');
-    //   return;
-    // }
+    final objectPosition = position + Vector2(32, 0);
+    if (!isAvailable) {
+      log('There is already a building here');
+      return;
+    }
+    isAvailable = false;
 
     final building = Building(
       coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),
