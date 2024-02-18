@@ -46,20 +46,11 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     if (info.pointerCount == 1) {
       cam?.onPanUpdate(info.delta.global);
     } else if (info.pointerCount == 2) {
-      debugPrint('Scale: ${info.scale.global}');
       bool zoomIn = info.scale.global.x > 1.0;
       cam?.onScaleUpdate(zoomIn);
     }
-    // super.onScaleUpdate(info);
+    super.onScaleUpdate(info);
   }
-
-  // void onScaleUpdate(ScaleUpdateDetails info) {
-  //   if (info.scale > 1.0) {
-  //     cam?.onScaleUpdate(info.scale);
-  //   } else if (info.scale < 1.0) {
-  //     cam?.onScaleUpdate(info.scale);
-  //   }
-  // }
 
   @override
   void lifecycleStateChange(AppLifecycleState state) {

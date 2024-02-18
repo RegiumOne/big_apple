@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
@@ -29,7 +27,6 @@ class AppCameraComponent extends CameraComponent {
     final scaledDelta = globalDelta * moveSpeed / viewfinder.zoom;
     final newPosition = currentPosition - scaledDelta;
     viewfinder.position = newPosition;
-    debugPrint('Position: $newPosition');
   }
 
   bool _isProcessing = false;
