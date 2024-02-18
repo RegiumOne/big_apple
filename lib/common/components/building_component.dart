@@ -101,12 +101,12 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     if (_isUnderConstruction) {
       double progress = 1 - (building.constructionTimeLeft / building.type.constructionTimeInSeconds);
       if (progress < 0.5) {
-        spritePath = building.type.imageInitial;
+        spritePath = building.type.imageInitial();
       } else {
-        spritePath = building.type.imageHalf;
+        spritePath = building.type.imageHalf();
       }
     } else {
-      spritePath = building.type.imageDone;
+      spritePath = building.type.imageDone();
     }
 
     sprite = Sprite(game.images.fromCache(spritePath));

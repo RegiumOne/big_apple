@@ -28,7 +28,7 @@ class Hud extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: IconButton(
-                      onPressed: _pause,
+                      onPressed: () => game.pauseGame(),
                       icon: const Icon(Icons.pause, color: Colors.black),
                     ),
                   ),
@@ -90,16 +90,12 @@ class Hud extends StatelessWidget {
                   "Shop",
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {},
+                onPressed: () => game.showShop(),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void _pause() {
-    game.pauseGame();
   }
 }

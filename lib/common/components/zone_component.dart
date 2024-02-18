@@ -27,8 +27,6 @@ class ZoneComponent extends PositionComponent
   @override
   void onTapUp(TapUpEvent event) async {
     _isPressed = false;
-
-    _addMill();
   }
 
   @override
@@ -43,7 +41,7 @@ class ZoneComponent extends PositionComponent
     canvas.drawRect(rect, _paint);
   }
 
-  Future<void> _addMill() async {
+  Future<void> addBuilding(BuildingType type) async {
     final objectPosition = position - Vector2(32, tileSize.y / 2);
 
     // TODO(Sasha071201): through componentsAtPoint you can prevent objects from being created nearby
@@ -52,8 +50,6 @@ class ZoneComponent extends PositionComponent
     //   log('There is already a mill here');
     //   return;
     // }
-
-    const type = BuildingType.mill;
 
     final building = Building(
       coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),

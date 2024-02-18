@@ -10,26 +10,14 @@ import 'package:injectable/injectable.dart';
 part 'game_event.dart';
 part 'game_state.dart';
 
-@injectable
+@Injectable()
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc(this._gameRepository) : super(const GameInitialState()) {
-    on<GameIncreaseMoneyEvent>(
-      _increaseMoney,
-    );
-    on<GameAddBuildingEvent>(
-      _addBuilding,
-    );
-    on<GameFinishBuildingEvent>(
-      _finishBuilding,
-    );
-    on<GameSaveEvent>(
-      _save,
-      transformer: restartable(),
-    );
-    on<GameLoadEvent>(
-      _load,
-      transformer: restartable(),
-    );
+    on<GameIncreaseMoneyEvent>(_increaseMoney);
+    on<GameAddBuildingEvent>(_addBuilding);
+    on<GameFinishBuildingEvent>(_finishBuilding);
+    on<GameSaveEvent>(_save, transformer: restartable());
+    on<GameLoadEvent>(_load, transformer: restartable());
   }
 
   final GameRepository _gameRepository;

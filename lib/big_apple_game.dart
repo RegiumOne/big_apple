@@ -131,8 +131,9 @@ class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {
     cam = AppCameraComponent(world: level);
     final bounds = Rectangle.fromLTWH(0, 0, level!.worldWidth, level!.worldHeight);
     cam?.setBounds(bounds);
-    final initialPosition = Vector2(0, 0);
+    final initialPosition = Vector2(level!.worldWidth / 2, level!.worldHeight / 2);
     cam?.viewfinder.position = initialPosition;
+    cam?.initZoom();
 
     if (cam != null && level != null) {
       addAll([cam!]);
@@ -144,5 +145,28 @@ class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {
     _saveGameTimer = Timer.periodic(AppDuration.saveGameDuration, (timer) {
       gameBloc.add(const GameSaveEvent());
     });
+  }
+
+  @override
+  void showShop() {
+    overlays.add(Overlays.shop.name);
+  }
+
+  @override
+  void hideShop() {
+    overlays.remove(Overlays.shop.name);
+  }
+
+  @override
+  void placeBuilding(BuildingType type) {
+    level?.placeBuilding(type, getVisibleWorldCenter());
+    hideShop();
+  }
+
+  // Calculate the center of the visible world
+  Coordinates getVisibleWorldCenter() {
+    final centerX = cam!.viewfinder.position.x;
+    final centerY = cam!.viewfinder.position.y;
+    return Coordinates(x: centerX, y: centerY);
   }
 }

@@ -1,5 +1,7 @@
+import 'package:big_apple/common/extensions/string_extensions.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 
+// TODO(hrubalskyi): stop using enum for buildings
 enum BuildingType {
   mill;
 
@@ -24,42 +26,47 @@ enum BuildingType {
     }
   }
 
-  String get imageInitial {
-    String result = '';
+  String title() {
     switch (this) {
       case BuildingType.mill:
-        result = Assets.images.buildingMillInitial.path;
-        break;
+        return 'Mill';
     }
-    return _preparedPath(result);
   }
 
-  String get imageHalf {
-    String result = '';
+  String imageInitial({bool replacePath = true}) {
+    String path = '';
     switch (this) {
       case BuildingType.mill:
-        result = Assets.images.buildingMillHalf.path;
+        path = Assets.images.buildingMillInitial.path;
         break;
     }
-    return _preparedPath(result);
+    if (replacePath) return path.removeAssetsPath();
+    return path;
   }
 
-  String get imageDone {
-    String result = '';
+  String imageHalf({bool replacePath = true}) {
+    String path = '';
     switch (this) {
       case BuildingType.mill:
-        result = Assets.images.buildingMillDone.path;
+        path = Assets.images.buildingMillHalf.path;
         break;
     }
-    return _preparedPath(result);
+    if (replacePath) return path.removeAssetsPath();
+    return path;
+  }
+
+  String imageDone({bool replacePath = true}) {
+    String path = '';
+    switch (this) {
+      case BuildingType.mill:
+        path = Assets.images.buildingMillDone.path;
+        break;
+    }
+    if (replacePath) return path.removeAssetsPath();
+    return path;
   }
 
   List<String> get allImages {
-    return [imageInitial, imageHalf, imageDone];
-  }
-
-  String _preparedPath(String result) {
-    result = result.replaceAll('assets/images/', '');
-    return result;
+    return [imageInitial(), imageHalf(), imageDone()];
   }
 }

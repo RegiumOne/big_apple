@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -66,6 +68,16 @@ class MainWorld extends World {
         add(zoneComponent);
       }
     }
+  }
+
+  ZoneComponent? getZoneByCoordinates(Coordinates coordinates) {
+    List<Component> components = componentsAtPoint(Vector2(coordinates.x, coordinates.y)).toList();
+    ZoneComponent? zoneComponent = components.firstWhereOrNull((element) => element is ZoneComponent) as ZoneComponent?;
+    return zoneComponent;
+  }
+
+  Future<void> placeBuilding(BuildingType type, Coordinates coordinates) async {
+    return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
   Future<void> initBuildings(List<Building> buidlings) async {
