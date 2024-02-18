@@ -1,8 +1,11 @@
-import 'package:big_apple/resources/values/app_duration.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/events.dart';
-import 'package:flutter/material.dart';
+
+import 'package:big_apple/resources/values/app_duration.dart';
 
 class AppCameraComponent extends CameraComponent {
   AppCameraComponent({
@@ -21,36 +24,41 @@ class AppCameraComponent extends CameraComponent {
     viewfinder.add(zoomEffect);
   }
 
-  void onPanUpdate(DragUpdateInfo info) {
+  void onPanUpdate(Vector2 globalDelta) {
     final currentPosition = viewfinder.position;
-    final scaledDelta = Vector2(info.delta.global.x, info.delta.global.y) * moveSpeed / viewfinder.zoom;
+    final scaledDelta = globalDelta * moveSpeed / viewfinder.zoom;
     final newPosition = currentPosition - scaledDelta;
     viewfinder.position = newPosition;
     debugPrint('Position: $newPosition');
   }
 
-  void onDoubleTapDown(TapDownInfo info) {
-    final currentZoom = viewfinder.zoom.round();
+  bool _isProcessing = false;
+
+  void onScaleUpdate(bool zoomIn) async {
+    if (_isProcessing) return;
+    _isProcessing = true;
+    _zoom(zoomIn);
+    await Future.delayed(const Duration(milliseconds: 400));
+    _isProcessing = false;
+  }
+
+  void _zoom(bool zoomIn) {
+    final currentZoom = (viewfinder.zoom * 10).round() / 10;
     double newZoom;
 
-    if (currentZoom >= maxZoom) {
+    if (currentZoom >= maxZoom && !zoomIn) {
       newZoom = minZoom;
-    } else if (currentZoom <= minZoom) {
+    } else if (currentZoom <= minZoom && zoomIn) {
       newZoom = maxZoom;
     } else {
-      newZoom = minZoom;
+      return;
     }
 
-    final moveEffect = MoveEffect.to(
-      Vector2(info.eventPosition.widget.x, info.eventPosition.widget.y),
-      EffectController(duration: AppDuration.defaultAnimationSpeed),
-    );
     final zoomEffect = ScaleEffect.to(
       Vector2.all(newZoom),
       EffectController(duration: AppDuration.defaultAnimationSpeed),
     );
 
-    viewfinder.add(moveEffect);
     viewfinder.add(zoomEffect);
   }
 }

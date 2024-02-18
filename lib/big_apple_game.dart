@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -7,16 +6,16 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
-import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/common/components/app_camera_component.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
-class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {
+class BigAppleGame extends CommonGame with ScaleDetector {
   BigAppleGame(this.gameBloc);
 
   final GameBloc gameBloc;
@@ -43,14 +42,24 @@ class BigAppleGame extends CommonGame with PanDetector, DoubleTapDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    cam?.onPanUpdate(info);
+  void onScaleUpdate(ScaleUpdateInfo info) {
+    if (info.pointerCount == 1) {
+      cam?.onPanUpdate(info.delta.global);
+    } else if (info.pointerCount == 2) {
+      debugPrint('Scale: ${info.scale.global}');
+      bool zoomIn = info.scale.global.x > 1.0;
+      cam?.onScaleUpdate(zoomIn);
+    }
+    // super.onScaleUpdate(info);
   }
 
-  @override
-  void onDoubleTapDown(TapDownInfo info) {
-    cam?.onDoubleTapDown(info);
-  }
+  // void onScaleUpdate(ScaleUpdateDetails info) {
+  //   if (info.scale > 1.0) {
+  //     cam?.onScaleUpdate(info.scale);
+  //   } else if (info.scale < 1.0) {
+  //     cam?.onScaleUpdate(info.scale);
+  //   }
+  // }
 
   @override
   void lifecycleStateChange(AppLifecycleState state) {
