@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:big_apple/data/models/builder.dart';
-import 'package:big_apple/data/models/building.dart';
+import 'package:big_apple/data/dto/builder.dart';
+import 'package:big_apple/data/dto/building.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +26,7 @@ class GameDataProvider {
 
   Future<bool> setMoney(double money) async {
     try {
-      return await _sharedPreferences.setDouble(_GameDataProviderKeys.moneyKey, money);
+      return _sharedPreferences.setDouble(_GameDataProviderKeys.moneyKey, money);
     } catch (e) {
       return false;
     }
@@ -74,7 +74,7 @@ class GameDataProvider {
 
   Future<bool> setLastSaveDateTime(DateTime dateTime) async {
     try {
-      return await _sharedPreferences.setString(_GameDataProviderKeys.lastSaveDateTimeKey, dateTime.toIso8601String());
+      return _sharedPreferences.setString(_GameDataProviderKeys.lastSaveDateTimeKey, dateTime.toIso8601String());
     } catch (e) {
       return false;
     }

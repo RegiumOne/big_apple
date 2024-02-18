@@ -1,30 +1,22 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:big_apple/blocs/game/game_bloc.dart';
-import 'package:big_apple/components/app_camera_component.dart';
-import 'package:big_apple/data/models/building.dart';
-import 'package:big_apple/data/models/enum/building_type.dart';
-import 'package:big_apple/components/world/main_world.dart';
-import 'package:big_apple/overlays/app_overlay.dart';
-import 'package:big_apple/resources/values/app_duration.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 
-abstract class AppGame extends FlameGame {
-  void startGame({bool isNewGame = false});
-  void endGame();
-  void pauseGame();
-  void resumeGame();
-  void initBuildings(List<Building> buildings);
-}
+import 'package:big_apple/common/components/app_camera_component.dart';
+import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
+import 'package:big_apple/resources/values/app_duration.dart';
 
-class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
-  BigAppleGame({
-    required this.gameBloc,
-  });
+class BigAppleGame extends CommonGame with ScaleDetector {
+  BigAppleGame(this.gameBloc);
 
   final GameBloc gameBloc;
 
@@ -50,13 +42,14 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    cam?.onPanUpdate(info);
-  }
-
-  @override
-  void onDoubleTapDown(TapDownInfo info) {
-    cam?.onDoubleTapDown(info);
+  void onScaleUpdate(ScaleUpdateInfo info) {
+    if (info.pointerCount == 1) {
+      cam?.onPanUpdate(info.delta.global);
+    } else if (info.pointerCount == 2) {
+      bool zoomIn = info.scale.global.x > 1.0;
+      cam?.onScaleUpdate(zoomIn);
+    }
+    super.onScaleUpdate(info);
   }
 
   @override
@@ -96,9 +89,9 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
 
   @override
   void pauseGame() {
-    if (overlays.isActive(Overlays.hud)) {
-      overlays.remove(Overlays.hud);
-      overlays.add(Overlays.pause);
+    if (overlays.isActive(Overlays.hud.name)) {
+      overlays.remove(Overlays.hud.name);
+      overlays.add(Overlays.pause.name);
     }
     pauseEngine();
     _saveGameTimer?.cancel();
@@ -106,11 +99,11 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
 
   @override
   void resumeGame() {
-    if (!(overlays.isActive(Overlays.pause))) {
+    if (!(overlays.isActive(Overlays.pause.name))) {
       resumeEngine();
     } else {
-      overlays.add(Overlays.hud);
-      overlays.remove(Overlays.pause);
+      overlays.add(Overlays.hud.name);
+      overlays.remove(Overlays.pause.name);
       resumeEngine();
     }
     _startSaveTimer();
@@ -138,8 +131,9 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
     cam = AppCameraComponent(world: level);
     final bounds = Rectangle.fromLTWH(0, 0, level!.worldWidth, level!.worldHeight);
     cam?.setBounds(bounds);
-    final initialPosition = Vector2(0, 0);
+    final initialPosition = Vector2(level!.worldWidth / 2, level!.worldHeight / 2);
     cam?.viewfinder.position = initialPosition;
+    cam?.initZoom();
 
     if (cam != null && level != null) {
       addAll([cam!]);
@@ -151,5 +145,28 @@ class BigAppleGame extends AppGame with PanDetector, DoubleTapDetector {
     _saveGameTimer = Timer.periodic(AppDuration.saveGameDuration, (timer) {
       gameBloc.add(const GameSaveEvent());
     });
+  }
+
+  @override
+  void showShop() {
+    overlays.add(Overlays.shop.name);
+  }
+
+  @override
+  void hideShop() {
+    overlays.remove(Overlays.shop.name);
+  }
+
+  @override
+  void placeBuilding(BuildingType type) {
+    level?.placeBuilding(type, getVisibleWorldCenter());
+    hideShop();
+  }
+
+  // Calculate the center of the visible world
+  Coordinates getVisibleWorldCenter() {
+    final centerX = cam!.viewfinder.position.x;
+    final centerY = cam!.viewfinder.position.y;
+    return Coordinates(x: centerX, y: centerY);
   }
 }

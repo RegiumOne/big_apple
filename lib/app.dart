@@ -1,11 +1,14 @@
-import 'package:big_apple/big_apple_game.dart';
-import 'package:big_apple/blocs/game/game_bloc.dart';
-import 'package:big_apple/di/injector.dart';
-import 'package:big_apple/overlays/app_overlay.dart';
-import 'package:big_apple/widgets/loading_widget.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flame/game.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:big_apple/big_apple_game.dart';
+import 'package:big_apple/common/app/theme.dart';
+import 'package:big_apple/di/injector.dart';
+import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/widgets/loading_widget.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -16,10 +19,11 @@ class App extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => inject<GameBloc>()),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
+        theme: appTheme,
         debugShowCheckedModeBanner: false,
         title: 'Big Apple',
-        home: Scaffold(
+        home: const Scaffold(
           body: _Game(),
         ),
       ),
@@ -33,9 +37,7 @@ class _Game extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget<BigAppleGame>.controlled(
-      gameFactory: () => BigAppleGame(
-        gameBloc: context.read<GameBloc>(),
-      ),
+      gameFactory: () => BigAppleGame(context.read<GameBloc>()),
       loadingBuilder: (context) => const _LoadingWidget(),
       overlayBuilderMap: AppOverlay.overlayBuilderMap,
       initialActiveOverlays: AppOverlay.initialActiveOverlays,
