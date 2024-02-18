@@ -36,13 +36,11 @@ class _Game extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: GameWidget<BigAppleGame>.controlled(
-        gameFactory: () => BigAppleGame(context.read<GameBloc>()),
-        loadingBuilder: (context) => const _LoadingWidget(),
-        overlayBuilderMap: AppOverlay.overlayBuilderMap,
-        initialActiveOverlays: AppOverlay.initialActiveOverlays,
-      ),
+    return GameWidget<BigAppleGame>.controlled(
+      gameFactory: () => BigAppleGame(context.read<GameBloc>()),
+      loadingBuilder: (context) => const _LoadingWidget(),
+      overlayBuilderMap: AppOverlay.overlayBuilderMap,
+      initialActiveOverlays: AppOverlay.initialActiveOverlays,
     );
   }
 }
