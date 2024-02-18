@@ -38,7 +38,7 @@ class MainWorld extends World {
     _worldHeight = tiledMap.height;
 
     await add(tiledMap);
-    _initZones();
+    await _initZones();
   }
 
   Future<void> _initZones() async {
