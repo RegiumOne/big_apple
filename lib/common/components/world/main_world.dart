@@ -12,8 +12,8 @@ import 'package:flame_tiled/flame_tiled.dart';
 
 class MainWorld extends World {
   MainWorld({
-    double tileWidth = 128,
-    double tileHeight = 64,
+    double tileWidth = 256,
+    double tileHeight = 128,
   }) : tileSize = Vector2(tileWidth, tileHeight);
 
   final Vector2 tileSize;
@@ -32,7 +32,7 @@ class MainWorld extends World {
 
   @override
   FutureOr<void> onLoad() async {
-    tiledMap = await TiledComponent.load('map.tmx', tileSize);
+    tiledMap = await TiledComponent.load('apple_map.tmx', tileSize);
 
     _worldWidth = tiledMap.width;
     _worldHeight = tiledMap.height;
