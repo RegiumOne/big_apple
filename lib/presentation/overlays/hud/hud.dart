@@ -1,6 +1,8 @@
+import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/extensions/date_time_extension.dart';
 import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class Hud extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppDimension.s16, vertical: AppDimension.s10),
@@ -81,16 +84,12 @@ class Hud extends StatelessWidget {
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primary,
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimension.s16, vertical: AppDimension.s10),
-                ),
-                child: const Text(
-                  "Shop",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () => game.showShop(),
+              child: ButtonWidget(
+                iconSvg: Assets.icons.store,
+                text: 'Store',
+                onPressed: () {
+                  game.showShop();
+                },
               ),
             ),
           ],
