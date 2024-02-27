@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBySwP-7OiC9yvR7JC_LO-qHNLpKFkU2_4',
-    appId: '1:304727663020:android:0d4265a63080138b631a09',
+    appId: '1:304727663020:android:bd8e45f1f32f616f631a09',
     messagingSenderId: '304727663020',
     projectId: 'big-apple-game',
     storageBucket: 'big-apple-game.appspot.com',
@@ -66,10 +66,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCRm6KWl2S9h691P6gqIg0HxwFwpR9w1Zw',
-    appId: '1:304727663020:ios:665dcb7f82e88938631a09',
+    appId: '1:304727663020:ios:657fd898bece554e631a09',
     messagingSenderId: '304727663020',
     projectId: 'big-apple-game',
     storageBucket: 'big-apple-game.appspot.com',
-    iosBundleId: 'one.regium.big-apple',
+    iosBundleId: 'one.regium.eca',
   );
 }

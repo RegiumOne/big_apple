@@ -48,7 +48,7 @@ android {
 
     defaultConfig {
         multiDexEnabled true
-        applicationId "one.regium.big_apple"
+        applicationId "one.regium.eca"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

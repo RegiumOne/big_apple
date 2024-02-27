@@ -17,6 +17,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		BFFC55914E0EB2428541B0EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 940D32E284D5EB9597AFBE4A /* GoogleService-Info.plist */; };
+		E179317F2B8D67B200BD7DC0 /* Appwrite in Frameworks */ = {isa = PBXBuildFile; productRef = E179317E2B8D67B200BD7DC0 /* Appwrite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E179317F2B8D67B200BD7DC0 /* Appwrite in Frameworks */,
 				887DA676EBB46212F18F5236 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,7 +109,6 @@
 				AEB028A2C18CA63024CA3089 /* Pods-RunnerTests.release.xcconfig */,
 				C7C28A70CEF4FBEC53F2174B /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -208,6 +209,9 @@
 			dependencies = (
 			);
 			name = Runner;
+			packageProductDependencies = (
+				E179317E2B8D67B200BD7DC0 /* Appwrite */,
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -241,6 +245,9 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+				E179317D2B8D67B200BD7DC0 /* XCRemoteSwiftPackageReference "sdk-for-apple" */,
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -476,11 +483,13 @@
 				DEVELOPMENT_TEAM = 546XCJM7PZ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "EcoCity Architecture";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "one.regium.big-apple";
+				PRODUCT_BUNDLE_IDENTIFIER = one.regium.eca;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -655,11 +664,13 @@
 				DEVELOPMENT_TEAM = 546XCJM7PZ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "EcoCity Architecture";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "one.regium.big-apple";
+				PRODUCT_BUNDLE_IDENTIFIER = one.regium.eca;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -678,11 +689,13 @@
 				DEVELOPMENT_TEAM = 546XCJM7PZ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "EcoCity Architecture";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "one.regium.big-apple";
+				PRODUCT_BUNDLE_IDENTIFIER = one.regium.eca;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -724,6 +737,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E179317D2B8D67B200BD7DC0 /* XCRemoteSwiftPackageReference "sdk-for-apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appwrite/sdk-for-apple";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E179317E2B8D67B200BD7DC0 /* Appwrite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E179317D2B8D67B200BD7DC0 /* XCRemoteSwiftPackageReference "sdk-for-apple" */;
+			productName = Appwrite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97C146E61CF9000F007C117D /* Project object */;
 }
