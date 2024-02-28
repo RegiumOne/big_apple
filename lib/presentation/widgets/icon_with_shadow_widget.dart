@@ -6,18 +6,20 @@ import 'package:flutter/material.dart';
 class IconWithShadowWidget extends StatelessWidget {
   const IconWithShadowWidget({
     super.key,
-    this.size = AppDimension.s30,
+    this.iconSize = AppDimension.s30,
     this.iconColor = Colors.white,
     this.shadowColor = AppColors.colorWineRed,
+    this.shadowOffset = const Offset(2, 1),
     this.iconData,
     this.iconSvg,
   });
 
-  final double size;
+  final double iconSize;
   final Color iconColor;
   final Color shadowColor;
   final IconData? iconData;
   final SvgGenImage? iconSvg;
+  final Offset shadowOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,11 @@ class IconWithShadowWidget extends StatelessWidget {
         ? Icon(
             iconData,
             color: iconColor,
-            size: size,
+            size: iconSize,
             shadows: [
               BoxShadow(
                 color: shadowColor,
-                offset: const Offset(2, 1),
+                offset: shadowOffset,
               ),
             ],
           )
@@ -37,17 +39,17 @@ class IconWithShadowWidget extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               Positioned(
-                left: 2,
-                top: 1,
+                left: shadowOffset.dx,
+                top: shadowOffset.dy,
                 child: iconSvg!.svg(
-                  width: size,
-                  height: size,
+                  width: iconSize,
+                  height: iconSize,
                   colorFilter: ColorFilter.mode(shadowColor, BlendMode.srcIn),
                 ),
               ),
               iconSvg!.svg(
-                width: size,
-                height: size,
+                width: iconSize,
+                height: iconSize,
                 colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
               ),
             ],

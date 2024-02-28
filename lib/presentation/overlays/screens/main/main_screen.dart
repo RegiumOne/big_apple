@@ -61,6 +61,19 @@ class MainScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: AppDimension.s16),
+                ElevatedButtonWidget(
+                  onPressed: () {
+                    game.overlays.remove(Overlays.main.name);
+                    game.overlays.add(Overlays.settings.name);
+                  },
+                  child: TextWidget(
+                    'Settings',
+                    style: theme.textTheme.labelLarge!.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
