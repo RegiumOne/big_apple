@@ -10,8 +10,20 @@ ThemeData _mainTheme() => ThemeData(
 
 TextTheme _textTheme() {
   return const TextTheme(
+    titleLarge: TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+    ),
+    bodyLarge: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
     bodyMedium: TextStyle(
       fontSize: 15,
+      fontWeight: FontWeight.w400,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 12,
       fontWeight: FontWeight.w400,
     ),
   );
