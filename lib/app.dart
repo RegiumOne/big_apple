@@ -1,3 +1,4 @@
+import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/game.dart';
@@ -18,6 +19,10 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => inject<GameBloc>()),
+        BlocProvider(
+          create: (context) => inject<AuthBloc>()..add(const AuthInitEvent()),
+          lazy: false,
+        ),
       ],
       child: MaterialApp(
         theme: appTheme,

@@ -71,12 +71,8 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   Future<void> startGame({bool isNewGame = false}) async {
+    gameBloc.add(const GameLoadEvent());
     await _initCamera();
-    if (isNewGame) {
-      // TODO(Sasha071201): Add reset game logic
-    } else {
-      gameBloc.add(const GameLoadEvent());
-    }
     _startSaveTimer();
   }
 
