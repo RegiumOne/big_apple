@@ -27,10 +27,11 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   Timer? _saveGameTimer;
 
   @override
-  Color backgroundColor() => const Color(0xFF1E88E5);
+  Color backgroundColor() => const Color(0xFF275F84);
 
   @override
   FutureOr<void> onLoad() async {
+    await startGame();
     await _cacheImages();
     await super.onLoad();
   }
@@ -69,8 +70,8 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   }
 
   @override
-  void startGame({bool isNewGame = false}) {
-    _initCamera();
+  Future<void> startGame({bool isNewGame = false}) async {
+    await _initCamera();
     if (isNewGame) {
       // TODO(Sasha071201): Add reset game logic
     } else {
@@ -121,7 +122,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     ]);
   }
 
-  void _initCamera() async {
+  Future<void> _initCamera() async {
     level = MainWorld();
 
     if (level == null) return;
@@ -136,7 +137,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     cam?.initZoom();
 
     if (cam != null && level != null) {
-      addAll([cam!]);
+      await addAll([cam!]);
     }
   }
 

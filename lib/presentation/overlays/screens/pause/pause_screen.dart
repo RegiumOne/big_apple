@@ -84,8 +84,8 @@ class PauseScreen extends StatelessWidget {
 
   void _exit() {
     game.overlays.remove(Overlays.pause.name);
-    game.overlays.add(Overlays.main.name);
     game.resumeEngine();
     game.endGame();
+    // TODO(Sasha071201): exit
   }
 }

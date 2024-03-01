@@ -1,7 +1,8 @@
+import 'dart:ui';
+
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
-import 'package:big_apple/presentation/widgets/background_image_widget.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/presentation/widgets/circle_button_widget.dart';
 import 'package:big_apple/presentation/widgets/text_widget.dart';
@@ -21,13 +22,13 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return BackgroundImageWidget(
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Center(
         child: _BackgroundWidget(
           title: 'Settings',
           onClose: () {
             game.overlays.remove(Overlays.settings.name);
-            game.overlays.add(Overlays.main.name);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -65,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
                         const SizedBox(width: AppDimension.s6),
                         Expanded(
                           child: ButtonWidget.iconWithTextRow(
-                            gradient: AppColors.gradientDarkGray,
+                            gradient: AppColors.darkGrayGradient,
                             shadowColor: Colors.black,
                             onPressed: () {},
                             iconSvg: Assets.icons.apple,
@@ -299,7 +300,7 @@ class _BackgroundWidget extends StatelessWidget {
               alignment: Alignment.center,
               constraints: const BoxConstraints(maxWidth: 166),
               decoration: const BoxDecoration(
-                gradient: AppColors.gradientSunriseGlow,
+                gradient: AppColors.sunriseGlowGradient,
                 borderRadius: BorderRadius.all(Radius.circular(AppDimension.r20)),
                 boxShadow: [AppColors.shadowElevatedSoft],
               ),

@@ -19,11 +19,15 @@ TextTheme _textTheme() {
       fontWeight: FontWeight.w400,
     ),
     bodyMedium: TextStyle(
-      fontSize: 15,
+      fontSize: 14,
       fontWeight: FontWeight.w400,
     ),
     bodySmall: TextStyle(
       fontSize: 12,
+      fontWeight: FontWeight.w400,
+    ),
+    labelSmall: TextStyle(
+      fontSize: 9,
       fontWeight: FontWeight.w400,
     ),
   );

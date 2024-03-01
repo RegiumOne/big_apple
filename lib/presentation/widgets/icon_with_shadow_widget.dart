@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 class IconWithShadowWidget extends StatelessWidget {
   const IconWithShadowWidget({
     super.key,
-    this.iconSize = AppDimension.s30,
+    this.iconWidth = AppDimension.s30,
+    this.iconHeight,
     this.iconColor = Colors.white,
     this.shadowColor = AppColors.colorWineRed,
     this.shadowOffset = const Offset(2, 1),
@@ -14,8 +15,9 @@ class IconWithShadowWidget extends StatelessWidget {
     this.iconSvg,
   });
 
-  final double iconSize;
-  final Color iconColor;
+  final double iconWidth;
+  final double? iconHeight;
+  final Color? iconColor;
   final Color shadowColor;
   final IconData? iconData;
   final SvgGenImage? iconSvg;
@@ -27,7 +29,7 @@ class IconWithShadowWidget extends StatelessWidget {
         ? Icon(
             iconData,
             color: iconColor,
-            size: iconSize,
+            size: iconWidth,
             shadows: [
               BoxShadow(
                 color: shadowColor,
@@ -42,15 +44,15 @@ class IconWithShadowWidget extends StatelessWidget {
                 left: shadowOffset.dx,
                 top: shadowOffset.dy,
                 child: iconSvg!.svg(
-                  width: iconSize,
-                  height: iconSize,
+                  width: iconWidth,
+                  height: iconHeight ?? iconWidth,
                   colorFilter: ColorFilter.mode(shadowColor, BlendMode.srcIn),
                 ),
               ),
               iconSvg!.svg(
-                width: iconSize,
-                height: iconSize,
-                colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+                width: iconWidth,
+                height: iconHeight ?? iconWidth,
+                colorFilter: iconColor == null ? null : ColorFilter.mode(iconColor!, BlendMode.srcIn),
               ),
             ],
           );

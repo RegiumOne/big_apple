@@ -22,7 +22,7 @@ class CircleButtonWidget extends StatelessWidget {
       height: AppDimension.s44,
       width: AppDimension.s44,
       decoration: const BoxDecoration(
-        gradient: AppColors.gradientSunsetPassion,
+        gradient: AppColors.sunsetPassionGradient,
         borderRadius: borderRadius,
       ),
       child: Material(
@@ -33,7 +33,7 @@ class CircleButtonWidget extends StatelessWidget {
           child: Center(
             child: IconWithShadowWidget(
               iconSvg: iconSvg,
-              iconSize: AppDimension.s16,
+              iconWidth: AppDimension.s16,
               shadowOffset: const Offset(2, 2),
               shadowColor: AppColors.colorLightSemiTransparentBlack,
             ),

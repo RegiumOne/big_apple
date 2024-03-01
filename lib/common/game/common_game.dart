@@ -3,7 +3,7 @@ import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:flame/game.dart';
 
 abstract class CommonGame extends FlameGame {
-  void startGame({bool isNewGame = false});
+  Future<void> startGame({bool isNewGame = false});
   void endGame();
   void pauseGame();
   void resumeGame();
