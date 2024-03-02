@@ -12,8 +12,8 @@ class ButtonWidget extends StatefulWidget {
     this.width = AppDimension.s66,
     this.height = AppDimension.s64,
     this.iconSize = AppDimension.s30,
-    this.gradient = AppColors.gradientWarmSunset,
-    this.gradientPress = AppColors.gradientVelvetWine,
+    this.gradient = AppColors.redGradient,
+    this.gradientPress = AppColors.darkRedGradient,
     this.shadowColor = AppColors.colorWineRed,
     this.borderRadius = AppDimension.r6,
     required this.onPressed,
@@ -21,15 +21,19 @@ class ButtonWidget extends StatefulWidget {
     this.colorPress,
     this.iconSvg,
     this.text,
+    this.gap = AppDimension.s4,
     this.child,
+    this.iconPadding,
+    this.shadowOffset = const Offset(2, 1),
+    this.iconShadowColor = AppColors.colorWineRed,
   });
 
   factory ButtonWidget.oneStatus({
     double width = AppDimension.s66,
     double height = AppDimension.s64,
     double iconSize = AppDimension.s30,
-    Gradient? gradient = AppColors.gradientWarmSunset,
-    Color shadowColor = AppColors.colorWineRed,
+    Gradient? gradient = AppColors.redGradient,
+    Color? shadowColor = AppColors.colorWineRed,
     double borderRadius = AppDimension.r6,
     required void Function() onPressed,
     Color? color,
@@ -57,7 +61,7 @@ class ButtonWidget extends StatefulWidget {
     double width = AppDimension.s66,
     double height = AppDimension.s64,
     double iconSize = AppDimension.s30,
-    Color shadowColor = AppColors.colorWineRed,
+    Color? shadowColor = AppColors.colorWineRed,
     double borderRadius = AppDimension.r6,
     required void Function() onPressed,
     Color? color,
@@ -82,9 +86,9 @@ class ButtonWidget extends StatefulWidget {
   factory ButtonWidget.iconWithTextRow({
     double width = double.infinity,
     double height = AppDimension.s40,
-    Gradient? gradient = AppColors.gradientAutumnBlaze,
+    Gradient? gradient = AppColors.autumnBlazeGradient,
     Color? color,
-    Color shadowColor = AppColors.colorRust,
+    Color? shadowColor = AppColors.colorRust,
     EdgeInsets? padding = const EdgeInsets.all(AppDimension.s8),
     required void Function() onPressed,
     required SvgGenImage iconSvg,
@@ -123,9 +127,9 @@ class ButtonWidget extends StatefulWidget {
   factory ButtonWidget.icon({
     double width = AppDimension.s30,
     double height = AppDimension.s32,
-    Gradient? gradient = AppColors.gradientDeepOceanGlide,
+    Gradient? gradient = AppColors.blueGradientTopBottom,
     Color? color,
-    Color shadowColor = AppColors.colorRoyalBlue,
+    Color? shadowColor = AppColors.colorRoyalBlue,
     required void Function() onPressed,
     required SvgGenImage iconSvg,
     double iconHeight = AppDimension.s18,
@@ -149,7 +153,7 @@ class ButtonWidget extends StatefulWidget {
     double width = double.infinity,
     double height = AppDimension.s38,
     Color color = AppColors.colorAlmondMilk,
-    Color shadowColor = AppColors.colorLightSemiTransparentBlack,
+    Color? shadowColor = AppColors.colorLightSemiTransparentBlack,
     required void Function() onPressed,
     required String text,
     required TextStyle? style,
@@ -167,10 +171,37 @@ class ButtonWidget extends StatefulWidget {
         ),
       );
 
+  factory ButtonWidget.flat({
+    double width = AppDimension.s30,
+    double height = AppDimension.s30,
+    double borderRadius = AppDimension.r8,
+    double iconSize = AppDimension.s10,
+    Offset shadowOffset = const Offset(2, 1),
+    Color iconShadowColor = AppColors.colorWineRed,
+    Color? color,
+    Gradient? gradient = AppColors.greenGradient,
+    required void Function() onPressed,
+    required SvgGenImage? iconSvg,
+  }) =>
+      ButtonWidget(
+        width: width,
+        height: height,
+        color: color,
+        gradient: gradient,
+        shadowColor: null,
+        borderRadius: borderRadius,
+        iconSize: iconSize,
+        iconShadowColor: iconShadowColor,
+        onPressed: onPressed,
+        iconSvg: iconSvg,
+        shadowOffset: shadowOffset,
+      );
+
   final void Function() onPressed;
   final double borderRadius;
   final double iconSize;
-  final Color shadowColor;
+  final Color? shadowColor;
+  final Color iconShadowColor;
   final Gradient? gradient;
   final Gradient? gradientPress;
   final Color? color;
@@ -180,6 +211,9 @@ class ButtonWidget extends StatefulWidget {
   final SvgGenImage? iconSvg;
   final String? text;
   final Widget? child;
+  final double gap;
+  final EdgeInsets? iconPadding;
+  final Offset shadowOffset;
 
   @override
   State<ButtonWidget> createState() => _ButtonWidgetState();
@@ -192,84 +226,110 @@ class _ButtonWidgetState extends State<ButtonWidget> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final borderRadiusResult = BorderRadius.all(Radius.circular(widget.borderRadius));
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: BoxDecoration(
-            color: widget.shadowColor,
-            borderRadius: borderRadiusResult,
-          ),
-        ),
-        AnimatedPositioned(
-          duration: AppDuration.defaultAnimationDuration,
-          bottom: _isPressed ? 0 : AppDimension.s4,
-          left: 0,
-          right: 0,
-          top: 0,
-          child: AnimatedContainer(
-            duration: AppDuration.defaultAnimationDuration,
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-              gradient: _isPressed ? widget.gradientPress : widget.gradient,
-              color: _isPressed ? widget.colorPress : widget.color,
-              borderRadius: borderRadiusResult,
+    final double bottomPadding = widget.shadowColor != null
+        ? _isPressed
+            ? 0
+            : AppDimension.s4
+        : 0;
+    final double topPadding = widget.shadowColor != null
+        ? _isPressed
+            ? AppDimension.s4
+            : 0
+        : 0;
+    return SizedBox(
+      width: widget.width,
+      height: widget.height,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          if (widget.shadowColor != null)
+            AnimatedPositioned(
+              duration: AppDuration.defaultAnimationDuration,
+              bottom: 0,
+              right: 0,
+              left: 0,
+              top: topPadding,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: widget.shadowColor,
+                  borderRadius: borderRadiusResult,
+                ),
+              ),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTapDown: (_) {
-                  setState(() {
-                    _isPressed = true;
-                  });
-                },
-                onTapUp: (_) {
-                  setState(() {
-                    _isPressed = false;
-                  });
-                },
-                onTapCancel: () {
-                  setState(() {
-                    _isPressed = false;
-                  });
-                },
+          AnimatedPositioned(
+            duration: AppDuration.defaultAnimationDuration,
+            bottom: bottomPadding,
+            left: 0,
+            right: 0,
+            top: topPadding,
+            child: AnimatedContainer(
+              duration: AppDuration.defaultAnimationDuration,
+              decoration: BoxDecoration(
+                gradient: _isPressed ? widget.gradientPress : widget.gradient,
+                color: _isPressed ? widget.colorPress : widget.color,
                 borderRadius: borderRadiusResult,
-                onTap: widget.onPressed,
-                child: Center(
-                  child: widget.child ??
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (widget.iconSvg != null)
-                            IconWithShadowWidget(iconSvg: widget.iconSvg!, iconSize: widget.iconSize),
-                          if (widget.iconSvg != null && widget.text != null) const SizedBox(height: AppDimension.s4),
-                          if (widget.text != null)
-                            TextWidget(
-                              widget.text!,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                height: 1.2,
-                                color: Colors.white,
-                                shadows: [
-                                  const BoxShadow(
-                                    color: AppColors.colorWineRed,
-                                    offset: Offset(2, 2),
-                                  ),
-                                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTapDown: (_) {
+                    setState(() {
+                      _isPressed = true;
+                    });
+                  },
+                  onTapUp: (_) {
+                    setState(() {
+                      _isPressed = false;
+                    });
+                  },
+                  onTapCancel: () {
+                    setState(() {
+                      _isPressed = false;
+                    });
+                  },
+                  borderRadius: borderRadiusResult,
+                  onTap: widget.onPressed,
+                  child: Center(
+                    child: widget.child ??
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (widget.iconSvg != null)
+                              Padding(
+                                padding: widget.iconPadding ?? EdgeInsets.zero,
+                                child: IconWithShadowWidget(
+                                  iconSvg: widget.iconSvg!,
+                                  iconWidth: widget.iconSize,
+                                  shadowOffset: widget.shadowOffset,
+                                  shadowColor: widget.iconShadowColor,
+                                ),
                               ),
-                            ),
-                        ],
-                      ),
+                            if (widget.iconSvg != null && widget.text != null) SizedBox(height: widget.gap),
+                            if (widget.text != null)
+                              TextWidget(
+                                widget.text!,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  height: 1.2,
+                                  color: Colors.white,
+                                  shadows: [
+                                    const BoxShadow(
+                                      color: AppColors.colorWineRed,
+                                      offset: Offset(2, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

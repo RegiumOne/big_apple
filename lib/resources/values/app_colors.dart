@@ -28,8 +28,12 @@ class AppColors {
   static const Color colorBrightBlue = Color(0xFF3D78EE);
   static const Color colorUltramarineBlue = Color(0xFF0E00AB);
   static const Color colorAlmondMilk = Color(0xFFE2D0BC);
+  static const Color colorDeepMahogany = Color(0xFF3A1700);
+  static const Color colorCopperBrown = Color(0xFF98603C);
+  static const Color colorTaupeGray = Color(0xFFAA866F);
+  static const Color colorBlackWithMediumTransparency = Color(0xA6000000);
 
-  static const Gradient gradientWarmSunset = LinearGradient(
+  static const Gradient redGradient = LinearGradient(
     colors: [
       colorLightRed,
       colorDarkRed,
@@ -38,7 +42,7 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient gradientVelvetWine = LinearGradient(
+  static const Gradient darkRedGradient = LinearGradient(
     colors: [
       colorCrimsonRed,
       colorChestnutRed,
@@ -47,7 +51,7 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient gradientSunsetPassion = LinearGradient(
+  static const Gradient sunsetPassionGradient = LinearGradient(
     colors: [
       colorSoftCoral,
       colorCarmine,
@@ -56,7 +60,7 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient gradientSunriseGlow = LinearGradient(
+  static const Gradient sunriseGlowGradient = LinearGradient(
     colors: [
       colorPeach,
       colorBurntOrange,
@@ -65,7 +69,7 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient gradientAutumnBlaze = LinearGradient(
+  static const Gradient autumnBlazeGradient = LinearGradient(
     colors: [
       colorBurntSienna,
       colorFieryRed,
@@ -74,7 +78,7 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient gradientDarkGray = LinearGradient(
+  static const Gradient darkGrayGradient = LinearGradient(
     colors: [
       colorDarkGray,
       colorVeryDarkGray,
@@ -83,10 +87,55 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient gradientDeepOceanGlide = LinearGradient(
+  static const Gradient blueGradientTopBottom = LinearGradient(
     colors: [
       colorBrightBlue,
       colorUltramarineBlue,
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient blueGradientLeftRight = LinearGradient(
+    colors: [
+      colorBrightBlue,
+      colorUltramarineBlue,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  static const Gradient greenGradient = LinearGradient(
+    colors: [
+      Color(0xFF82B22A),
+      Color(0xFF558300),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient espressoSunriseGradient = LinearGradient(
+    colors: [
+      Color(0xFF5C361E),
+      Color(0xFF895534),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient darkBlueGradient = LinearGradient(
+    colors: [
+      Color(0xFF2650A2),
+      Color(0xFF00349C),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient orangeGradient = LinearGradient(
+    colors: [
+      Color(0xFFFF9961),
+      Color(0xFFFD7124),
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -107,5 +156,15 @@ class AppColors {
   static const BoxShadow shadowCrispEdge = BoxShadow(
     color: AppColors.colorLightSemiTransparentBlack,
     offset: Offset(2, 2),
+  );
+
+  static const BoxShadow shadowSubtleElegance = BoxShadow(
+    color: AppColors.colorDeepMahogany,
+    offset: Offset(1, 1),
+  );
+
+  static const BoxShadow shadowSoftFocus = BoxShadow(
+    color: AppColors.colorBlackWithMediumTransparency,
+    offset: Offset(1, 1),
   );
 }
