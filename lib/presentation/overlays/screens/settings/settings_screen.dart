@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/data/dto/enum/o_auth_provider.dart';
 import 'package:big_apple/generated/assets.gen.dart';
+import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/presentation/widgets/circle_button_widget.dart';
@@ -10,6 +12,7 @@ import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({
@@ -46,42 +49,50 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ButtonWidget.iconWithTextRow(
-                            onPressed: () {},
-                            iconSvg: Assets.icons.google,
-                            iconHeight: AppDimension.s26,
-                            iconWidth: AppDimension.s28,
-                            gap: AppDimension.s10,
-                            text: 'Sign in with Google',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              height: 1.2,
-                              color: Colors.white,
-                              shadows: [AppColors.shadowCrispEdge],
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: ButtonWidget.iconWithTextRow(
+                                onPressed: () {
+                                  _handleAuthenticationPress(state, context, OAuthProvider.google);
+                                },
+                                iconSvg: Assets.icons.google,
+                                iconHeight: AppDimension.s26,
+                                iconWidth: AppDimension.s28,
+                                gap: AppDimension.s10,
+                                text: state.oAuthProvider == OAuthProvider.google
+                                    ? 'Sign out of Google'
+                                    : 'Sign in with Google',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  height: 1.2,
+                                  color: Colors.white,
+                                  shadows: [AppColors.shadowCrispEdge],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: AppDimension.s6),
-                        Expanded(
-                          child: ButtonWidget.iconWithTextRow(
-                            gradient: AppColors.darkGrayGradient,
-                            shadowColor: Colors.black,
-                            onPressed: () {},
-                            iconSvg: Assets.icons.apple,
-                            iconHeight: AppDimension.s24,
-                            iconWidth: AppDimension.s22,
-                            gap: AppDimension.s12,
-                            text: 'Sign in with Apple',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              height: 1.2,
-                              color: Colors.white,
-                              shadows: [AppColors.shadowCrispEdge],
+                            const SizedBox(width: AppDimension.s6),
+                            Expanded(
+                              child: ButtonWidget.iconWithTextRow(
+                                gradient: AppColors.darkGrayGradient,
+                                shadowColor: Colors.black,
+                                onPressed: () {},
+                                iconSvg: Assets.icons.apple,
+                                iconHeight: AppDimension.s24,
+                                iconWidth: AppDimension.s22,
+                                gap: AppDimension.s12,
+                                text: 'Sign in with Apple',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  height: 1.2,
+                                  color: Colors.white,
+                                  shadows: [AppColors.shadowCrispEdge],
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: AppDimension.s12),
                     ConstrainedBox(
@@ -221,6 +232,14 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleAuthenticationPress(AuthState state, BuildContext context, OAuthProvider oAuthProvider) {
+    if (state.oAuthProvider == oAuthProvider) {
+      context.read<AuthBloc>().add(const AuthLogoutEvent());
+    } else {
+      context.read<AuthBloc>().add(AuthLoginEvent(oAuthProvider));
+    }
   }
 }
 

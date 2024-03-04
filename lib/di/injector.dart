@@ -7,7 +7,8 @@ import 'package:injectable/injectable.dart';
   preferRelativeImports: true,
   asExtension: true,
 )
-Future<void> configureDependencies() async => await GetIt.instance.$initGetIt();
+Future<void> configureDependencies(String environment) async =>
+    await GetIt.instance.$initGetIt(environment: environment);
 
 T inject<T extends Object>({
   String? instanceName,
