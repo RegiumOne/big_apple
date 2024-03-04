@@ -77,12 +77,16 @@ class SettingsScreen extends StatelessWidget {
                               child: ButtonWidget.iconWithTextRow(
                                 gradient: AppColors.darkGrayGradient,
                                 shadowColor: Colors.black,
-                                onPressed: () {},
+                                onPressed: () {
+                                  _handleAuthenticationPress(state, context, OAuthProvider.apple);
+                                },
                                 iconSvg: Assets.icons.apple,
                                 iconHeight: AppDimension.s24,
                                 iconWidth: AppDimension.s22,
                                 gap: AppDimension.s12,
-                                text: 'Sign in with Apple',
+                                text: state.oAuthProvider == OAuthProvider.apple
+                                    ? 'Sign out of Apple'
+                                    : 'Sign in with Apple',
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   height: 1.2,
                                   color: Colors.white,

@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 
 enum OAuthProvider {
-  google;
+  google,
+  apple;
 
   String get provider {
     return name;
