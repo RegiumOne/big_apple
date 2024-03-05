@@ -20,6 +20,7 @@ class AudioBloc extends Bloc<AudioEvent, AudioState> {
     on<AudioInitEvent>(_init, transformer: restartable());
     on<AudioToggleMusicEnabledEvent>(_toggleMusicEnabled, transformer: restartable());
     on<AudioToggleSoundEnabledEvent>(_toggleSoundEnabled, transformer: restartable());
+    on<AudioCheckMusicEvent>(_checkMusic, transformer: restartable());
   }
 
   final IsMusicEnabledUseCase _isMusicEnabledUseCase;
@@ -118,5 +119,17 @@ class AudioBloc extends Bloc<AudioEvent, AudioState> {
         ),
       );
     }
+  }
+
+  void _checkMusic(
+    AudioCheckMusicEvent event,
+    Emitter<AudioState> emit,
+  ) {
+    emit(
+      AudioCheckMusicState(
+        isMusicEnabled: state.isMusicEnabled,
+        isSoundEnabled: state.isSoundEnabled,
+      ),
+    );
   }
 }

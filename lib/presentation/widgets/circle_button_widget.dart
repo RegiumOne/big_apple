@@ -1,3 +1,5 @@
+import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/widgets/icon_with_shadow_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
@@ -29,7 +31,10 @@ class CircleButtonWidget extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: borderRadius,
-          onTap: onTap,
+          onTap: () {
+            onTap();
+            AudioService.instance.playSound(AudioFile.mouseClick);
+          },
           child: Center(
             child: IconWithShadowWidget(
               iconSvg: iconSvg,
