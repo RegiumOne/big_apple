@@ -1,3 +1,4 @@
+import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,9 @@ class App extends StatelessWidget {
         BlocProvider(
           create: (context) => inject<AuthBloc>()..add(const AuthInitEvent()),
           lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => inject<AudioBloc>()..add(const AudioInitEvent()),
         ),
       ],
       child: MaterialApp(
