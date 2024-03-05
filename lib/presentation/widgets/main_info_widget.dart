@@ -225,61 +225,65 @@ class ResourceWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return SizedBox(
       width: width,
-      height: AppDimension.s30,
       child: Row(
         children: [
           Expanded(
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(
-                  left: iconLeftPadding,
-                  right: 0,
-                  child: Container(
-                    width: double.infinity,
-                    height: AppDimension.s30,
-                    decoration: BoxDecoration(
-                      color: AppColors.colorCopperBrown,
-                      border: Border.all(
-                        color: AppColors.colorTaupeGray,
-                        width: 3,
-                      ),
-                      borderRadius: BorderRadius.circular(AppDimension.r10),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: -iconTopPadding,
-                  bottom: -iconBottomPadding,
-                  child: icon.svg(
-                    width: iconWidth,
-                    height: iconHeight,
-                  ),
-                ),
-                Positioned(
-                  left: textLeftPadding,
-                  top: 0,
-                  bottom: 0,
-                  right: 6,
-                  child: Center(
-                    child: FittedBox(
-                      child: Text(
-                        value,
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          color: Colors.white,
-                          shadows: [AppColors.shadowSubtleElegance],
+            child: SizedBox(
+              height: AppDimension.s30,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    left: iconLeftPadding,
+                    right: 0,
+                    child: Container(
+                      width: double.infinity,
+                      height: AppDimension.s30,
+                      decoration: BoxDecoration(
+                        color: AppColors.colorCopperBrown,
+                        border: Border.all(
+                          color: AppColors.colorTaupeGray,
+                          width: 3,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                        borderRadius: BorderRadius.circular(AppDimension.r10),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: -iconTopPadding,
+                    bottom: -iconBottomPadding,
+                    child: icon.svg(
+                      width: iconWidth,
+                      height: iconHeight,
+                    ),
+                  ),
+                  Positioned(
+                    left: textLeftPadding,
+                    top: 0,
+                    bottom: 0,
+                    right: 6,
+                    child: Center(
+                      child: FittedBox(
+                        child: Text(
+                          value,
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            color: Colors.white,
+                            shadows: [AppColors.shadowSubtleElegance],
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           if (onAdd != null)
             ButtonWidget.flat(
+              width: AppDimension.s32,
+              height: AppDimension.s32,
               iconSvg: Assets.icons.plus,
               shadowOffset: const Offset(1, 1),
               iconShadowColor: AppColors.colorBlackWithMediumTransparency,
@@ -313,7 +317,6 @@ class _BackgroundWidget extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            height: AppDimension.s52,
             margin: const EdgeInsets.only(
               bottom: AppDimension.s12,
               left: AppDimension.s10,
@@ -335,9 +338,9 @@ class _BackgroundWidget extends StatelessWidget {
           ),
           Positioned(
             top: -30,
-            bottom: 6,
-            right: 6,
-            left: 6,
+            bottom: 16,
+            right: 16,
+            left: 16,
             child: IgnorePointer(
               child: DottedBorder(
                 borderType: BorderType.RRect,
@@ -345,14 +348,7 @@ class _BackgroundWidget extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 dashPattern: const [5, 5],
                 radius: const Radius.circular(AppDimension.r16),
-                child: const Padding(
-                  padding: EdgeInsets.only(
-                    top: AppDimension.s26,
-                    bottom: AppDimension.s16,
-                    left: AppDimension.s14,
-                    right: AppDimension.s14,
-                  ),
-                ),
+                child: const SizedBox.shrink(),
               ),
             ),
           ),
