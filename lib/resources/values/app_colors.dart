@@ -32,6 +32,7 @@ class AppColors {
   static const Color colorCopperBrown = Color(0xFF98603C);
   static const Color colorTaupeGray = Color(0xFFAA866F);
   static const Color colorBlackWithMediumTransparency = Color(0xA6000000);
+  static const Color colorMediumTransparencyBlack = Color(0x5C000000);
 
   static const Gradient redGradient = LinearGradient(
     colors: [

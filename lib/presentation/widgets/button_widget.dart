@@ -24,8 +24,8 @@ class ButtonWidget extends StatefulWidget {
     this.gap = AppDimension.s4,
     this.child,
     this.iconPadding,
-    this.shadowOffset = const Offset(2, 1),
-    this.iconShadowColor = AppColors.colorWineRed,
+    this.childShadowOffset = const Offset(2, 1),
+    this.childShadowColor = AppColors.colorWineRed,
   });
 
   factory ButtonWidget.oneStatus({
@@ -191,17 +191,17 @@ class ButtonWidget extends StatefulWidget {
         shadowColor: null,
         borderRadius: borderRadius,
         iconSize: iconSize,
-        iconShadowColor: iconShadowColor,
+        childShadowColor: iconShadowColor,
         onPressed: onPressed,
         iconSvg: iconSvg,
-        shadowOffset: shadowOffset,
+        childShadowOffset: shadowOffset,
       );
 
   final void Function() onPressed;
   final double borderRadius;
   final double iconSize;
   final Color? shadowColor;
-  final Color iconShadowColor;
+  final Color childShadowColor;
   final Gradient? gradient;
   final Gradient? gradientPress;
   final Color? color;
@@ -213,7 +213,7 @@ class ButtonWidget extends StatefulWidget {
   final Widget? child;
   final double gap;
   final EdgeInsets? iconPadding;
-  final Offset shadowOffset;
+  final Offset childShadowOffset;
 
   @override
   State<ButtonWidget> createState() => _ButtonWidgetState();
@@ -302,8 +302,8 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                                 child: IconWithShadowWidget(
                                   iconSvg: widget.iconSvg!,
                                   iconWidth: widget.iconSize,
-                                  shadowOffset: widget.shadowOffset,
-                                  shadowColor: widget.iconShadowColor,
+                                  shadowOffset: widget.childShadowOffset,
+                                  shadowColor: widget.childShadowColor,
                                 ),
                               ),
                             if (widget.iconSvg != null && widget.text != null) SizedBox(height: widget.gap),
@@ -314,9 +314,9 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                                   height: 1.2,
                                   color: Colors.white,
                                   shadows: [
-                                    const BoxShadow(
-                                      color: AppColors.colorWineRed,
-                                      offset: Offset(2, 2),
+                                    BoxShadow(
+                                      color: widget.childShadowColor,
+                                      offset: const Offset(2, 2),
                                     ),
                                   ],
                                 ),
