@@ -17,6 +17,9 @@ class AppCameraComponent extends CameraComponent {
   final double maxZoom;
   final double minZoom;
 
+  final StreamController _onChangeController = StreamController.broadcast();
+  Stream get onChangeStream => _onChangeController.stream;
+
   void initZoom() {
     final zoomEffect = ScaleEffect.to(Vector2.all(minZoom), EffectController(duration: 0));
     viewfinder.add(zoomEffect);
@@ -27,6 +30,8 @@ class AppCameraComponent extends CameraComponent {
     final scaledDelta = globalDelta * moveSpeed / viewfinder.zoom;
     final newPosition = currentPosition - scaledDelta;
     viewfinder.position = newPosition;
+
+    _onChangeController.add(null);
   }
 
   bool _isProcessing = false;
@@ -37,6 +42,8 @@ class AppCameraComponent extends CameraComponent {
     _zoom(zoomIn);
     await Future.delayed(const Duration(milliseconds: 400));
     _isProcessing = false;
+
+    _onChangeController.add(null);
   }
 
   void _zoom(bool zoomIn) {
@@ -57,5 +64,11 @@ class AppCameraComponent extends CameraComponent {
     );
 
     viewfinder.add(zoomEffect);
+  }
+
+  @override
+  void onRemove() {
+    _onChangeController.close();
+    super.onRemove();
   }
 }

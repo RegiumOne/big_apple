@@ -40,7 +40,7 @@ enum BuildingType {
         path = Assets.images.buildingMillInitial.path;
         break;
     }
-    if (replacePath) return path.removeAssetsPath();
+    if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
 
@@ -51,7 +51,7 @@ enum BuildingType {
         path = Assets.images.buildingMillHalf.path;
         break;
     }
-    if (replacePath) return path.removeAssetsPath();
+    if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
 
@@ -62,7 +62,7 @@ enum BuildingType {
         path = Assets.images.buildingMillDone.path;
         break;
     }
-    if (replacePath) return path.removeAssetsPath();
+    if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
 

@@ -1,3 +1,5 @@
+import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/widgets/icon_with_shadow_widget.dart';
 import 'package:big_apple/presentation/widgets/text_widget.dart';
@@ -278,6 +280,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                     setState(() {
                       _isPressed = true;
                     });
+                    AudioService.instance.playSound(AudioFile.mouseClick);
                   },
                   onTapUp: (_) {
                     setState(() {

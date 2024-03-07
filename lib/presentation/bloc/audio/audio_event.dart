@@ -15,3 +15,7 @@ class AudioToggleMusicEnabledEvent extends AudioEvent {
 class AudioToggleSoundEnabledEvent extends AudioEvent {
   const AudioToggleSoundEnabledEvent();
 }
+
+class AudioCheckMusicEvent extends AudioEvent {
+  const AudioCheckMusicEvent();
+}

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/dto/enum/o_auth_provider.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
@@ -15,13 +16,30 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     super.key,
     required this.game,
   });
 
   final CommonGame game;
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  void initState() {
+    AudioService.instance.playPopupWindowMusic();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.game.checkMusic();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
         child: _BackgroundWidget(
           title: 'Settings',
           onClose: () {
-            game.overlays.remove(Overlays.settings.name);
+            widget.game.overlays.remove(Overlays.settings.name);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,

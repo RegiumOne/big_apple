@@ -7,6 +7,7 @@ abstract class CommonGame extends FlameGame {
   void endGame();
   void pauseGame();
   void resumeGame();
+  void checkMusic();
   void initBuildings(List<Building> buildings);
 
   /// Shows the shop overlay

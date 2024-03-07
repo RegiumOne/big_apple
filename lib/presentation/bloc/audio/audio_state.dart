@@ -31,6 +31,13 @@ class AudioLoadedState extends AudioState {
   });
 }
 
+class AudioCheckMusicState extends AudioState {
+  const AudioCheckMusicState({
+    required super.isMusicEnabled,
+    required super.isSoundEnabled,
+  });
+}
+
 class AudioFailureState extends AudioState {
   const AudioFailureState({
     required super.isMusicEnabled,

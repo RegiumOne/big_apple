@@ -14,6 +14,7 @@ dependencies:
   dotted_border: ^2.1.0
   firebase_core: ^2.25.4
   flame: ^1.14.0
+  flame_audio: ^2.10.0
   flame_tiled: ^1.18.4
   flutter:
     sdk: flutter
@@ -47,6 +48,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/audio/
     - assets/icons/
     - assets/images/
     - assets/tiles/
