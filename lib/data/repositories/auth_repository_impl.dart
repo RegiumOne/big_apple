@@ -13,19 +13,13 @@ final class AuthRepositoryImpl implements AuthRepository {
   final AuthDataProvider _authDataProvider;
 
   @override
-  Future<app_write_models.User?> login(OAuthProvider provider) async {
-    return _authApiClient.loginOAuth(provider);
-  }
+  Future<app_write_models.User?> login(OAuthProvider provider) => _authApiClient.loginOAuth(provider);
 
   @override
-  Future<app_write_models.User?> getUser() async {
-    return _authApiClient.getUser();
-  }
+  Future<app_write_models.User?> getUser() => _authApiClient.getUser();
 
   @override
-  Future<void> logout() async {
-    return _authApiClient.logout();
-  }
+  Future<void> logout() => _authApiClient.logout();
 
   @override
   OAuthProvider? getOAuthProvider() => _authDataProvider.getOAuthProvider();
