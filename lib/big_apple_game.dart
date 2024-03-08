@@ -8,9 +8,11 @@ import 'package:flame/game.dart';
 
 import 'package:big_apple/common/components/app_camera_component.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/extensions/string_extensions.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
@@ -115,6 +117,9 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   Future<void> _cacheImages() async {
     await images.loadAll([
       ...BuildingType.values.expand((e) => e.allImages),
+      Assets.images.moveBuilding.path.removeAssetsPath(),
+      Assets.images.btnApproveBuilding.path.removeAssetsPath(),
+      Assets.images.btnCancelBuilding.path.removeAssetsPath(),
     ]);
   }
 

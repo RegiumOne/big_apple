@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/components/building_component.dart';
@@ -11,7 +9,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
 class ZoneComponent extends PositionComponent
-    with TapCallbacks, HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
+    with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame>, TapCallbacks {
   ZoneComponent({
     required this.tileSize,
     required this.isAvailable,
@@ -48,12 +46,13 @@ class ZoneComponent extends PositionComponent
   }
 
   Future<void> addBuilding(BuildingType type) async {
-    final objectPosition = position + Vector2(32, 0);
-    if (!isAvailable) {
-      log('There is already a building here');
-      return;
-    }
+    // if (!isAvailable) {
+    //   log('There is already a building here');
+    //   return;
+    // }
     isAvailable = false;
+
+    final objectPosition = position + Vector2(32, 0);
 
     final building = Building(
       coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),
@@ -61,8 +60,8 @@ class ZoneComponent extends PositionComponent
       constructionTimeLeft: type.constructionTimeInSeconds,
     );
 
-    final money = game.gameBloc.state.money - building.type.cost;
-    if (money < 0 || game.gameBloc.state.availableBuilders.isEmpty) return;
+    // final money = game.gameBloc.state.money - building.type.cost;
+    // if (money < 0 || game.gameBloc.state.availableBuilders.isEmpty) return;
 
     game.gameBloc.add(GameAddBuildingEvent(building));
 
@@ -71,5 +70,8 @@ class ZoneComponent extends PositionComponent
       size: tileSize,
     );
     await world.add(mill);
+    await world.add(
+      DeclineBuildingButtonsComponent(onTap: () {}, game: game),
+    );
   }
 }
