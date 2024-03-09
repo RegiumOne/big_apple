@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/dto/enum/o_auth_provider.dart';
 import 'package:big_apple/generated/assets.gen.dart';
+import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
@@ -14,13 +16,30 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     super.key,
     required this.game,
   });
 
   final CommonGame game;
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  void initState() {
+    AudioService.instance.playPopupWindowMusic();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    widget.game.checkMusic();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
         child: _BackgroundWidget(
           title: 'Settings',
           onClose: () {
-            game.overlays.remove(Overlays.settings.name);
+            widget.game.overlays.remove(Overlays.settings.name);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -114,74 +133,82 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimension.s6),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.colorLightGray,
-                        borderRadius: BorderRadius.circular(AppDimension.r10),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: AppDimension.s12,
-                        right: AppDimension.s8,
-                        top: AppDimension.s8,
-                        bottom: AppDimension.s8,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Music',
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: AppColors.colorBronze,
-                                height: 1.18,
+              BlocBuilder<AudioBloc, AudioState>(
+                builder: (context, state) {
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.colorLightGray,
+                            borderRadius: BorderRadius.circular(AppDimension.r10),
+                          ),
+                          padding: const EdgeInsets.only(
+                            left: AppDimension.s12,
+                            right: AppDimension.s8,
+                            top: AppDimension.s8,
+                            bottom: AppDimension.s8,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Music',
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.colorBronze,
+                                    height: 1.18,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: AppDimension.s4),
-                          ButtonWidget.icon(
-                            onPressed: () {},
-                            iconSvg: Assets.icons.music,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: AppDimension.s10),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.colorLightGray,
-                        borderRadius: BorderRadius.circular(AppDimension.r10),
-                      ),
-                      padding: const EdgeInsets.only(
-                        left: AppDimension.s12,
-                        right: AppDimension.s8,
-                        top: AppDimension.s8,
-                        bottom: AppDimension.s8,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Sound',
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: AppColors.colorBronze,
-                                height: 1.18,
+                              const SizedBox(width: AppDimension.s4),
+                              ButtonWidget.icon(
+                                onPressed: () {
+                                  context.read<AudioBloc>().add(const AudioToggleMusicEnabledEvent());
+                                },
+                                iconSvg: Assets.icons.music,
                               ),
-                            ),
+                            ],
                           ),
-                          const SizedBox(width: AppDimension.s4),
-                          ButtonWidget.icon(
-                            onPressed: () {},
-                            iconSvg: Assets.icons.sound,
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                      const SizedBox(width: AppDimension.s10),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.colorLightGray,
+                            borderRadius: BorderRadius.circular(AppDimension.r10),
+                          ),
+                          padding: const EdgeInsets.only(
+                            left: AppDimension.s12,
+                            right: AppDimension.s8,
+                            top: AppDimension.s8,
+                            bottom: AppDimension.s8,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Sound',
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                    color: AppColors.colorBronze,
+                                    height: 1.18,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: AppDimension.s4),
+                              ButtonWidget.icon(
+                                onPressed: () {
+                                  context.read<AudioBloc>().add(const AudioToggleSoundEnabledEvent());
+                                },
+                                iconSvg: Assets.icons.sound,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: AppDimension.s14),
               Row(

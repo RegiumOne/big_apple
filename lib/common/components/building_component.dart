@@ -9,6 +9,7 @@ import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/generated/assets.gen.dart';
+import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
@@ -32,6 +33,8 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
   bool _isEditing = true;
 
   bool _isUnderConstruction = false;
+
+  bool get isUnderConstruction => _isUnderConstruction;
 
   @override
   FutureOr<void> onLoad() async {
@@ -156,6 +159,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
       _isUnderConstruction = false;
       building = building.copyWith(constructionTimeLeft: 0);
       game.gameBloc.add(GameFinishBuildingEvent(building));
+      game.audioBloc.add(const AudioCheckMusicEvent());
     }
 
     _updateSprite();

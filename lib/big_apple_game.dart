@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
+import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/events.dart';
@@ -18,9 +21,10 @@ import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
 class BigAppleGame extends CommonGame with ScaleDetector {
-  BigAppleGame(this.gameBloc);
+  BigAppleGame({required this.gameBloc, required this.audioBloc});
 
   final GameBloc gameBloc;
+  final AudioBloc audioBloc;
 
   AppCameraComponent? cam;
 
@@ -28,19 +32,26 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   Timer? _saveGameTimer;
 
+  StreamSubscription? _camSubscription;
+
   @override
   Color backgroundColor() => const Color(0xFF275F84);
 
   @override
   FutureOr<void> onLoad() async {
+    AudioService.instance.initialize();
+    AudioService.instance.playMusic();
     await startGame();
     await _cacheImages();
+    checkMusic();
     await super.onLoad();
   }
 
   @override
   void onRemove() {
+    AudioService.instance.dispose();
     endGame();
+    _camSubscription?.cancel();
     super.onRemove();
   }
 
@@ -88,6 +99,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   void pauseGame() {
+    AudioService.instance.pauseMusic();
     if (overlays.isActive(Overlays.hud.name)) {
       overlays.remove(Overlays.hud.name);
       overlays.add(Overlays.pause.name);
@@ -105,6 +117,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
       overlays.remove(Overlays.pause.name);
       resumeEngine();
     }
+    AudioService.instance.resumeMusic();
     _startSaveTimer();
   }
 
@@ -112,6 +125,18 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   void initBuildings(List<Building> buildings) async {
     if (level == null) return;
     level!.initBuildings(buildings);
+  }
+
+  @override
+  void checkMusic() {
+    AudioFile audioFile = level?.getAudioFileFromZone(getVisibleWorldCenter()) ?? AudioFile.forest;
+    if (audioFile == AudioFile.forest) {
+      AudioService.instance.playForestMusic();
+    } else if (audioFile == AudioFile.riverStream) {
+      AudioService.instance.playRiverStreamMusic();
+    } else if (audioFile == AudioFile.constructionSounds) {
+      AudioService.instance.playConstructionMusic();
+    }
   }
 
   Future<void> _cacheImages() async {
@@ -140,6 +165,10 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     if (cam != null && level != null) {
       await addAll([cam!]);
     }
+
+    _camSubscription = cam?.onChangeStream.listen((_) {
+      checkMusic();
+    });
   }
 
   void _startSaveTimer() {

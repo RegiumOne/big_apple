@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:big_apple/big_apple_game.dart';
+import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/data/dto/building.dart';
@@ -13,11 +16,13 @@ class ZoneComponent extends PositionComponent
   ZoneComponent({
     required this.tileSize,
     required this.isAvailable,
+    required this.isWater,
   }) {
     // debugMode = true;
   }
 
   final Vector2 tileSize;
+  final bool isWater;
   bool isAvailable;
 
   final _paint = Paint();
@@ -46,10 +51,11 @@ class ZoneComponent extends PositionComponent
   }
 
   Future<void> addBuilding(BuildingType type) async {
-    // if (!isAvailable) {
-    //   log('There is already a building here');
-    //   return;
-    // }
+    if (isWater) return;
+    if (!isAvailable) {
+      log('There is already a building here');
+      return;
+    }
     isAvailable = false;
 
     final objectPosition = position + Vector2(32, 0);
@@ -73,5 +79,6 @@ class ZoneComponent extends PositionComponent
     await world.add(
       DeclineBuildingButtonsComponent(onTap: () {}, game: game),
     );
+    AudioService.instance.playConstructionMusic();
   }
 }

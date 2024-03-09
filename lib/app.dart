@@ -1,3 +1,4 @@
+import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +19,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => inject<GameBloc>()),
+        BlocProvider(
+          create: (context) => inject<GameBloc>(),
+        ),
         BlocProvider(
           create: (context) => inject<AuthBloc>()..add(const AuthInitEvent()),
           lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => inject<AudioBloc>(),
         ),
       ],
       child: MaterialApp(
@@ -42,7 +48,10 @@ class _Game extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GameWidget<BigAppleGame>.controlled(
-      gameFactory: () => BigAppleGame(context.read<GameBloc>()),
+      gameFactory: () => BigAppleGame(
+        gameBloc: BlocProvider.of<GameBloc>(context),
+        audioBloc: BlocProvider.of<AudioBloc>(context),
+      ),
       loadingBuilder: (context) => const _LoadingWidget(),
       overlayBuilderMap: AppOverlay.overlayBuilderMap,
       initialActiveOverlays: AppOverlay.initialActiveOverlays,
