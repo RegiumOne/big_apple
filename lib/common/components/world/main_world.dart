@@ -102,8 +102,8 @@ class MainWorld extends World {
 
   AudioFile getAudioFileFromZone(Coordinates coordinates) {
     List<Component> components = componentsAtPoint(Vector2(coordinates.x, coordinates.y)).toList();
-    BuildingComponent? buildingComponent =
-        components.firstWhereOrNull((element) => element is BuildingComponent) as BuildingComponent?;
+    SmallBuildingComponent? buildingComponent =
+        components.firstWhereOrNull((element) => element is SmallBuildingComponent) as SmallBuildingComponent?;
     if (buildingComponent?.isUnderConstruction == true) {
       return AudioFile.constructionSounds;
     }
@@ -118,7 +118,7 @@ class MainWorld extends World {
 
   Future<void> initBuildings(List<Building> buidlings) async {
     for (Building buidling in buidlings) {
-      BuildingComponent buildingComponent = BuildingComponent(
+      SmallBuildingComponent buildingComponent = SmallBuildingComponent(
         building: buidling,
         size: Vector2.all(tileSize.x),
       );

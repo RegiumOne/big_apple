@@ -133,7 +133,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   Future<void> _cacheImages() async {
     await images.loadAll([
       ...BuildingType.values.expand((e) => e.allImages),
-      Assets.images.moveBuilding.asset(),
+      Assets.images.moveBuilding1x1.asset(),
       Assets.images.btnApproveBuilding.asset(),
       Assets.images.btnCancelBuilding.asset(),
     ]);

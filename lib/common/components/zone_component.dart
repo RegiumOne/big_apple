@@ -8,11 +8,8 @@ import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
-import 'package:flutter/material.dart';
 
-class ZoneComponent extends PositionComponent
-    with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame>, TapCallbacks {
+class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
   ZoneComponent({
     required this.tileSize,
     required this.isAvailable,
@@ -25,31 +22,6 @@ class ZoneComponent extends PositionComponent
   final bool isWater;
   bool isAvailable;
 
-  final _paint = Paint();
-  bool _isPressed = false;
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    _isPressed = true;
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) async {
-    _isPressed = false;
-  }
-
-  @override
-  void onTapCancel(TapCancelEvent event) {
-    _isPressed = false;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    _paint.color = _isPressed ? Colors.red : Colors.transparent;
-    final rect = Rect.fromLTWH(0, 0, width, height);
-    canvas.drawRect(rect, _paint);
-  }
-
   Future<void> addBuilding(BuildingType type) async {
     if (isWater) return;
     if (!isAvailable) {
@@ -58,10 +30,11 @@ class ZoneComponent extends PositionComponent
     }
     isAvailable = false;
 
-    final objectPosition = position + Vector2(32, 0);
+    double centeredX = position.x - position.x % 256;
+    double centeredY = position.y - position.y % 128;
 
     final building = Building(
-      coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),
+      coordinates: Coordinates(x: centeredX, y: centeredY),
       type: type,
       constructionTimeLeft: type.constructionTimeInSeconds,
     );
@@ -71,7 +44,7 @@ class ZoneComponent extends PositionComponent
 
     game.gameBloc.add(GameAddBuildingEvent(building));
 
-    final mill = BuildingComponent(
+    final mill = SmallBuildingComponent(
       building: building,
       size: tileSize,
     );

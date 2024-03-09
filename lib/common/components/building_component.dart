@@ -13,15 +13,20 @@ import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
-class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
-  BuildingComponent({
+/// A component that represents a building in the game.
+/// It can be dragged and dropped to a new position.
+/// It can be declined or approved.
+/// It can be under construction or not.
+/// Size: 256x178
+class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
+  SmallBuildingComponent({
     super.key,
     required this.building,
     required super.size,
     super.anchor = Anchor.center,
   }) : super(
           priority: building.coordinates.y.toInt() + 100,
-          position: Vector2(building.coordinates.x, building.coordinates.y),
+          position: Vector2(building.coordinates.x, building.coordinates.y - 22),
         ) {
     debugMode = true;
   }
@@ -42,6 +47,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
 
     // await _updateSprite();
 
+    size = Vector2(256, 178);
     sprite = Sprite(game.images.fromCache(building.type.imageDone()));
 
     return super.onLoad();
@@ -74,6 +80,11 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
     _isDragging = false;
+
+    double newXPosition = (position.x / 128).round() * 128;
+    bool isOdd = (newXPosition / 128).round().isOdd;
+    double newYPosition = (position.y / 128).round() * 128 + (isOdd ? 64 : 0) - 23;
+    position = Vector2(newXPosition, newYPosition);
   }
 
   @override
@@ -82,11 +93,11 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
 
     if (_isEditing) {
       Sprite(
-        game.images.fromCache(Assets.images.moveBuilding.asset()),
+        game.images.fromCache(Assets.images.moveBuilding1x1.asset()),
       ).render(
         canvas,
-        position: Vector2(0, size.y / 2),
-        size: Vector2(size.x, size.y / 2),
+        position: Vector2(0, 0),
+        size: Vector2(size.x, size.y),
         anchor: Anchor.topLeft,
       );
       Sprite(
@@ -97,22 +108,6 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
         size: Vector2(size.x, size.y),
         anchor: Anchor.topLeft,
       );
-    }
-
-    if (!_isDragging) {
-      DeclineBuildingButtonsComponent(
-        game: game,
-        onTap: () {
-          game.level?.remove(this);
-        },
-      ).render(canvas);
-
-      ApproveBuildingButtonComponent(
-        game: game,
-        onTap: () {
-          game.level?.remove(this);
-        },
-      ).render(canvas);
     }
 
     // const padding = AppDimension.s4;
