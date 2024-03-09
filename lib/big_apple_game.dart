@@ -100,23 +100,14 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   @override
   void pauseGame() {
     AudioService.instance.pauseMusic();
-    if (overlays.isActive(Overlays.hud.name)) {
-      overlays.remove(Overlays.hud.name);
-      overlays.add(Overlays.pause.name);
-    }
+
     pauseEngine();
     _saveGameTimer?.cancel();
   }
 
   @override
   void resumeGame() {
-    if (!(overlays.isActive(Overlays.pause.name))) {
-      resumeEngine();
-    } else {
-      overlays.add(Overlays.hud.name);
-      overlays.remove(Overlays.pause.name);
-      resumeEngine();
-    }
+    resumeEngine();
     AudioService.instance.resumeMusic();
     _startSaveTimer();
   }

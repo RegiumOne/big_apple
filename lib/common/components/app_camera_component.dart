@@ -9,8 +9,8 @@ class AppCameraComponent extends CameraComponent {
   AppCameraComponent({
     super.world,
     this.moveSpeed = 2,
-    this.maxZoom = 1,
-    this.minZoom = 0.5,
+    this.maxZoom = 0.75,
+    this.minZoom = 0.50,
   });
 
   final double moveSpeed;
