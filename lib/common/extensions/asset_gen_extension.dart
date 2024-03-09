@@ -3,6 +3,6 @@ import 'package:big_apple/generated/assets.gen.dart';
 
 extension AssetGenExtension on AssetGenImage {
   String asset() {
-    return path.removeAssetsPath();
+    return path.removeAssetsImagesPath();
   }
 }
