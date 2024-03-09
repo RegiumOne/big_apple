@@ -76,9 +76,7 @@ class ZoneComponent extends PositionComponent
       size: tileSize,
     );
     await world.add(mill);
-    await world.add(
-      DeclineBuildingButtonsComponent(onTap: () {}, game: game),
-    );
+
     AudioService.instance.playConstructionMusic();
   }
 }

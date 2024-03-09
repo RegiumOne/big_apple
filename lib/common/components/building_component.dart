@@ -194,22 +194,18 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
   }
 }
 
-class DeclineBuildingButtonsComponent extends SpriteComponent with TapCallbacks {
+class DeclineBuildingButtonsComponent extends PositionComponent with TapCallbacks {
   DeclineBuildingButtonsComponent({
     required this.onTap,
     required this.game,
   }) {
     debugMode = true;
+    sprite = Sprite(game.images.fromCache(Assets.images.btnCancelBuilding.asset()));
   }
 
   final VoidCallback onTap;
   final BigAppleGame game;
-
-  @override
-  FutureOr<void> onLoad() {
-    sprite = Sprite(game.images.fromCache(Assets.images.btnCancelBuilding.asset()));
-    return super.onLoad();
-  }
+  late final Sprite sprite;
 
   @override
   void render(Canvas canvas) {
@@ -224,12 +220,6 @@ class DeclineBuildingButtonsComponent extends SpriteComponent with TapCallbacks 
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    onTap();
-  }
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    super.onTapUp(event);
     onTap();
   }
 }
