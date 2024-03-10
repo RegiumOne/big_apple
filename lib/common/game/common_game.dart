@@ -10,12 +10,6 @@ abstract class CommonGame extends FlameGame {
   void checkMusic();
   void initBuildings(List<Building> buildings);
 
-  /// Shows the shop overlay
-  void showShop();
-
-  /// Hides the shop overlay
-  void hideShop();
-
   /// Places a building on the map
   void placeBuilding(BuildingType type);
 }
