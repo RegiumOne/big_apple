@@ -188,6 +188,7 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
     sprite = Sprite(game.images.fromCache(spritePath));
   }
 
+  // ignore: unused_element
   void _income(double dt) {
     if (_isUnderConstruction) return;
 

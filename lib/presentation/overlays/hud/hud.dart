@@ -3,6 +3,7 @@ import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/widgets/building_button.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/presentation/overlays/hud/widgets/level_widget.dart';
 import 'package:big_apple/presentation/overlays/hud/widgets/main_info_widget.dart';
@@ -141,20 +142,16 @@ class Hud extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ButtonWidget(
-                        borderRadius: AppDimension.r10,
-                        iconSvg: Assets.icons.store,
-                        childShadowColor: AppColors.colorMediumTransparencyBlack,
+                      BuildingButton(
+                        icon: Assets.icons.cancel.svg(),
                         text: 'Cancel',
                         onPressed: () {
                           context.read<BuildingBloc>().add(CancelBuildingEvent(buildingId: state.buildingId));
                         },
                       ),
                       const SizedBox(width: AppDimension.s6),
-                      ButtonWidget(
-                        borderRadius: AppDimension.r10,
-                        iconSvg: Assets.icons.store,
-                        childShadowColor: AppColors.colorMediumTransparencyBlack,
+                      BuildingButton(
+                        icon: Assets.icons.checkmark.svg(),
                         text: 'Build',
                         onPressed: () {
                           context.read<BuildingBloc>().add(BuildBuildingEvent(buildingId: state.buildingId));
