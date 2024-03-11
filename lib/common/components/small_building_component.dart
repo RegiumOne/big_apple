@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:big_apple/common/extensions/int_extension.dart';
+import 'package:big_apple/presentation/providers/game_provider.dart';
+import 'package:big_apple/resources/values/app_dimension.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -13,12 +17,13 @@ import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
-/// A component that represents a building in the game.
+/// A component that represents a small building in the game.
 /// It can be dragged and dropped to a new position.
 /// It can be declined or approved.
 /// It can be under construction or not.
 /// Size: 256x178
-class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
+class SmallBuildingComponent extends SpriteComponent
+    with HasGameReference<BigAppleGame>, DragCallbacks, RiverpodComponentMixin {
   SmallBuildingComponent({
     super.key,
     required this.building,
@@ -36,7 +41,6 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
   double _incomeTimer = 0;
   bool _isDragging = false;
   bool _isEditing = true;
-
   bool _isUnderConstruction = false;
 
   bool get isUnderConstruction => _isUnderConstruction;
@@ -54,11 +58,27 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
   }
 
   @override
+  void onMount() {
+    addToGameWidgetBuild(() {
+      ref.listen(buildingStateProvider, (previousState, nextState) {
+        if (nextState is BuildingBuildState) {
+          _isEditing = false;
+        }
+      });
+    });
+
+    // ref.read(buildingStateProvider.notifier).state = BuildingInitial();
+
+    super.onMount();
+  }
+
+  @override
   void update(double dt) {
     super.update(dt);
 
-    // _construction(dt);
-    // _income(dt);
+    if (_isUnderConstruction) {
+      _construction(dt);
+    }
   }
 
   @override
@@ -110,38 +130,39 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
       );
     }
 
-    // const padding = AppDimension.s4;
-    // if (_isUnderConstruction) {
-    //   final progress = (building.constructionTimeLeft / building.type.constructionTimeInSeconds).clamp(0.0, 1.0);
-    //   const barHeight = 14.0;
-    //   final barWidth = size.x;
-    //   const borderRadius = Radius.circular(100);
-    //   final gradient = LinearGradient(
-    //     colors: const [Colors.yellow, Colors.grey],
-    //     begin: Alignment.centerLeft,
-    //     end: Alignment.centerRight,
-    //     stops: [1 - progress, 1 - progress],
-    //   );
+    if (_isUnderConstruction) {
+      const padding = AppDimension.s4;
 
-    //   final rect = Rect.fromLTWH(padding, -barHeight, barWidth - padding, barHeight);
-    //   final progressBarPaint = Paint()..shader = gradient.createShader(rect);
-    //   final progressBarRRect = RRect.fromRectAndRadius(rect, borderRadius);
-    //   canvas.drawRRect(progressBarRRect, progressBarPaint);
+      final progress = (building.constructionTimeLeft / building.type.constructionTimeInSeconds).clamp(0.0, 1.0);
+      const barHeight = 14.0;
+      final barWidth = size.x;
+      const borderRadius = Radius.circular(100);
+      final gradient = LinearGradient(
+        colors: const [Colors.yellow, Colors.grey],
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        stops: [1 - progress, 1 - progress],
+      );
 
-    //   final timeText = building.constructionTimeLeft.toInt().toTimeText();
-    //   final textPainter = TextPainter(
-    //     text: TextSpan(
-    //       text: timeText,
-    //       style: const TextStyle(color: Colors.black, fontSize: 14, height: 1),
-    //     ),
-    //     textDirection: TextDirection.ltr,
-    //   );
-    //   textPainter.layout();
-    //   textPainter.paint(
-    //     canvas,
-    //     Offset((size.x - textPainter.width) / 2, -barHeight + 1),
-    //   );
-    // }
+      final rect = Rect.fromLTWH(padding, -barHeight, barWidth - padding, barHeight);
+      final progressBarPaint = Paint()..shader = gradient.createShader(rect);
+      final progressBarRRect = RRect.fromRectAndRadius(rect, borderRadius);
+      canvas.drawRRect(progressBarRRect, progressBarPaint);
+
+      final timeText = building.constructionTimeLeft.toInt().toTimeText();
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: timeText,
+          style: const TextStyle(color: Colors.black, fontSize: 14, height: 1),
+        ),
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset((size.x - textPainter.width) / 2, -barHeight + 1),
+      );
+    }
   }
 
   void _construction(double dt) {
@@ -186,65 +207,5 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
       game.gameBloc.add(GameIncreaseMoneyEvent(building.type.moneyPerUnitOfTime));
       _incomeTimer = 0;
     }
-  }
-}
-
-class DeclineBuildingButtonsComponent extends PositionComponent with TapCallbacks {
-  DeclineBuildingButtonsComponent({
-    required this.onTap,
-    required this.game,
-  }) {
-    debugMode = true;
-    sprite = Sprite(game.images.fromCache(Assets.images.btnCancelBuilding.asset()));
-  }
-
-  final VoidCallback onTap;
-  final BigAppleGame game;
-  late final Sprite sprite;
-
-  @override
-  void render(Canvas canvas) {
-    Sprite(game.images.fromCache(Assets.images.btnCancelBuilding.asset())).render(
-      canvas,
-      position: Vector2(56, 266),
-      size: Vector2(64, 64),
-    );
-    super.render(canvas);
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    onTap();
-  }
-}
-
-class ApproveBuildingButtonComponent extends PositionComponent with TapCallbacks {
-  ApproveBuildingButtonComponent({
-    required this.onTap,
-    required this.game,
-  }) {
-    debugMode = true;
-    sprite = Sprite(game.images.fromCache(Assets.images.btnApproveBuilding.asset()));
-  }
-
-  late final Sprite sprite;
-  final VoidCallback onTap;
-  final BigAppleGame game;
-
-  @override
-  void render(Canvas canvas) {
-    sprite.render(
-      canvas,
-      position: Vector2(136, 266),
-      size: Vector2(64, 64),
-    );
-    super.render(canvas);
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    super.onTapDown(event);
-    onTap();
   }
 }

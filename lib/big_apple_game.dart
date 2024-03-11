@@ -4,6 +4,7 @@ import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/events.dart';
@@ -20,7 +21,7 @@ import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
-class BigAppleGame extends CommonGame with ScaleDetector {
+class BigAppleGame extends CommonGame with ScaleDetector, RiverpodGameMixin {
   BigAppleGame({required this.gameBloc, required this.audioBloc});
 
   final GameBloc gameBloc;
@@ -39,12 +40,13 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   FutureOr<void> onLoad() async {
+    await super.onLoad();
+
     AudioService.instance.initialize();
     AudioService.instance.playMusic();
     await startGame();
     await _cacheImages();
     checkMusic();
-    await super.onLoad();
   }
 
   @override

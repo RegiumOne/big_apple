@@ -1,7 +1,9 @@
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/providers/game_provider.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/presentation/widgets/level_widget.dart';
 import 'package:big_apple/presentation/widgets/main_info_widget.dart';
@@ -11,6 +13,7 @@ import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Hud extends StatelessWidget {
   const Hud({
@@ -121,6 +124,33 @@ class Hud extends StatelessWidget {
               ],
             ),
           ),
+          DiceRollWidget(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ButtonWidget(
+                  borderRadius: AppDimension.r10,
+                  iconSvg: Assets.icons.store,
+                  childShadowColor: AppColors.colorMediumTransparencyBlack,
+                  text: 'Cancel',
+                  onPressed: () {},
+                ),
+                const SizedBox(width: AppDimension.s6),
+                ButtonWidget(
+                  borderRadius: AppDimension.r10,
+                  iconSvg: Assets.icons.store,
+                  childShadowColor: AppColors.colorMediumTransparencyBlack,
+                  text: 'Build',
+                  onPressed: () {
+                    game.showShop();
+                  },
+                ),
+              ],
+            ),
+          ),
           Positioned(
             bottom: 0,
             right: 0,
@@ -169,6 +199,24 @@ class Hud extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class DiceRollWidget extends ConsumerWidget {
+  const DiceRollWidget({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(buildingStateProvider, (previous, next) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Dice roll! We got: $next')),
+      );
+    });
+    return TextButton.icon(
+      onPressed: () => ref.invalidate(buildingStateProvider),
+      icon: const Icon(Icons.casino),
+      label: const Text('Roll a dice'),
     );
   }
 }

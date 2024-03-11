@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:big_apple/common/components/building_component.dart';
+import 'package:big_apple/common/components/small_building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';

@@ -1,5 +1,6 @@
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
+import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/game.dart';
@@ -11,31 +12,28 @@ import 'package:big_apple/di/injector.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/loading_widget.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => inject<GameBloc>(),
-        ),
-        BlocProvider(
-          create: (context) => inject<AuthBloc>()..add(const AuthInitEvent()),
-          lazy: false,
-        ),
-        BlocProvider(
-          create: (context) => inject<AudioBloc>(),
-        ),
-      ],
-      child: MaterialApp(
-        theme: appTheme,
-        debugShowCheckedModeBanner: false,
-        title: 'Big Apple',
-        home: const Scaffold(
-          body: _Game(),
+    return ProviderScope(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => inject<GameBloc>()),
+          BlocProvider(create: (context) => inject<BuildingBloc>()),
+          BlocProvider(create: (context) => inject<AudioBloc>()),
+          BlocProvider(create: (context) => inject<AuthBloc>()..add(const AuthInitEvent()), lazy: false),
+        ],
+        child: MaterialApp(
+          theme: appTheme,
+          debugShowCheckedModeBanner: false,
+          title: 'EcoCity Architects',
+          home: const Scaffold(
+            body: _Game(),
+          ),
         ),
       ),
     );

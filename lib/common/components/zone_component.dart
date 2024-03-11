@@ -3,13 +3,14 @@ import 'dart:developer';
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
-import 'package:big_apple/common/components/building_component.dart';
+import 'package:big_apple/common/components/small_building_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:flame/components.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 
-class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
+class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame>, RiverpodComponentMixin {
   ZoneComponent({
     required this.tileSize,
     required this.isAvailable,
