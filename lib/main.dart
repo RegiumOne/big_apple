@@ -10,7 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await configureDependencies(Environment.prod);
-
+  
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await Flame.device.fullScreen();
