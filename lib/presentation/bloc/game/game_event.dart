@@ -13,13 +13,13 @@ class GameIncreaseMoneyEvent extends GameEvent {
 class GameAddBuildingEvent extends GameEvent {
   const GameAddBuildingEvent(this.building);
 
-  final Building building;
+  final BuildingInfo building;
 }
 
 class GameFinishBuildingEvent extends GameEvent {
   const GameFinishBuildingEvent(this.building);
 
-  final Building building;
+  final BuildingInfo building;
 }
 
 class GameSaveEvent extends GameEvent {

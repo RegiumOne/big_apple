@@ -1,7 +1,8 @@
 import 'package:big_apple/common/extensions/int_extension.dart';
 import 'package:big_apple/common/utils/formatters.dart';
-import 'package:big_apple/data/dto/enum/building_type.dart';
-import 'package:big_apple/data/dto/enum/receive_type.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/enum/passive_benefit.dart';
+import 'package:big_apple/data/dto/enum/passive_disadvantage.dart';
 import 'package:big_apple/data/dto/enum/requirement_type.dart';
 import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/generated/assets.gen.dart';
@@ -23,7 +24,7 @@ class BuildingCardWidget extends StatefulWidget {
     required this.onBuild,
   });
 
-  final BuildingType building;
+  final Building building;
   final double availableMoney;
   final void Function() onBuild;
 
@@ -67,7 +68,7 @@ class _BackWidget extends StatelessWidget {
     required this.onInfo,
   });
 
-  final BuildingType building;
+  final Building building;
   final void Function() onInfo;
 
   @override
@@ -113,12 +114,21 @@ class _BackWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimension.s12),
-              ...building.receive.keys.map((receiveType) {
-                return _ReceiveItemWidget(
-                  receiveItem: building.receive[receiveType] ?? 0,
-                  receiveType: receiveType,
+              ...building.passiveBenefits.keys.map((receiveType) {
+                return _PassiveItemWidget(
+                  receiveItem: building.passiveBenefits[receiveType] ?? 0,
+                  passiveBenefit: receiveType,
+                  passiveDisadvantage: null,
                 );
               }),
+              if (building.income > 0) ...[
+                const SizedBox(height: AppDimension.s8),
+                _PassiveItemWidget(
+                  receiveItem: building.income.toInt(),
+                  passiveBenefit: PassiveBenefit.income,
+                  passiveDisadvantage: null,
+                ),
+              ],
               const SizedBox(height: AppDimension.s20),
               TextWidget(
                 'Requirements',
@@ -130,12 +140,23 @@ class _BackWidget extends StatelessWidget {
               const SizedBox(height: AppDimension.s6),
               Wrap(
                 spacing: AppDimension.s6,
-                children: building.requirements.keys.map((requirementType) {
-                  return _RequirementsForBuildingWidget(
-                    requiredValue: building.requirements[requirementType] ?? 0,
-                    requirementType: requirementType,
-                  );
-                }).toList(),
+                runSpacing: AppDimension.s6,
+                children: [
+                  ...building.requirements.keys.map((requirementType) {
+                    return _RequirementsForBuildingWidget(
+                      requiredValue: building.requirements[requirementType] ?? 0,
+                      requirementType: requirementType,
+                      passiveDisadvantage: null,
+                    );
+                  }),
+                  ...building.passiveDisadvantages.keys.map((requirementType) {
+                    return _RequirementsForBuildingWidget(
+                      requiredValue: building.passiveDisadvantages[requirementType] ?? 0,
+                      requirementType: null,
+                      passiveDisadvantage: requirementType,
+                    );
+                  }),
+                ],
               ),
             ],
           ),
@@ -170,7 +191,7 @@ class _FrontWidget extends StatelessWidget {
     required this.onInfo,
   });
 
-  final BuildingType building;
+  final Building building;
   final Map<ResourceType, int> availableResources;
   final void Function() onBuild;
   final void Function() onInfo;
@@ -179,7 +200,7 @@ class _FrontWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     bool canBuild = true;
-    building.cost.forEach((key, value) {
+    building.price.forEach((key, value) {
       if ((availableResources[key] ?? 0) < value) {
         canBuild = false;
       }
@@ -207,11 +228,13 @@ class _FrontWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimension.s12),
-                  child: Image.asset(
-                    building.imageDone(replacePath: false),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppDimension.s12),
+                    child: Image.asset(
+                      building.imageDone(replacePath: false),
+                    ),
                   ),
                 ),
               ),
@@ -219,9 +242,9 @@ class _FrontWidget extends StatelessWidget {
               Wrap(
                 spacing: AppDimension.s6,
                 runSpacing: AppDimension.s6,
-                children: building.cost.keys.map((cost) {
+                children: building.price.keys.map((cost) {
                   return _ResourceForBuildingWidget(
-                    requiredValue: building.cost[cost] ?? 0,
+                    requiredValue: building.price[cost] ?? 0,
                     availableValue: availableResources[cost] ?? 0,
                     resourceType: cost,
                   );
@@ -237,7 +260,7 @@ class _FrontWidget extends StatelessWidget {
               ),
               const SizedBox(height: AppDimension.s2),
               TextWidget(
-                'Building time  - ${building.constructionTimeInSeconds.toInt().toTimeText()}',
+                'Building time  - ${building.buildingDurationInSeconds.toInt().toTimeText()}',
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: AppColors.colorDimGray,
                   height: 1.2,
@@ -284,23 +307,26 @@ class _FrontWidget extends StatelessWidget {
   }
 }
 
-class _ReceiveItemWidget extends StatelessWidget {
-  const _ReceiveItemWidget({
+class _PassiveItemWidget extends StatelessWidget {
+  const _PassiveItemWidget({
     required this.receiveItem,
-    required this.receiveType,
+    required this.passiveBenefit,
+    required this.passiveDisadvantage,
   });
 
   final int receiveItem;
-  final ReceiveType receiveType;
+  final PassiveBenefit? passiveBenefit;
+  final PassiveDisadvantage? passiveDisadvantage;
 
   @override
   Widget build(BuildContext context) {
+    final isBenefit = passiveBenefit != null;
     final theme = Theme.of(context);
     return Container(
       height: AppDimension.s22,
-      decoration: const BoxDecoration(
-        gradient: AppColors.greenGradientLeftRight,
-        borderRadius: BorderRadius.all(Radius.circular(AppDimension.r6)),
+      decoration: BoxDecoration(
+        gradient: isBenefit ? AppColors.greenGradientLeftRight : AppColors.redGradientLeftRight,
+        borderRadius: const BorderRadius.all(Radius.circular(AppDimension.r6)),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimension.s6,
@@ -311,7 +337,9 @@ class _ReceiveItemWidget extends StatelessWidget {
         children: [
           Flexible(
             child: TextWidget(
-              '+${formatNumber2(receiveItem.toInt())} [${receiveType.title}]',
+              isBenefit
+                  ? '+${formatNumber2(receiveItem.toInt())} ${passiveBenefit?.title}'
+                  : '-${formatNumber2(receiveItem.toInt())} ${passiveDisadvantage?.title}',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.white,
                 height: 1,
@@ -322,7 +350,7 @@ class _ReceiveItemWidget extends StatelessWidget {
           ),
           const SizedBox(width: AppDimension.s4),
           SvgPicture.asset(
-            receiveType.icon(replacePath: false),
+            passiveBenefit?.icon(replacePath: false) ?? passiveDisadvantage!.icon(replacePath: false),
             width: AppDimension.s18,
             height: AppDimension.s18,
           ),
@@ -387,13 +415,16 @@ class _RequirementsForBuildingWidget extends StatelessWidget {
   const _RequirementsForBuildingWidget({
     required this.requiredValue,
     required this.requirementType,
+    required this.passiveDisadvantage,
   });
 
   final int requiredValue;
-  final RequirementType requirementType;
+  final RequirementType? requirementType;
+  final PassiveDisadvantage? passiveDisadvantage;
 
   @override
   Widget build(BuildContext context) {
+    final title = requirementType?.title ?? passiveDisadvantage?.title ?? '';
     final theme = Theme.of(context);
     return Container(
       height: AppDimension.s22,
@@ -410,7 +441,7 @@ class _RequirementsForBuildingWidget extends StatelessWidget {
         children: [
           Flexible(
             child: TextWidget(
-              '${formatNumber2(requiredValue)}${requirementType.title.isNotEmpty ? ' ${requirementType.title}' : ''}',
+              '${formatNumber2(requiredValue)}${title.isNotEmpty ? ' $title' : ''}',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: Colors.black,
                 height: 1,
@@ -421,7 +452,7 @@ class _RequirementsForBuildingWidget extends StatelessWidget {
           ),
           const SizedBox(width: AppDimension.s4),
           SvgPicture.asset(
-            requirementType.icon(replacePath: false),
+            requirementType?.icon(replacePath: false) ?? passiveDisadvantage!.icon(replacePath: false),
             width: AppDimension.s18,
             height: AppDimension.s18,
           ),

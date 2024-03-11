@@ -37,13 +37,22 @@ class AppColors {
   static const Color colorDimGray = Color(0xFF646464);
   static const Color colorSlateGray = Color(0xFF858585);
 
-  static const Gradient redGradient = LinearGradient(
+  static const Gradient redGradientTopBottom = LinearGradient(
     colors: [
       colorLightRed,
       colorDarkRed,
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
+  );
+
+  static const Gradient redGradientLeftRight = LinearGradient(
+    colors: [
+      colorLightRed,
+      colorDarkRed,
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
   );
 
   static const Gradient darkRedGradient = LinearGradient(

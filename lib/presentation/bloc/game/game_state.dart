@@ -9,7 +9,7 @@ abstract class GameState {
   });
 
   final double money;
-  final List<Building> buildings;
+  final List<BuildingInfo> buildings;
   final List<Builder> builders;
   final DateTime? lastSaveDateTime;
 

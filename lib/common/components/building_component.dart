@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/common/extensions/int_extension.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
@@ -22,7 +22,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     // debugMode = true;
   }
 
-  Building building;
+  BuildingInfo building;
 
   double _incomeTimer = 0;
   bool _isUnderConstruction = false;
@@ -50,7 +50,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
   void render(Canvas canvas) {
     const padding = AppDimension.s4;
     if (_isUnderConstruction) {
-      final progress = (building.constructionTimeLeft / building.type.constructionTimeInSeconds).clamp(0.0, 1.0);
+      final progress = (building.constructionTimeLeft / building.building.buildingDurationInSeconds).clamp(0.0, 1.0);
       const barHeight = 14.0;
       final barWidth = size.x;
       const borderRadius = Radius.circular(100);
@@ -104,14 +104,14 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     String spritePath;
 
     if (_isUnderConstruction) {
-      double progress = 1 - (building.constructionTimeLeft / building.type.constructionTimeInSeconds);
+      double progress = 1 - (building.constructionTimeLeft / building.building.buildingDurationInSeconds);
       if (progress < 0.5) {
-        spritePath = building.type.imageInitial();
+        spritePath = building.building.imageInitial();
       } else {
-        spritePath = building.type.imageHalf();
+        spritePath = building.building.imageHalf();
       }
     } else {
-      spritePath = building.type.imageDone();
+      spritePath = building.building.imageDone();
     }
 
     sprite = Sprite(game.images.fromCache(spritePath));
@@ -123,7 +123,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     _incomeTimer += dt;
 
     if (_incomeTimer >= AppDuration.buildingIncomeIntervalInSeconds) {
-      game.gameBloc.add(GameIncreaseMoneyEvent(building.type.moneyPerUnitOfTime));
+      game.gameBloc.add(GameIncreaseMoneyEvent(building.building.income));
       _incomeTimer = 0;
     }
   }

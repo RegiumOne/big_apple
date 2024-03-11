@@ -2,9 +2,17 @@ import 'dart:ui';
 
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/apartment.dart';
+import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/commercial.dart';
+import 'package:big_apple/data/dto/enum/apartment_type.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/data/dto/enum/building_category.dart';
-import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:big_apple/data/dto/enum/commercial_type.dart';
+import 'package:big_apple/data/dto/enum/manufactory_type.dart';
+import 'package:big_apple/data/dto/enum/road_type.dart';
+import 'package:big_apple/data/dto/manufactory.dart';
+import 'package:big_apple/data/dto/road.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
@@ -44,8 +52,25 @@ class _ShopScreenState extends State<ShopScreen> {
     super.dispose();
   }
 
+  List<Building> _getBuildingsForSelectedCategory(BuildingCategory category) {
+    switch (category) {
+      case BuildingCategory.apartments:
+        return ApartmentType.values.map((e) => Apartment(currentLevel: 1, type: e)).toList();
+      case BuildingCategory.commercial:
+        return CommercialType.values.map((e) => Commercial(currentLevel: 1, type: e)).toList();
+      case BuildingCategory.manufactory:
+        return ManufactoryType.values.map((e) => Manufactory(currentLevel: 1, type: e)).toList();
+      case BuildingCategory.road:
+        return RoadType.values.map((e) => Road(currentLevel: 1, type: e)).toList();
+      default:
+        return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Building> buildings = _getBuildingsForSelectedCategory(_selectedCategory);
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Align(
@@ -63,14 +88,17 @@ class _ShopScreenState extends State<ShopScreen> {
           child: BlocBuilder<GameBloc, GameState>(
             builder: (context, state) {
               return Row(
-                children: List.generate(BuildingType.values.length, (index) {
-                  return BuildingCardWidget(
-                    building: BuildingType.values[index],
-                    availableMoney: state.money,
-                    onBuild: () {
-                      _hideShop();
-                      widget.game.placeBuilding(BuildingType.values[index]);
-                    },
+                children: List.generate(buildings.length, (index) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: index == buildings.length - 1 ? 0 : AppDimension.s16),
+                    child: BuildingCardWidget(
+                      building: buildings[index],
+                      availableMoney: state.money,
+                      onBuild: () {
+                        _hideShop();
+                        widget.game.placeBuilding(buildings[index]);
+                      },
+                    ),
                   );
                 }),
               );
