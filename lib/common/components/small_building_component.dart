@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:big_apple/common/extensions/int_extension.dart';
-import 'package:big_apple/presentation/providers/game_provider.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
-import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -22,8 +20,7 @@ import 'package:big_apple/resources/values/app_duration.dart';
 /// It can be declined or approved.
 /// It can be under construction or not.
 /// Size: 256x178
-class SmallBuildingComponent extends SpriteComponent
-    with HasGameReference<BigAppleGame>, DragCallbacks, RiverpodComponentMixin {
+class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
   SmallBuildingComponent({
     super.key,
     required this.building,
@@ -55,21 +52,6 @@ class SmallBuildingComponent extends SpriteComponent
     sprite = Sprite(game.images.fromCache(building.type.imageDone()));
 
     return super.onLoad();
-  }
-
-  @override
-  void onMount() {
-    addToGameWidgetBuild(() {
-      ref.listen(buildingStateProvider, (previousState, nextState) {
-        if (nextState is BuildingBuildState) {
-          _isEditing = false;
-        }
-      });
-    });
-
-    // ref.read(buildingStateProvider.notifier).state = BuildingInitial();
-
-    super.onMount();
   }
 
   @override

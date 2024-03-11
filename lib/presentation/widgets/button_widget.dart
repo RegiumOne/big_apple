@@ -24,6 +24,7 @@ class ButtonWidget extends StatefulWidget {
     this.iconSvg,
     this.text,
     this.gap = AppDimension.s4,
+    this.shadowOffsetBottom = AppDimension.s4,
     this.child,
     this.iconPadding,
     this.childShadowOffset = const Offset(2, 1),
@@ -181,7 +182,7 @@ class ButtonWidget extends StatefulWidget {
     Offset shadowOffset = const Offset(2, 1),
     Color iconShadowColor = AppColors.colorWineRed,
     Color? color,
-    Gradient? gradient = AppColors.greenGradient,
+    Gradient? gradient = AppColors.greenGradientTopBottom,
     required void Function() onPressed,
     required SvgGenImage? iconSvg,
   }) =>
@@ -216,6 +217,7 @@ class ButtonWidget extends StatefulWidget {
   final double gap;
   final EdgeInsets? iconPadding;
   final Offset childShadowOffset;
+  final double shadowOffsetBottom;
 
   @override
   State<ButtonWidget> createState() => _ButtonWidgetState();
@@ -231,11 +233,11 @@ class _ButtonWidgetState extends State<ButtonWidget> {
     final double bottomPadding = widget.shadowColor != null
         ? _isPressed
             ? 0
-            : AppDimension.s4
+            : widget.shadowOffsetBottom
         : 0;
     final double topPadding = widget.shadowColor != null
         ? _isPressed
-            ? AppDimension.s4
+            ? widget.shadowOffsetBottom
             : 0
         : 0;
     return SizedBox(

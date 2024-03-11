@@ -7,7 +7,7 @@ class ProgressBarWidget extends StatelessWidget {
     super.key,
     required this.maxValue,
     required this.currentValue,
-    this.gradient = AppColors.greenGradient,
+    this.gradient = AppColors.greenGradientTopBottom,
     this.alignment = Alignment.centerLeft,
   });
 

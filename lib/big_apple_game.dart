@@ -4,7 +4,7 @@ import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
-import 'package:flame_riverpod/flame_riverpod.dart';
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/events.dart';
@@ -18,10 +18,9 @@ import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
-import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
-class BigAppleGame extends CommonGame with ScaleDetector, RiverpodGameMixin {
+class BigAppleGame extends CommonGame with ScaleDetector {
   BigAppleGame({required this.gameBloc, required this.audioBloc});
 
   final GameBloc gameBloc;
@@ -102,7 +101,6 @@ class BigAppleGame extends CommonGame with ScaleDetector, RiverpodGameMixin {
   @override
   void pauseGame() {
     AudioService.instance.pauseMusic();
-
     pauseEngine();
     _saveGameTimer?.cancel();
   }
@@ -123,7 +121,9 @@ class BigAppleGame extends CommonGame with ScaleDetector, RiverpodGameMixin {
   @override
   void checkMusic() {
     AudioFile audioFile = level?.getAudioFileFromZone(getVisibleWorldCenter()) ?? AudioFile.forest;
-    if (audioFile == AudioFile.forest) {
+    if (overlays.isActive(Overlays.shop.name) || overlays.isActive(Overlays.settings.name)) {
+      AudioService.instance.playPopupWindowMusic();
+    } else if (audioFile == AudioFile.forest) {
       AudioService.instance.playForestMusic();
     } else if (audioFile == AudioFile.riverStream) {
       AudioService.instance.playRiverStreamMusic();
@@ -172,19 +172,8 @@ class BigAppleGame extends CommonGame with ScaleDetector, RiverpodGameMixin {
   }
 
   @override
-  void showShop() {
-    overlays.add(Overlays.shop.name);
-  }
-
-  @override
-  void hideShop() {
-    overlays.remove(Overlays.shop.name);
-  }
-
-  @override
   void placeBuilding(BuildingType type) {
     level?.placeBuilding(type, getVisibleWorldCenter());
-    hideShop();
   }
 
   // Calculate the center of the visible world

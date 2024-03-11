@@ -1,19 +1,16 @@
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/common/game/common_game.dart';
-import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
-import 'package:big_apple/presentation/providers/game_provider.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
-import 'package:big_apple/presentation/widgets/level_widget.dart';
-import 'package:big_apple/presentation/widgets/main_info_widget.dart';
-import 'package:big_apple/presentation/widgets/resource_with_progress_bar_widget.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/level_widget.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/main_info_widget.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/resource_with_progress_bar_widget.dart';
 import 'package:big_apple/presentation/widgets/safe_area_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Hud extends StatelessWidget {
   const Hud({
@@ -63,6 +60,7 @@ class Hud extends StatelessWidget {
                           iconPadding: const EdgeInsets.only(left: AppDimension.s2),
                           iconSvg: Assets.icons.settings,
                           onPressed: () {
+                            game.overlays.remove(Overlays.hud.name);
                             game.overlays.add(Overlays.settings.name);
                           },
                         ),
@@ -124,7 +122,6 @@ class Hud extends StatelessWidget {
               ],
             ),
           ),
-          DiceRollWidget(),
           Align(
             alignment: Alignment.bottomCenter,
             child: Row(
@@ -144,9 +141,7 @@ class Hud extends StatelessWidget {
                   iconSvg: Assets.icons.store,
                   childShadowColor: AppColors.colorMediumTransparencyBlack,
                   text: 'Build',
-                  onPressed: () {
-                    game.showShop();
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
@@ -160,7 +155,8 @@ class Hud extends StatelessWidget {
               childShadowColor: AppColors.colorMediumTransparencyBlack,
               text: 'Store',
               onPressed: () {
-                game.showShop();
+                game.overlays.remove(Overlays.hud.name);
+                game.overlays.add(Overlays.shop.name);
               },
             ),
           ),
@@ -199,24 +195,6 @@ class Hud extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class DiceRollWidget extends ConsumerWidget {
-  const DiceRollWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(buildingStateProvider, (previous, next) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Dice roll! We got: $next')),
-      );
-    });
-    return TextButton.icon(
-      onPressed: () => ref.invalidate(buildingStateProvider),
-      icon: const Icon(Icons.casino),
-      label: const Text('Roll a dice'),
     );
   }
 }

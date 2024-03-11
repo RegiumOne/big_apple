@@ -8,9 +8,8 @@ import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:flame/components.dart';
-import 'package:flame_riverpod/flame_riverpod.dart';
 
-class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame>, RiverpodComponentMixin {
+class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>, HasGameReference<BigAppleGame> {
   ZoneComponent({
     required this.tileSize,
     required this.isAvailable,

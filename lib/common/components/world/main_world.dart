@@ -97,7 +97,7 @@ class MainWorld extends World {
   }
 
   Future<void> placeBuilding(BuildingType type, Coordinates coordinates) async {
-    return getZoneByCoordinates(coordinates)?.addBuilding(type);
+    await getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
   AudioFile getAudioFileFromZone(Coordinates coordinates) {
