@@ -26,6 +26,7 @@ class CircleButtonWidget extends StatelessWidget {
       decoration: const BoxDecoration(
         gradient: AppColors.sunsetPassionGradient,
         borderRadius: borderRadius,
+        boxShadow: [AppColors.shadowGentleElevation],
       ),
       child: Material(
         color: Colors.transparent,

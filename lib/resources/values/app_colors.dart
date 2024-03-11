@@ -33,6 +33,9 @@ class AppColors {
   static const Color colorTaupeGray = Color(0xFFAA866F);
   static const Color colorBlackWithMediumTransparency = Color(0xA6000000);
   static const Color colorMediumTransparencyBlack = Color(0x5C000000);
+  static const Color colorPaleTaupe = Color(0xFFDED7C4);
+  static const Color colorDimGray = Color(0xFF646464);
+  static const Color colorSlateGray = Color(0xFF858585);
 
   static const Gradient redGradient = LinearGradient(
     colors: [
@@ -106,13 +109,22 @@ class AppColors {
     end: Alignment.centerRight,
   );
 
-  static const Gradient greenGradient = LinearGradient(
+  static const Gradient greenGradientTopBottom = LinearGradient(
     colors: [
       Color(0xFF82B22A),
       Color(0xFF558300),
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
+  );
+
+  static const Gradient greenGradientLeftRight = LinearGradient(
+    colors: [
+      Color(0xFF82B22A),
+      Color(0xFF558300),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
   );
 
   static const Gradient espressoSunriseGradient = LinearGradient(
@@ -133,13 +145,49 @@ class AppColors {
     end: Alignment.bottomCenter,
   );
 
-  static const Gradient orangeGradient = LinearGradient(
+  static const Gradient orangeGradientTopBottom = LinearGradient(
     colors: [
       Color(0xFFFF9961),
       Color(0xFFFD7124),
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
+  );
+
+  static const Gradient orangeGradientLeftRight = LinearGradient(
+    colors: [
+      Color(0xFFFF9961),
+      Color(0xFFFD7124),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  static const Gradient disablesGradientTopBottom = LinearGradient(
+    colors: [
+      Color(0xFFB7B7B7),
+      Color(0xFF9D9D9D),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient disablesGradientLeftRight = LinearGradient(
+    colors: [
+      Color(0xFFB7B7B7),
+      Color(0xFF9D9D9D),
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+
+  static const Gradient brownGradientLeftRight = LinearGradient(
+    colors: [
+      Color(0xFF5C361E),
+      Color(0xFF895534),
+    ],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
   );
 
   static const BoxShadow shadowSoftBlack = BoxShadow(
@@ -167,5 +215,11 @@ class AppColors {
   static const BoxShadow shadowSoftFocus = BoxShadow(
     color: AppColors.colorBlackWithMediumTransparency,
     offset: Offset(1, 1),
+  );
+
+  static const BoxShadow shadowGentleElevation = BoxShadow(
+    color: AppColors.colorLightSemiTransparentBlack,
+    offset: Offset(0, 4),
+    blurRadius: 4,
   );
 }

@@ -3,9 +3,9 @@ import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
-import 'package:big_apple/presentation/widgets/level_widget.dart';
-import 'package:big_apple/presentation/widgets/main_info_widget.dart';
-import 'package:big_apple/presentation/widgets/resource_with_progress_bar_widget.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/level_widget.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/main_info_widget.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/resource_with_progress_bar_widget.dart';
 import 'package:big_apple/presentation/widgets/safe_area_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
@@ -60,6 +60,7 @@ class Hud extends StatelessWidget {
                           iconPadding: const EdgeInsets.only(left: AppDimension.s2),
                           iconSvg: Assets.icons.settings,
                           onPressed: () {
+                            game.overlays.remove(Overlays.hud.name);
                             game.overlays.add(Overlays.settings.name);
                           },
                         ),
@@ -130,7 +131,8 @@ class Hud extends StatelessWidget {
               childShadowColor: AppColors.colorMediumTransparencyBlack,
               text: 'Store',
               onPressed: () {
-                game.showShop();
+                game.overlays.remove(Overlays.hud.name);
+                game.overlays.add(Overlays.shop.name);
               },
             ),
           ),

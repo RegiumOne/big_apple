@@ -27,7 +27,7 @@ TextTheme _textTheme() {
       fontWeight: FontWeight.w400,
     ),
     labelSmall: TextStyle(
-      fontSize: 9,
+      fontSize: 10,
       fontWeight: FontWeight.w400,
     ),
   );

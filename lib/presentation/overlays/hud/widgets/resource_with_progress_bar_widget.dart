@@ -36,7 +36,7 @@ class ResourceWithProgressBarWidget extends StatelessWidget {
               maxValue: maxValue,
               currentValue: value,
               alignment: Alignment.centerRight,
-              gradient: AppColors.orangeGradient,
+              gradient: AppColors.orangeGradientTopBottom,
             ),
           ),
           Positioned(

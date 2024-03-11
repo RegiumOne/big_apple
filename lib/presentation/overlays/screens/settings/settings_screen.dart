@@ -51,6 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           title: 'Settings',
           onClose: () {
             widget.game.overlays.remove(Overlays.settings.name);
+            widget.game.overlays.add(Overlays.hud.name);
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -165,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 onPressed: () {
                                   context.read<AudioBloc>().add(const AudioToggleMusicEnabledEvent());
                                 },
-                                iconSvg: Assets.icons.music,
+                                iconSvg: state.isMusicEnabled ? Assets.icons.music : Assets.icons.musicOff,
                               ),
                             ],
                           ),
@@ -200,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 onPressed: () {
                                   context.read<AudioBloc>().add(const AudioToggleSoundEnabledEvent());
                                 },
-                                iconSvg: Assets.icons.sound,
+                                iconSvg: state.isSoundEnabled ? Assets.icons.sound : Assets.icons.soundOff,
                               ),
                             ],
                           ),

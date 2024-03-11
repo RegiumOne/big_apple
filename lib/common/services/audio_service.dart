@@ -147,6 +147,7 @@ class AudioService {
   }
 
   Future<void> resumeMusic() async {
+    if (!_isEnabledMusic) return;
     await FlameAudio.bgm.resume();
     await _secondaryPlayer?.resume();
   }
