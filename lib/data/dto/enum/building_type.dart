@@ -71,7 +71,7 @@ enum BuildingType {
     String path = '';
     switch (this) {
       case BuildingType.mill:
-        path = Assets.images.buildingMillInitial.path;
+        path = Assets.images.apartment1LvlInitial.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -82,7 +82,7 @@ enum BuildingType {
     String path = '';
     switch (this) {
       case BuildingType.mill:
-        path = Assets.images.buildingMillHalf.path;
+        path = Assets.images.apartment1LvlHalf.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();

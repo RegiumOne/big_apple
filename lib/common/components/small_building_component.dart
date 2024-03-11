@@ -23,6 +23,7 @@ import 'package:big_apple/resources/values/app_duration.dart';
 class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
   SmallBuildingComponent({
     super.key,
+    required this.id,
     required this.building,
     required super.size,
     super.anchor = Anchor.center,
@@ -35,12 +36,19 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
 
   Building building;
 
+  final int id;
   double _incomeTimer = 0;
   bool _isDragging = false;
   bool _isEditing = true;
   bool _isUnderConstruction = false;
 
   bool get isUnderConstruction => _isUnderConstruction;
+
+  Future<void> build() async {
+    _isUnderConstruction = true;
+    _isEditing = false;
+    await _updateSprite();
+  }
 
   @override
   FutureOr<void> onLoad() async {

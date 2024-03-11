@@ -44,6 +44,7 @@ class _Game extends StatelessWidget {
   Widget build(BuildContext context) {
     return GameWidget<BigAppleGame>.controlled(
       gameFactory: () => BigAppleGame(
+        buildingBloc: BlocProvider.of<BuildingBloc>(context),
         gameBloc: BlocProvider.of<GameBloc>(context),
         audioBloc: BlocProvider.of<AudioBloc>(context),
       ),

@@ -22,11 +22,11 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>,
   final bool isWater;
   bool isAvailable;
 
-  Future<void> addBuilding(BuildingType type) async {
-    if (isWater) return;
+  Future<int?> addBuilding(BuildingType type) async {
+    if (isWater) return null;
     if (!isAvailable) {
       log('There is already a building here');
-      return;
+      return null;
     }
     isAvailable = false;
 
@@ -44,12 +44,18 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>,
 
     game.gameBloc.add(GameAddBuildingEvent(building));
 
-    final mill = SmallBuildingComponent(
+    int id = DateTime.now().millisecondsSinceEpoch;
+
+    final buildingComponent = SmallBuildingComponent(
+      id: id,
       building: building,
       size: tileSize,
     );
-    await world.add(mill);
+
+    await world.add(buildingComponent);
 
     AudioService.instance.playConstructionMusic();
+
+    return id;
   }
 }

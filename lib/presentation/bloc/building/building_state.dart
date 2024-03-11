@@ -3,10 +3,22 @@ part of 'building_bloc.dart';
 @immutable
 sealed class BuildingState {}
 
-final class BuildingInitial extends BuildingState {}
-
 final class BuildingIdle extends BuildingState {}
 
-final class BuidlingBuild extends BuildingState {}
+final class BuildingPreparing extends BuildingState {
+  BuildingPreparing({required this.buildingId});
 
-final class BuidlingCancelled extends BuildingState {}
+  final int buildingId;
+}
+
+final class BuidlingBuild extends BuildingState {
+  BuidlingBuild({required this.buildingId});
+
+  final int buildingId;
+}
+
+final class BuidlingCancelled extends BuildingState {
+  BuidlingCancelled({required this.buildingId});
+
+  final int  buildingId;
+}

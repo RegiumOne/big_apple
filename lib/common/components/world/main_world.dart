@@ -96,8 +96,19 @@ class MainWorld extends World {
     return zoneComponent;
   }
 
-  Future<void> placeBuilding(BuildingType type, Coordinates coordinates) async {
-    await getZoneByCoordinates(coordinates)?.addBuilding(type);
+  void removeBuildingById(int id) {
+    return removeWhere((component) => component is SmallBuildingComponent && component.id == id);
+  }
+
+  void buildBuildingById(int id) {
+    Component? building = children.firstWhereOrNull((element) => element is SmallBuildingComponent && element.id == id);
+    if (building != null) {
+      (building as SmallBuildingComponent).build();
+    }
+  }
+
+  Future<int?> placeBuilding(BuildingType type, Coordinates coordinates) async {
+    return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
   AudioFile getAudioFileFromZone(Coordinates coordinates) {
@@ -119,6 +130,7 @@ class MainWorld extends World {
   Future<void> initBuildings(List<Building> buidlings) async {
     for (Building buidling in buidlings) {
       SmallBuildingComponent buildingComponent = SmallBuildingComponent(
+        id: buidling.coordinates.x.toInt() + buidling.coordinates.y.toInt(),
         building: buidling,
         size: Vector2.all(tileSize.x),
       );
