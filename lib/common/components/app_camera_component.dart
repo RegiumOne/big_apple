@@ -29,6 +29,20 @@ class AppCameraComponent extends CameraComponent {
     final currentPosition = viewfinder.position;
     final scaledDelta = globalDelta * moveSpeed / viewfinder.zoom;
     final newPosition = currentPosition - scaledDelta;
+
+    // Limit the camera movement to the game world
+    if (newPosition.x < 1340) {
+      newPosition.x = 1340;
+    } else if (newPosition.x > 8020) {
+      newPosition.x = 8020;
+    }
+
+    if (newPosition.y < 930) {
+      newPosition.y = 930;
+    } else if (newPosition.y > 7080) {
+      newPosition.y = 7080;
+    }
+
     viewfinder.position = newPosition;
 
     _onChangeController.add(null);
