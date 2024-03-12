@@ -210,13 +210,13 @@ class Commercial extends Building<CommercialType> {
     String path = '';
     switch (type) {
       case CommercialType.store:
-        path = Assets.images.initialBuilding1On1.path;
+        path = Assets.images.initialBuilding1x1.path;
         break;
       case CommercialType.market:
-        path = Assets.images.marketLvl1.path;
+        path = Assets.images.initialBuilding2x1.path;
         break;
       case CommercialType.cityMall:
-        path = Assets.images.mallLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -228,13 +228,13 @@ class Commercial extends Building<CommercialType> {
     String path = '';
     switch (type) {
       case CommercialType.store:
-        path = Assets.images.initialBuilding1On1.path;
+        path = Assets.images.initialBuilding1x1.path;
         break;
       case CommercialType.market:
-        path = Assets.images.marketLvl1.path;
+        path = Assets.images.initialBuilding2x1.path;
         break;
       case CommercialType.cityMall:
-        path = Assets.images.mallLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();

@@ -194,13 +194,13 @@ class Manufactory extends Building<ManufactoryType> {
     String path = '';
     switch (type) {
       case ManufactoryType.coalElectricStation:
-        path = Assets.images.coalLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
       case ManufactoryType.atomicElectricityStation:
-        path = Assets.images.atomLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
       case ManufactoryType.windElectricityStation:
-        path = Assets.images.electricityLvl1.path;
+        path = Assets.images.initialBuilding1x1.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -212,13 +212,13 @@ class Manufactory extends Building<ManufactoryType> {
     String path = '';
     switch (type) {
       case ManufactoryType.coalElectricStation:
-        path = Assets.images.coalLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
       case ManufactoryType.atomicElectricityStation:
-        path = Assets.images.atomLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
       case ManufactoryType.windElectricityStation:
-        path = Assets.images.initialBuilding1On1.path;
+        path = Assets.images.initialBuilding1x1.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();

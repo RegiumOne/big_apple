@@ -182,7 +182,7 @@ class Apartment extends Building<ApartmentType> {
         path = Assets.images.apartmentLvl1.path;
         break;
       case ApartmentType.skyscraper:
-        path = Assets.images.apartmentLvl1.path;
+        path = Assets.images.scyscraperLvl1.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -194,13 +194,13 @@ class Apartment extends Building<ApartmentType> {
     String path = '';
     switch (type) {
       case ApartmentType.house:
-        path = Assets.images.houseLvl1Half.path;
+        path = Assets.images.initialBuilding1x1.path;
         break;
       case ApartmentType.apartment:
-        path = Assets.images.apartmentLvl1.path;
+        path = Assets.images.initialBuilding2x1.path;
         break;
       case ApartmentType.skyscraper:
-        path = Assets.images.apartmentLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -212,13 +212,13 @@ class Apartment extends Building<ApartmentType> {
     String path = '';
     switch (type) {
       case ApartmentType.house:
-        path = Assets.images.initialBuilding1On1.path;
+        path = Assets.images.initialBuilding1x1.path;
         break;
       case ApartmentType.apartment:
-        path = Assets.images.apartmentLvl1.path;
+        path = Assets.images.initialBuilding2x1.path;
         break;
       case ApartmentType.skyscraper:
-        path = Assets.images.apartmentLvl1.path;
+        path = Assets.images.initialBuilding2x2.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();

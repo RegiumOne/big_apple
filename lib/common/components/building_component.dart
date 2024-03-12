@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:big_apple/common/components/zone_component.dart';
+import 'package:big_apple/data/dto/enum/manufactory_type.dart';
+import 'package:big_apple/data/dto/enum/road_type.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -31,7 +33,8 @@ class BuildingComponent extends SpriteComponent
     super.anchor = Anchor.center,
     bool markAsBuild = false,
   }) : super(
-          priority: building.coordinates.y.toInt() + 100,
+          priority: building.coordinates.y.toInt() +
+              (building.building.type == ManufactoryType.coalElectricStation ? 100 : 0),
           position: Vector2(building.coordinates.x, building.coordinates.y),
         ) {
     id = building.id;
@@ -70,9 +73,18 @@ class BuildingComponent extends SpriteComponent
 
   @override
   FutureOr<void> onLoad() async {
-    size = Vector2(256, 178);
     sprite = Sprite(game.images.fromCache(building.building.imageDone()));
-    position = Vector2(building.coordinates.x, building.coordinates.y);
+
+    if (building.building.type == ManufactoryType.coalElectricStation) {
+      size = Vector2(512, 533);
+      position = Vector2(building.coordinates.x, building.coordinates.y - 54);
+    } else if (building.building.type == RoadType.road) {
+      size = Vector2(256, 133);
+      position = Vector2(building.coordinates.x, building.coordinates.y + 28);
+    } else {
+      size = Vector2(256, 256);
+      position = Vector2(building.coordinates.x, building.coordinates.y - 45);
+    }
 
     return super.onLoad();
   }
@@ -119,8 +131,12 @@ class BuildingComponent extends SpriteComponent
     ZoneComponent? zone = world.getZoneByVector2(newPosition);
 
     if (zone?.isAvailable == true) {
+      if (building.building.type == RoadType.road) {
+        position = newPosition + Vector2(0, 28);
+      } else {
+        position = newPosition - Vector2(0, 45);
+      }
       priority = position.y.toInt() + 100;
-      position = newPosition;
       if (_isBuild) {
         zone?.changeAvailability(false);
         ZoneComponent? previousZone = world.getZoneByVector2(positionBeforeDrag!);

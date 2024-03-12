@@ -31,8 +31,8 @@ class AppCameraComponent extends CameraComponent {
     final newPosition = currentPosition - scaledDelta;
 
     // Limit the camera movement to the game world
-    if (newPosition.x < 1340) {
-      newPosition.x = 1340;
+    if (newPosition.x < 984) {
+      newPosition.x = 984;
     } else if (newPosition.x > 8020) {
       newPosition.x = 8020;
     }
