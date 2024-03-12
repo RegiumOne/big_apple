@@ -11,7 +11,7 @@ class PortComponent extends SpriteComponent with HasGameReference<BigAppleGame>,
   FutureOr<void> onLoad() {
     size = Vector2(937, 557);
     position = Vector2(128, 6826);
-    sprite = Sprite(game.images.fromCache(Assets.images.portLvl1.asset()));
+    sprite = Sprite(game.images.fromCache(Assets.images.portLvl3.asset()));
     return super.onLoad();
   }
 }
