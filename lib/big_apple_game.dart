@@ -137,7 +137,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     }
   }
 
-  Future<void> _cacheImages()  {
+  Future<void> _cacheImages() {
     return images.loadAll(Assets.images.values.map((e) => e.asset()).toList());
   }
 
@@ -173,9 +173,9 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   void placeBuilding(Building type) async {
-    int? buildingId = await level?.placeBuilding(type, getVisibleWorldCenter());
-    if (buildingId != null) {
-      buildingBloc.add(InitBuildingEvent(buildingId: buildingId));
+    BuildingInfo? buildingInfo = await level?.placeBuilding(type, getVisibleWorldCenter());
+    if (buildingInfo != null) {
+      buildingBloc.add(InitBuildingEvent(buildingInfo: buildingInfo));
     }
   }
 

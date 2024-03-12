@@ -15,6 +15,7 @@ part 'building_info.g.dart';
 @JsonSerializable(explicitToJson: true)
 class BuildingInfo {
   const BuildingInfo({
+    required this.id,
     required this.coordinates,
     required this.building,
     required this.constructionTimeLeft,
@@ -22,6 +23,7 @@ class BuildingInfo {
 
   factory BuildingInfo.fromJson(Map<String, dynamic> json) => _$BuildingInfoFromJson(json);
 
+  final int id;
   final Coordinates coordinates;
   @JsonKey(fromJson: _buildingFromJson, toJson: _buildingToJson)
   final Building building;
@@ -30,11 +32,13 @@ class BuildingInfo {
   Map<String, dynamic> toJson() => _$BuildingInfoToJson(this);
 
   BuildingInfo copyWith({
+    int? id,
     Coordinates? coordinates,
     Building? building,
     double? constructionTimeLeft,
   }) {
     return BuildingInfo(
+      id: id ?? this.id,
       coordinates: coordinates ?? this.coordinates,
       building: building ?? this.building,
       constructionTimeLeft: constructionTimeLeft ?? this.constructionTimeLeft,

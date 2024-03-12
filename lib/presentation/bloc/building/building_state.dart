@@ -6,9 +6,9 @@ sealed class BuildingState {}
 final class BuildingIdle extends BuildingState {}
 
 final class BuildingPreparing extends BuildingState {
-  BuildingPreparing({required this.buildingId});
+  BuildingPreparing({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }
 
 final class BuidlingBuild extends BuildingState {

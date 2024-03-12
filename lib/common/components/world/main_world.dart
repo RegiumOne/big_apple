@@ -45,20 +45,19 @@ class MainWorld extends World {
   Future<void> _initZones() async {
     TileLayer? backgroundLayer = tiledMap.tileMap.getLayer('Background');
     TileLayer? waterLayer = tiledMap.tileMap.getLayer('Water');
-    await _initZonesLayer(backgroundLayer, false);
-    await _initZonesLayer(waterLayer, true);
-  }
 
-  Future<void> _initZonesLayer(TileLayer? layer, bool isWater) async {
-    if (layer == null || layer.data == null) return;
+    if (backgroundLayer == null || backgroundLayer.data == null) return;
+    if (waterLayer == null || waterLayer.data == null) return;
 
-    int rowCount = layer.height;
-    int columnCount = layer.width;
+    int rowCount = backgroundLayer.height;
+    int columnCount = backgroundLayer.width;
 
     for (int row = 0; row < rowCount; row++) {
       for (int column = 0; column < columnCount; column++) {
-        int tile = layer.data![row * columnCount + column];
-        if (tile == 0) continue;
+        int backgroundTile = backgroundLayer.data![row * columnCount + column];
+        int waterTile = waterLayer.data![row * columnCount + column];
+
+        if (backgroundTile == 0) continue;
 
         bool isEven = row % 2 == 0;
 
@@ -68,7 +67,7 @@ class MainWorld extends World {
         Vector2 position = Vector2(x, y);
         Vector2 size = Vector2(tileSize.x / 2, tileSize.y);
 
-        //it is important that _initialBusyCoordinates are initialized first in the initBuildings method, otherwise you need to check in initBuildings too if _initZones is initialized first
+        // it is important that _initialBusyCoordinates are initialized first in the initBuildings method, otherwise you need to check in initBuildings too if _initZones is initialized first
         final checkPosition = _initialBusyCoordinates.firstWhereOrNull(
           (element) => (element - Vector2(64, 0)) == position,
         );
@@ -78,9 +77,9 @@ class MainWorld extends World {
         }
 
         ZoneComponent zoneComponent = ZoneComponent(
+          isWater: waterTile != 0,
           tileSize: Vector2.all(tileSize.x),
           isAvailable: checkPosition == null,
-          isWater: isWater,
         )
           ..position = position + Vector2(32, 0)
           ..anchor = Anchor.topLeft
@@ -96,6 +95,10 @@ class MainWorld extends World {
     return zoneComponent;
   }
 
+  ZoneComponent? getZoneByVector2(Vector2 vector2) {
+    return getZoneByCoordinates(Coordinates(x: vector2.x, y: vector2.y));
+  }
+
   void removeBuildingById(int id) {
     return removeWhere((component) => component is BuildingComponent && component.id == id);
   }
@@ -107,7 +110,7 @@ class MainWorld extends World {
     }
   }
 
-  Future<int?> placeBuilding(Building type, Coordinates coordinates) async {
+  Future<BuildingInfo?> placeBuilding(Building type, Coordinates coordinates) async {
     return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
@@ -130,7 +133,6 @@ class MainWorld extends World {
   Future<void> initBuildings(List<BuildingInfo> buidlings) async {
     for (BuildingInfo buidling in buidlings) {
       BuildingComponent buildingComponent = BuildingComponent(
-        id: buidling.coordinates.x.toInt() + buidling.coordinates.y.toInt(),
         building: buidling,
         size: Vector2.all(tileSize.x),
       );

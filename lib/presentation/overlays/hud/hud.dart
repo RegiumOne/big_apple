@@ -146,7 +146,7 @@ class Hud extends StatelessWidget {
                         icon: Assets.icons.cancel.svg(),
                         text: 'Cancel',
                         onPressed: () {
-                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingId: state.buildingId));
+                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingId: state.buildingInfo.id));
                         },
                       ),
                       const SizedBox(width: AppDimension.s6),
@@ -154,7 +154,7 @@ class Hud extends StatelessWidget {
                         icon: Assets.icons.checkmark.svg(),
                         text: 'Build',
                         onPressed: () {
-                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingId: state.buildingId));
+                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingId: state.buildingInfo.id));
                         },
                       ),
                     ],
