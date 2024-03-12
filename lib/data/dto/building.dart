@@ -1,46 +1,27 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:big_apple/data/dto/enum/passive_benefit.dart';
+import 'package:big_apple/data/dto/enum/passive_disadvantage.dart';
+import 'package:big_apple/data/dto/enum/requirement_type.dart';
+import 'package:big_apple/data/dto/enum/resource_type.dart';
 
-import 'package:big_apple/data/dto/enum/building_type.dart';
-
-part 'building.g.dart';
-
-@JsonSerializable(explicitToJson: true)
-class Building {
+abstract class Building<T extends Enum> {
   const Building({
-    required this.coordinates,
+    required this.currentLevel,
     required this.type,
-    required this.constructionTimeLeft,
   });
 
-  factory Building.fromJson(Map<String, dynamic> json) => _$BuildingFromJson(json);
+  final int currentLevel;
+  final T type;
 
-  final Coordinates coordinates;
-  final BuildingType type;
-  final double constructionTimeLeft;
+  double get buildingDurationInSeconds;
+  Map<RequirementType, int> get requirements;
+  Map<PassiveBenefit, int> get passiveBenefits;
+  Map<PassiveDisadvantage, int> get passiveDisadvantages;
+  Map<ResourceType, int> get price;
+  String get title;
+  String get description => 'Description maybe, why i must build it?';
+  double get income;
 
-  Map<String, dynamic> toJson() => _$BuildingToJson(this);
-
-  Building copyWith({
-    Coordinates? coordinates,
-    BuildingType? type,
-    double? constructionTimeLeft,
-  }) {
-    return Building(
-      coordinates: coordinates ?? this.coordinates,
-      type: type ?? this.type,
-      constructionTimeLeft: constructionTimeLeft ?? this.constructionTimeLeft,
-    );
-  }
-}
-
-@JsonSerializable()
-class Coordinates {
-  const Coordinates({required this.x, required this.y});
-
-  factory Coordinates.fromJson(Map<String, dynamic> json) => _$CoordinatesFromJson(json);
-
-  final double x;
-  final double y;
-
-  Map<String, dynamic> toJson() => _$CoordinatesToJson(this);
+  String imageInitial({bool replacePath = true});
+  String imageHalf({bool replacePath = true});
+  String imageDone({bool replacePath = true});
 }

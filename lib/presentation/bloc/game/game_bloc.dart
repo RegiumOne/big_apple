@@ -1,5 +1,5 @@
 import 'package:big_apple/data/dto/builder.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/domain/repositories/game_repository.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
@@ -41,7 +41,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     GameAddBuildingEvent event,
     Emitter<GameState> emit,
   ) async {
-    final money = state.money - (event.building.type.cost[ResourceType.coin] ?? 0);
+    final money = state.money - (event.building.building.price[ResourceType.coin] ?? 0);
     if (money < 0) return;
 
     final builderIndex = state.builders.indexWhere((builder) => !builder.isBusy);
@@ -160,7 +160,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       final intervals = (differenceInSeconds / AppDuration.buildingIncomeIntervalInSeconds).floor();
 
       for (var building in buildings) {
-        final collectedMoney = building.type.moneyPerUnitOfTime * intervals;
+        final collectedMoney = building.building.income * intervals;
         money += collectedMoney;
       }
 

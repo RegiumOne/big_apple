@@ -1,5 +1,5 @@
 import 'package:big_apple/data/dto/building.dart';
-import 'package:big_apple/data/dto/enum/building_type.dart';
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:flame/game.dart';
 
 abstract class CommonGame extends FlameGame {
@@ -8,8 +8,8 @@ abstract class CommonGame extends FlameGame {
   void pauseGame();
   void resumeGame();
   void checkMusic();
-  void initBuildings(List<Building> buildings);
+  void initBuildings(List<BuildingInfo> buildings);
 
   /// Places a building on the map
-  void placeBuilding(BuildingType type);
+  void placeBuilding(Building type);
 }
