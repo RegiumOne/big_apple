@@ -38,7 +38,7 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
 
     BuildingInfo buildingInfo = BuildingInfo(
       id: DateTime.now().millisecondsSinceEpoch,
-      coordinates: Coordinates(x: centeredX, y: centeredY),
+      coordinates: Coordinates(x: centeredX, y: centeredY - 22),
       building: type,
       constructionTimeLeft: type.buildingDurationInSeconds,
     );

@@ -31,7 +31,7 @@ class BuildingComponent extends SpriteComponent
     super.anchor = Anchor.center,
   }) : super(
           priority: building.coordinates.y.toInt() + 100,
-          position: Vector2(building.coordinates.x, building.coordinates.y - 22),
+          position: Vector2(building.coordinates.x, building.coordinates.y),
         ) {
     id = building.id;
     // debugMode = true;
@@ -67,6 +67,7 @@ class BuildingComponent extends SpriteComponent
   FutureOr<void> onLoad() async {
     size = Vector2(256, 178);
     sprite = Sprite(game.images.fromCache(building.building.imageDone()));
+    position = Vector2(building.coordinates.x, building.coordinates.y);
 
     return super.onLoad();
   }
@@ -91,6 +92,7 @@ class BuildingComponent extends SpriteComponent
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    if (_isUnderConstruction) return;
     super.onDragUpdate(event);
     if (_isDragging) {
       position.add(event.localDelta);
@@ -99,8 +101,8 @@ class BuildingComponent extends SpriteComponent
 
   @override
   void onDragEnd(DragEndEvent event) {
+    if (_isUnderConstruction) return;
     super.onDragEnd(event);
-    priority = position.y.toInt() + 100;
     _isDragging = false;
     _isEditing = !_isBuild;
 
@@ -112,6 +114,7 @@ class BuildingComponent extends SpriteComponent
     ZoneComponent? zone = world.getZoneByVector2(newPosition);
 
     if (zone?.isAvailable == true) {
+      priority = position.y.toInt() + 100;
       position = newPosition;
       if (_isBuild) {
         zone?.changeAvailability(false);
