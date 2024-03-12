@@ -29,11 +29,16 @@ class BuildingComponent extends SpriteComponent
     required this.building,
     required super.size,
     super.anchor = Anchor.center,
+    bool markAsBuild = false,
   }) : super(
           priority: building.coordinates.y.toInt() + 100,
           position: Vector2(building.coordinates.x, building.coordinates.y),
         ) {
     id = building.id;
+    if (markAsBuild) {
+      _isEditing = false;
+      _isBuild = true;
+    }
     // debugMode = true;
   }
 

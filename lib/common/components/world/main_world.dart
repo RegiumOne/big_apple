@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'dart:developer';
+
+import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
-import 'package:collection/collection.dart';
-import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame_tiled/flame_tiled.dart';
 
 class MainWorld extends World {
   MainWorld({
@@ -19,6 +19,7 @@ class MainWorld extends World {
 
   final Vector2 tileSize;
 
+  bool _isInited = false;
   double get worldWidth => _worldWidth;
   double get worldHeight => _worldHeight;
   int get columnCount => (_worldWidth / tileSize.x).floor();
@@ -29,8 +30,6 @@ class MainWorld extends World {
 
   late TiledComponent<FlameGame<World>> tiledMap;
 
-  final List<Vector2> _initialBusyCoordinates = [];
-
   @override
   FutureOr<void> onLoad() async {
     tiledMap = await TiledComponent.load('apple_map.tmx', tileSize);
@@ -40,6 +39,7 @@ class MainWorld extends World {
 
     await add(tiledMap);
     await _initZones();
+    _isInited = true;
   }
 
   Future<void> _initZones() async {
@@ -67,19 +67,10 @@ class MainWorld extends World {
         Vector2 position = Vector2(x, y);
         Vector2 size = Vector2(tileSize.x / 2, tileSize.y);
 
-        // it is important that _initialBusyCoordinates are initialized first in the initBuildings method, otherwise you need to check in initBuildings too if _initZones is initialized first
-        final checkPosition = _initialBusyCoordinates.firstWhereOrNull(
-          (element) => (element - Vector2(64, 0)) == position,
-        );
-
-        if (checkPosition != null) {
-          log('Busy position: $position');
-        }
-
         ZoneComponent zoneComponent = ZoneComponent(
           isWater: waterTile != 0,
           tileSize: Vector2.all(tileSize.x),
-          isAvailable: checkPosition == null,
+          isAvailable: true,
         )
           ..position = position + Vector2(32, 0)
           ..anchor = Anchor.topLeft
@@ -132,17 +123,12 @@ class MainWorld extends World {
   }
 
   Future<void> initBuildings(List<BuildingInfo> buidlings) async {
-    for (BuildingInfo buidling in buidlings) {
-      BuildingComponent buildingComponent = BuildingComponent(
-        building: buidling,
-        size: Vector2.all(tileSize.x),
-      );
-
-      _initialBusyCoordinates.add(buildingComponent.position);
-
-      buildingComponent.markAsBuild();
-
-      await add(buildingComponent);
+    if (!_isInited) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      return initBuildings(buidlings);
+    }
+    for (BuildingInfo building in buidlings) {
+      await getZoneByCoordinates(building.coordinates)?.addBuildingWithoutConstruction(building);
     }
   }
 }

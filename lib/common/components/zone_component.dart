@@ -27,6 +27,21 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
     isAvailable = availability;
   }
 
+  Future<void> addBuildingWithoutConstruction(BuildingInfo info) async {
+    if (!isAvailable || isWater) {
+      log('There is no available space for a building');
+    }
+    isAvailable = false;
+
+    BuildingComponent buildingComponent = BuildingComponent(
+      building: info,
+      markAsBuild: true,
+      size: Vector2.all(tileSize.x),
+    );
+
+    await world.add(buildingComponent);
+  }
+
   Future<BuildingInfo?> addBuilding(Building type) async {
     if (!isAvailable || isWater) {
       log('There is no available space for a building');
