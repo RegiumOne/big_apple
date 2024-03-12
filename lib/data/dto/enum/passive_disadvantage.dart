@@ -1,13 +1,16 @@
 import 'package:big_apple/common/extensions/string_extensions.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 
-enum ReceiveType {
-  populationCapacity;
+enum PassiveDisadvantage {
+  electricityPts,
+  freeWorkers;
 
   String get title {
     switch (this) {
-      case populationCapacity:
-        return 'capacity';
+      case electricityPts:
+        return '';
+      case freeWorkers:
+        return '';
       default:
         return '';
     }
@@ -16,7 +19,10 @@ enum ReceiveType {
   String icon({bool replacePath = true}) {
     String path = '';
     switch (this) {
-      case ReceiveType.populationCapacity:
+      case electricityPts:
+        path = Assets.icons.energyWhite.path;
+        break;
+      case freeWorkers:
         path = Assets.icons.populationWhite.path;
         break;
     }

@@ -4,8 +4,8 @@ import 'dart:developer';
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
-import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -107,7 +107,7 @@ class MainWorld extends World {
     }
   }
 
-  Future<int?> placeBuilding(BuildingType type, Coordinates coordinates) async {
+  Future<int?> placeBuilding(Building type, Coordinates coordinates) async {
     return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
@@ -127,8 +127,8 @@ class MainWorld extends World {
     return AudioFile.forest;
   }
 
-  Future<void> initBuildings(List<Building> buidlings) async {
-    for (Building buidling in buidlings) {
+  Future<void> initBuildings(List<BuildingInfo> buidlings) async {
+    for (BuildingInfo buidling in buidlings) {
       BuildingComponent buildingComponent = BuildingComponent(
         id: buidling.coordinates.x.toInt() + buidling.coordinates.y.toInt(),
         building: buidling,

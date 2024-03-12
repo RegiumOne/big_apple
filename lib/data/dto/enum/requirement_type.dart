@@ -2,11 +2,11 @@ import 'package:big_apple/common/extensions/string_extensions.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 
 enum RequirementType {
-  level;
+  ecologyLvl;
 
   String get title {
     switch (this) {
-      case level:
+      case ecologyLvl:
         return 'lvl';
       default:
         return '';
@@ -16,7 +16,7 @@ enum RequirementType {
   String icon({bool replacePath = true}) {
     String path = '';
     switch (this) {
-      case RequirementType.level:
+      case ecologyLvl:
         path = Assets.icons.lvl.path;
         break;
     }

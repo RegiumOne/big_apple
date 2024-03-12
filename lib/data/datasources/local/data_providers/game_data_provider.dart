@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:big_apple/data/dto/builder.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,7 +21,7 @@ class GameDataProvider {
   final SharedPreferences _sharedPreferences;
 
   double getMoney() {
-    return _sharedPreferences.getDouble(_GameDataProviderKeys.moneyKey) ?? 1000;
+    return _sharedPreferences.getDouble(_GameDataProviderKeys.moneyKey) ?? 10000;
   }
 
   Future<bool> setMoney(double money) async {
@@ -32,14 +32,14 @@ class GameDataProvider {
     }
   }
 
-  List<Building> getBuildings() {
+  List<BuildingInfo> getBuildings() {
     final List<String>? buildingString = _sharedPreferences.getStringList(_GameDataProviderKeys.buildingsKey);
     if (buildingString == null) return [];
-    final buildings = buildingString.map((e) => Building.fromJson(json.decode(e))).toList();
+    final buildings = buildingString.map((e) => BuildingInfo.fromJson(json.decode(e))).toList();
     return buildings;
   }
 
-  Future<bool> setBuildings(List<Building> buildings) async {
+  Future<bool> setBuildings(List<BuildingInfo> buildings) async {
     try {
       final buildingsString = buildings.map((e) => json.encode(e.toJson())).toList();
       return await _sharedPreferences.setStringList(_GameDataProviderKeys.buildingsKey, buildingsString);

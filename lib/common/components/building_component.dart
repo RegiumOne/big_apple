@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:big_apple/common/extensions/int_extension.dart';
-import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -9,10 +7,12 @@ import 'package:flame/events.dart';
 
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/common/extensions/asset_gen_extension.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/common/extensions/int_extension.dart';
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
 /// A component that represents a small building in the game.
@@ -34,7 +34,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     // debugMode = true;
   }
 
-  Building building;
+  BuildingInfo building;
 
   final int id;
   double _incomeTimer = 0;
@@ -45,8 +45,8 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
   bool get isUnderConstruction => _isUnderConstruction;
 
   Future<void> build() async {
-    _isUnderConstruction = true;
     _isEditing = false;
+    _isUnderConstruction = true;
     await _updateSprite();
   }
 
@@ -57,7 +57,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     // await _updateSprite();
 
     size = Vector2(256, 178);
-    sprite = Sprite(game.images.fromCache(building.type.imageDone()));
+    sprite = Sprite(game.images.fromCache(building.building.imageDone()));
 
     return super.onLoad();
   }
@@ -111,7 +111,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
         anchor: Anchor.topLeft,
       );
       Sprite(
-        game.images.fromCache(building.type.imageDone()),
+        game.images.fromCache(building.building.imageDone()),
       ).render(
         canvas,
         position: Vector2(0, 0),
@@ -123,7 +123,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     if (_isUnderConstruction) {
       const padding = AppDimension.s4;
 
-      final progress = (building.constructionTimeLeft / building.type.constructionTimeInSeconds).clamp(0.0, 1.0);
+      final progress = (building.constructionTimeLeft / building.building.buildingDurationInSeconds).clamp(0.0, 1.0);
       const barHeight = 32.0;
       final barWidth = size.x;
       const borderRadius = Radius.circular(12);
@@ -181,14 +181,14 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     String spritePath;
 
     if (_isUnderConstruction) {
-      double progress = 1 - (building.constructionTimeLeft / building.type.constructionTimeInSeconds);
+      double progress = 1 - (building.constructionTimeLeft / building.building.buildingDurationInSeconds);
       if (progress < 0.5) {
-        spritePath = building.type.imageInitial();
+        spritePath = building.building.imageInitial();
       } else {
-        spritePath = building.type.imageHalf();
+        spritePath = building.building.imageHalf();
       }
     } else {
-      spritePath = building.type.imageDone();
+      spritePath = building.building.imageDone();
     }
 
     sprite = Sprite(game.images.fromCache(spritePath));
@@ -201,7 +201,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
     _incomeTimer += dt;
 
     if (_incomeTimer >= AppDuration.buildingIncomeIntervalInSeconds) {
-      game.gameBloc.add(GameIncreaseMoneyEvent(building.type.moneyPerUnitOfTime));
+      game.gameBloc.add(GameIncreaseMoneyEvent(building.building.income));
       _incomeTimer = 0;
     }
   }

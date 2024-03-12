@@ -21,6 +21,7 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
   @override
   void initState() {
     context.read<AudioBloc>().add(const AudioInitEvent());
+    context.read<GameBloc>().add(const GameLoadEvent());
     super.initState();
   }
 
