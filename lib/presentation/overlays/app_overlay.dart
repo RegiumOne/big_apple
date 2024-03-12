@@ -5,6 +5,7 @@ import 'package:big_apple/presentation/overlays/screens/information/information_
 import 'package:big_apple/presentation/overlays/screens/port/port_screen.dart';
 import 'package:big_apple/presentation/overlays/screens/settings/settings_screen.dart';
 import 'package:big_apple/presentation/overlays/screens/shop/shop_screen.dart';
+import 'package:big_apple/presentation/overlays/screens/upgrade/upgrade_screen.dart';
 import 'package:flutter/material.dart';
 
 enum Overlays {
@@ -14,6 +15,7 @@ enum Overlays {
   settings,
   information,
   port,
+  upgrade,
 }
 
 class AppOverlay {
@@ -29,5 +31,6 @@ class AppOverlay {
     Overlays.settings.name: (context, game) => SettingsScreen(game: game),
     Overlays.information.name: (context, game) => InformationScreen(game: game),
     Overlays.port.name: (context, game) => PortScreen(game: game),
+    Overlays.upgrade.name: (context, game) => UpgradeScreen(game: game),
   };
 }

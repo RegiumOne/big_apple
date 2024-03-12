@@ -240,4 +240,12 @@ class Commercial extends Building<CommercialType> {
     if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
+
+  @override
+  Building<CommercialType> copyWith({int? currentLevel, CommercialType? type}) {
+    return Commercial(
+      currentLevel: currentLevel ?? this.currentLevel,
+      type: type ?? this.type,
+    );
+  }
 }
