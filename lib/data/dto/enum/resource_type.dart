@@ -5,6 +5,7 @@ enum ResourceType {
   coin,
   stone,
   metal,
+  wood,
   builders,
   electricity,
   population;
@@ -17,6 +18,8 @@ enum ResourceType {
         return 'Stone';
       case metal:
         return 'Metal';
+      case wood:
+        return 'Wood';
       case builders:
         return 'Builders';
       case electricity:
@@ -38,6 +41,9 @@ enum ResourceType {
       case metal:
         path = isWhite ? Assets.icons.metalWhite.path : Assets.icons.metal.path;
         break;
+      case wood:
+        path = isWhite ? Assets.icons.wood.path : Assets.icons.wood.path;
+        break;
       case builders:
         path = Assets.icons.worker.path;
         break;
@@ -51,4 +57,11 @@ enum ResourceType {
     if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
+
+  static List<ResourceType> mainResources = [
+    coin,
+    stone,
+    metal,
+    wood,
+  ];
 }

@@ -213,19 +213,6 @@ class Hud extends StatelessWidget {
                       ButtonWidget(
                         gap: AppDimension.s2,
                         borderRadius: AppDimension.r10,
-                        iconSvg: Assets.icons.storage,
-                        gradient: AppColors.blueGradientTopBottom,
-                        gradientPress: AppColors.darkBlueGradient,
-                        shadowColor: AppColors.colorRoyalBlue,
-                        childShadowColor: AppColors.colorMediumTransparencyBlack,
-                        childShadowOffset: const Offset(2, 2),
-                        text: 'Storage',
-                        onPressed: () {},
-                      ),
-                      const SizedBox(height: AppDimension.s12),
-                      ButtonWidget(
-                        gap: AppDimension.s2,
-                        borderRadius: AppDimension.r10,
                         iconSvg: Assets.icons.port,
                         gradient: AppColors.blueGradientTopBottom,
                         gradientPress: AppColors.darkBlueGradient,
@@ -233,7 +220,10 @@ class Hud extends StatelessWidget {
                         childShadowColor: AppColors.colorMediumTransparencyBlack,
                         childShadowOffset: const Offset(2, 2),
                         text: 'Port',
-                        onPressed: () {},
+                        onPressed: () {
+                          game.overlays.remove(Overlays.hud.name);
+                          game.overlays.add(Overlays.port.name);
+                        },
                       ),
                     ],
                   ),
