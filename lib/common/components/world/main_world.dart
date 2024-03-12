@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:big_apple/common/components/port_component.dart';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -80,6 +81,11 @@ class MainWorld extends World {
     }
   }
 
+  Future<void> _initPort() async {
+    PortComponent port = PortComponent();
+    await add(port);
+  }
+
   ZoneComponent? getZoneByCoordinates(Coordinates coordinates) {
     List<Component> components = componentsAtPoint(Vector2(coordinates.x, coordinates.y)).toList();
     ZoneComponent? zoneComponent = components.firstWhereOrNull((element) => element is ZoneComponent) as ZoneComponent?;
@@ -127,6 +133,9 @@ class MainWorld extends World {
       await Future.delayed(const Duration(milliseconds: 100));
       return initBuildings(buidlings);
     }
+
+    await _initPort();
+
     for (BuildingInfo building in buidlings) {
       await getZoneByCoordinates(building.coordinates)?.addBuildingWithoutConstruction(building);
     }
