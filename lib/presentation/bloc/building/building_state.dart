@@ -12,13 +12,13 @@ final class BuildingPreparing extends BuildingState {
 }
 
 final class BuidlingBuild extends BuildingState {
-  BuidlingBuild({required this.buildingId});
+  BuidlingBuild({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }
 
 final class BuidlingCancelled extends BuildingState {
-  BuidlingCancelled({required this.buildingId});
+  BuidlingCancelled({required this.buildingInfo});
 
-  final int  buildingId;
+  final BuildingInfo buildingInfo;
 }

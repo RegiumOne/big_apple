@@ -19,10 +19,10 @@ class BuildingBloc extends Bloc<BuildingEvent, BuildingState> {
   }
 
   void _handleBuildBuildingEvent(BuildBuildingEvent event, Emitter<BuildingState> emit) {
-    emit(BuidlingBuild(buildingId: event.buildingId));
+    emit(BuidlingBuild(buildingInfo: event.buildingInfo));
   }
 
   void _handleCancelBuildingEvent(CancelBuildingEvent event, Emitter<BuildingState> emit) {
-    emit(BuidlingCancelled(buildingId: event.buildingId));
+    emit(BuidlingCancelled(buildingInfo: event.buildingInfo));
   }
 }

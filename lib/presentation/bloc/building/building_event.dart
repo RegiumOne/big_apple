@@ -10,13 +10,13 @@ class InitBuildingEvent extends BuildingEvent {
 }
 
 class BuildBuildingEvent extends BuildingEvent {
-  BuildBuildingEvent({required this.buildingId});
+  BuildBuildingEvent({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }
 
 class CancelBuildingEvent extends BuildingEvent {
-  CancelBuildingEvent({required this.buildingId});
+  CancelBuildingEvent({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }

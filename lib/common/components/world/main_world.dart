@@ -96,18 +96,19 @@ class MainWorld extends World {
   }
 
   ZoneComponent? getZoneByVector2(Vector2 vector2) {
-   return getZoneByCoordinates(Coordinates(x: vector2.x, y: vector2.y));
+    return getZoneByCoordinates(Coordinates(x: vector2.x, y: vector2.y));
   }
 
   void removeBuildingById(int id) {
     return removeWhere((component) => component is BuildingComponent && component.id == id);
   }
 
-  void buildBuildingById(int id) {
+  Future<Vector2>? buildBuildingById(int id) {
     Component? building = children.firstWhereOrNull((element) => element is BuildingComponent && element.id == id);
     if (building != null) {
-      (building as BuildingComponent).build();
+      return (building as BuildingComponent).build();
     }
+    return null;
   }
 
   Future<BuildingInfo?> placeBuilding(Building type, Coordinates coordinates) async {
@@ -138,6 +139,8 @@ class MainWorld extends World {
       );
 
       _initialBusyCoordinates.add(buildingComponent.position);
+
+      buildingComponent.markAsBuild();
 
       await add(buildingComponent);
     }

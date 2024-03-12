@@ -187,7 +187,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
       );
 
       BuildingInfo? buildingInfo = await level?.placeBuilding(type, centerOfTheWorld);
-      
+
       if (buildingInfo != null) {
         buildingBloc.add(InitBuildingEvent(buildingInfo: buildingInfo));
         return;
@@ -206,5 +206,5 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   void removeBuildingById(int id) => level?.removeBuildingById(id);
 
   @override
-  void buildBuildingById(int id) => level?.buildBuildingById(id);
+  Future<Vector2>? buildBuildingById(int id) => level?.buildBuildingById(id);
 }

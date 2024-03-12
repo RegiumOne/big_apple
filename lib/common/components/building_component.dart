@@ -49,12 +49,18 @@ class BuildingComponent extends SpriteComponent
 
   Vector2? positionBeforeDrag;
 
-  Future<void> build() async {
+  void markAsBuild() {
+    _isEditing = false;
+    _isBuild = true;
+  }
+
+  Future<Vector2> build() async {
     _isEditing = false;
     _isBuild = true;
     _isUnderConstruction = true;
     world.getZoneByVector2(position)?.changeAvailability(false);
     await _updateSprite();
+    return position;
   }
 
   @override
