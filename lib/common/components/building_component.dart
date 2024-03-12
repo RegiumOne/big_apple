@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:big_apple/common/components/zone_component.dart';
+import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/data/dto/enum/manufactory_type.dart';
 import 'package:big_apple/data/dto/enum/road_type.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ import 'package:big_apple/resources/values/app_duration.dart';
 /// It can be under construction or not.
 /// Size: 256x178
 class BuildingComponent extends SpriteComponent
-    with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, DragCallbacks {
+    with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, DragCallbacks, TapCallbacks {
   BuildingComponent({
     super.key,
     required this.building,
@@ -43,6 +45,13 @@ class BuildingComponent extends SpriteComponent
       _isBuild = true;
     }
     // debugMode = true;
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    game.gameBloc.add(GameSelectBuildingEvent(building));
+    AudioService.instance.playSound(AudioFile.mouseClick);
+    super.onTapUp(event);
   }
 
   BuildingInfo building;

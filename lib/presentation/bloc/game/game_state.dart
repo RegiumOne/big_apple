@@ -6,14 +6,19 @@ abstract class GameState {
     required this.buildings,
     required this.builders,
     required this.lastSaveDateTime,
+    required this.selectedBuilding,
   });
 
   final double money;
   final List<BuildingInfo> buildings;
   final List<Builder> builders;
   final DateTime? lastSaveDateTime;
+  final BuildingInfo? selectedBuilding;
 
   List<Builder> get availableBuilders => builders.where((builder) => !builder.isBusy).toList();
+  Map<ResourceType, int> get availableResources => {
+        ResourceType.coin: money.toInt(),
+      };
 }
 
 class GameInitialState extends GameState {
@@ -22,6 +27,7 @@ class GameInitialState extends GameState {
     super.buildings = const [],
     super.builders = const [],
     super.lastSaveDateTime,
+    super.selectedBuilding,
   });
 }
 
@@ -31,6 +37,7 @@ class GameIdleState extends GameState {
     required super.buildings,
     required super.builders,
     required super.lastSaveDateTime,
+    required super.selectedBuilding,
   });
 }
 
@@ -40,6 +47,7 @@ class GameSavingState extends GameState {
     required super.buildings,
     required super.builders,
     required super.lastSaveDateTime,
+    required super.selectedBuilding,
   });
 }
 
@@ -49,6 +57,7 @@ class GameLoadingState extends GameState {
     required super.buildings,
     required super.builders,
     required super.lastSaveDateTime,
+    required super.selectedBuilding,
   });
 }
 
@@ -58,6 +67,7 @@ class GameLoadedState extends GameState {
     required super.buildings,
     required super.builders,
     required super.lastSaveDateTime,
+    required super.selectedBuilding,
   });
 }
 
@@ -67,5 +77,6 @@ class GameFailureState extends GameState {
     required super.buildings,
     required super.builders,
     required super.lastSaveDateTime,
+    required super.selectedBuilding,
   });
 }

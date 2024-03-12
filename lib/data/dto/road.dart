@@ -106,4 +106,12 @@ class Road extends Building<RoadType> {
     if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
+
+  @override
+  Building<RoadType> copyWith({int? currentLevel, RoadType? type}) {
+    return Road(
+      currentLevel: currentLevel ?? this.currentLevel,
+      type: type ?? this.type,
+    );
+  }
 }

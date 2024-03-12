@@ -24,4 +24,9 @@ abstract class Building<T extends Enum> {
   String imageInitial({bool replacePath = true});
   String imageHalf({bool replacePath = true});
   String imageDone({bool replacePath = true});
+
+  Building<T> copyWith({
+    int? currentLevel,
+    T? type,
+  });
 }

@@ -224,4 +224,12 @@ class Apartment extends Building<ApartmentType> {
     if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
+
+  @override
+  Building<ApartmentType> copyWith({int? currentLevel, ApartmentType? type}) {
+    return Apartment(
+      currentLevel: currentLevel ?? this.currentLevel,
+      type: type ?? this.type,
+    );
+  }
 }

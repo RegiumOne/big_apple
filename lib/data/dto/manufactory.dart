@@ -224,4 +224,12 @@ class Manufactory extends Building<ManufactoryType> {
     if (replacePath) return path.removeAssetsImagesPath();
     return path;
   }
+
+  @override
+  Building<ManufactoryType> copyWith({int? currentLevel, ManufactoryType? type}) {
+    return Manufactory(
+      currentLevel: currentLevel ?? this.currentLevel,
+      type: type ?? this.type,
+    );
+  }
 }

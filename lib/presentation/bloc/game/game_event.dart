@@ -35,3 +35,9 @@ class GameSaveEvent extends GameEvent {
 class GameLoadEvent extends GameEvent {
   const GameLoadEvent();
 }
+
+class GameSelectBuildingEvent extends GameEvent {
+  const GameSelectBuildingEvent(this.building);
+
+  final BuildingInfo? building;
+}

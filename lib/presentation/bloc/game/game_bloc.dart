@@ -20,6 +20,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<GameFinishBuildingEvent>(_finishBuilding);
     on<GameSaveEvent>(_save, transformer: restartable());
     on<GameLoadEvent>(_load, transformer: restartable());
+    on<GameSelectBuildingEvent>(_selectBuilding, transformer: restartable());
   }
 
   final GameRepository _gameRepository;
@@ -41,6 +42,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         buildings: updatedBuildings,
         builders: state.builders,
         lastSaveDateTime: state.lastSaveDateTime,
+        selectedBuilding: state.selectedBuilding,
       ),
     );
     add(const GameSaveEvent());
@@ -56,6 +58,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         buildings: state.buildings,
         builders: state.builders,
         lastSaveDateTime: state.lastSaveDateTime,
+        selectedBuilding: state.selectedBuilding,
       ),
     );
   }
@@ -82,6 +85,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         buildings: [...state.buildings, event.building],
         builders: updatedBuilders,
         lastSaveDateTime: state.lastSaveDateTime,
+        selectedBuilding: state.selectedBuilding,
       ),
     );
     add(const GameSaveEvent());
@@ -112,6 +116,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         buildings: updatedBuildings,
         builders: updatedBuilders,
         lastSaveDateTime: state.lastSaveDateTime,
+        selectedBuilding: state.selectedBuilding,
       ),
     );
     add(const GameSaveEvent());
@@ -128,6 +133,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           buildings: state.buildings,
           builders: state.builders,
           lastSaveDateTime: state.lastSaveDateTime,
+          selectedBuilding: state.selectedBuilding,
         ),
       );
 
@@ -145,6 +151,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           buildings: state.buildings,
           builders: state.builders,
           lastSaveDateTime: lastSaveDateTime,
+          selectedBuilding: state.selectedBuilding,
         ),
       );
     } catch (e) {
@@ -154,6 +161,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           buildings: state.buildings,
           builders: state.builders,
           lastSaveDateTime: state.lastSaveDateTime,
+          selectedBuilding: state.selectedBuilding,
         ),
       );
     }
@@ -170,6 +178,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           buildings: state.buildings,
           builders: state.builders,
           lastSaveDateTime: state.lastSaveDateTime,
+          selectedBuilding: state.selectedBuilding,
         ),
       );
 
@@ -193,6 +202,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           buildings: buildings,
           builders: builders,
           lastSaveDateTime: lastSaveDateTime,
+          selectedBuilding: state.selectedBuilding,
         ),
       );
     } catch (e) {
@@ -202,8 +212,24 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           buildings: state.buildings,
           builders: state.builders,
           lastSaveDateTime: state.lastSaveDateTime,
+          selectedBuilding: state.selectedBuilding,
         ),
       );
     }
+  }
+
+  void _selectBuilding(
+    GameSelectBuildingEvent event,
+    Emitter<GameState> emit,
+  ) async {
+    emit(
+      GameLoadedState(
+        money: state.money,
+        buildings: state.buildings,
+        builders: state.builders,
+        lastSaveDateTime: state.lastSaveDateTime,
+        selectedBuilding: event.building,
+      ),
+    );
   }
 }
