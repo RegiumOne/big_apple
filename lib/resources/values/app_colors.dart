@@ -36,6 +36,7 @@ class AppColors {
   static const Color colorPaleTaupe = Color(0xFFDED7C4);
   static const Color colorDimGray = Color(0xFF646464);
   static const Color colorSlateGray = Color(0xFF858585);
+  static const Color colorPaleSilver = Color(0xB2D9D3C4);
 
   static const Gradient redGradientTopBottom = LinearGradient(
     colors: [

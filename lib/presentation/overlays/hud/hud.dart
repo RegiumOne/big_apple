@@ -69,21 +69,42 @@ class Hud extends StatelessWidget {
                               level: 2,
                             ),
                             const SizedBox(height: AppDimension.s10),
-                            ButtonWidget(
-                              height: AppDimension.s42,
-                              width: AppDimension.s42,
-                              gradient: AppColors.blueGradientTopBottom,
-                              gradientPress: AppColors.darkBlueGradient,
-                              shadowColor: AppColors.colorRoyalBlue,
-                              iconSize: AppDimension.s24,
-                              childShadowColor: AppColors.colorMediumTransparencyBlack,
-                              childShadowOffset: const Offset(2, 2),
-                              iconPadding: const EdgeInsets.only(left: AppDimension.s2),
-                              iconSvg: Assets.icons.settings,
-                              onPressed: () {
-                                game.overlays.remove(Overlays.hud.name);
-                                game.overlays.add(Overlays.settings.name);
-                              },
+                            Row(
+                              children: [
+                                ButtonWidget(
+                                  height: AppDimension.s42,
+                                  width: AppDimension.s42,
+                                  gradient: AppColors.blueGradientTopBottom,
+                                  gradientPress: AppColors.darkBlueGradient,
+                                  shadowColor: AppColors.colorRoyalBlue,
+                                  iconSize: AppDimension.s24,
+                                  childShadowColor: AppColors.colorMediumTransparencyBlack,
+                                  childShadowOffset: const Offset(2, 2),
+                                  iconPadding: const EdgeInsets.only(left: AppDimension.s2),
+                                  iconSvg: Assets.icons.settings,
+                                  onPressed: () {
+                                    game.overlays.remove(Overlays.hud.name);
+                                    game.overlays.add(Overlays.settings.name);
+                                  },
+                                ),
+                                const SizedBox(width: AppDimension.s8),
+                                ButtonWidget(
+                                  height: AppDimension.s42,
+                                  width: AppDimension.s42,
+                                  gradient: AppColors.blueGradientTopBottom,
+                                  gradientPress: AppColors.darkBlueGradient,
+                                  shadowColor: AppColors.colorRoyalBlue,
+                                  iconSize: AppDimension.s24,
+                                  childShadowColor: AppColors.colorMediumTransparencyBlack,
+                                  childShadowOffset: const Offset(2, 2),
+                                  iconPadding: const EdgeInsets.only(left: AppDimension.s2),
+                                  iconSvg: Assets.icons.info,
+                                  onPressed: () {
+                                    game.overlays.remove(Overlays.hud.name);
+                                    game.overlays.add(Overlays.information.name);
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),

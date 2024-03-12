@@ -36,6 +36,14 @@ class _BuildingCardWidgetState extends State<BuildingCardWidget> {
   final FlipCardController _controller = FlipCardController();
 
   @override
+  void didUpdateWidget(covariant BuildingCardWidget oldWidget) {
+    if (_controller.state?.isFront == false) {
+      _controller.flipcard();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FlipCard(
       controller: _controller,
@@ -228,28 +236,40 @@ class _FrontWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Expanded(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppDimension.s12),
-                    child: Image.asset(
-                      building.imageDone(replacePath: false),
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  SizedBox(
+                    height: 115,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: AppDimension.s12),
+                        child: Image.asset(
+                          building.imageDone(replacePath: false),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: -AppDimension.s28,
+                    child: Wrap(
+                      spacing: AppDimension.s6,
+                      runSpacing: AppDimension.s6,
+                      children: building.price.keys.map((cost) {
+                        return _ResourceForBuildingWidget(
+                          requiredValue: building.price[cost] ?? 0,
+                          availableValue: availableResources[cost] ?? 0,
+                          resourceType: cost,
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: AppDimension.s6),
-              Wrap(
-                spacing: AppDimension.s6,
-                runSpacing: AppDimension.s6,
-                children: building.price.keys.map((cost) {
-                  return _ResourceForBuildingWidget(
-                    requiredValue: building.price[cost] ?? 0,
-                    availableValue: availableResources[cost] ?? 0,
-                    resourceType: cost,
-                  );
-                }).toList(),
-              ),
+              const SizedBox(height: AppDimension.s28),
               const SizedBox(height: AppDimension.s6),
               TextWidget(
                 building.title,
@@ -259,14 +279,16 @@ class _FrontWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimension.s2),
-              TextWidget(
-                'Building time  - ${building.buildingDurationInSeconds.toInt().toTimeText()}',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: AppColors.colorDimGray,
-                  height: 1.2,
+              Expanded(
+                child: TextWidget(
+                  'Building time  - ${building.buildingDurationInSeconds.toInt().toTimeText()}',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: AppColors.colorDimGray,
+                    height: 1.2,
+                  ),
                 ),
               ),
-              const SizedBox(height: AppDimension.s26),
+              const SizedBox(height: AppDimension.s4),
               IgnorePointer(
                 ignoring: !canBuild,
                 child: ButtonWidget(
