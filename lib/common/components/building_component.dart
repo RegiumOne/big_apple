@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/components/zone_component.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -42,6 +43,7 @@ class BuildingComponent extends SpriteComponent
   double _incomeTimer = 0;
   bool _isDragging = false;
   bool _isEditing = true;
+  bool _isBuild = false;
   bool _isUnderConstruction = false;
   bool get isUnderConstruction => _isUnderConstruction;
 
@@ -49,7 +51,9 @@ class BuildingComponent extends SpriteComponent
 
   Future<void> build() async {
     _isEditing = false;
+    _isBuild = true;
     _isUnderConstruction = true;
+    world.getZoneByVector2(position)?.changeAvailability(false);
     await _updateSprite();
   }
 
@@ -92,14 +96,22 @@ class BuildingComponent extends SpriteComponent
     super.onDragEnd(event);
     priority = position.y.toInt() + 100;
     _isDragging = false;
+    _isEditing = !_isBuild;
 
     double newXPosition = (position.x / 128).round() * 128;
     bool isOdd = (newXPosition / 128).round().isOdd;
     double newYPosition = (position.y / 128).round() * 128 + (isOdd ? 64 : 0) - 23;
     Vector2 newPosition = Vector2(newXPosition, newYPosition);
 
-    if (world.getZoneByVector2(newPosition)?.isAvailable == true) {
+    ZoneComponent? zone = world.getZoneByVector2(newPosition);
+
+    if (zone?.isAvailable == true) {
       position = newPosition;
+      if (_isBuild) {
+        zone?.changeAvailability(false);
+        ZoneComponent? previousZone = world.getZoneByVector2(positionBeforeDrag!);
+        previousZone?.changeAvailability(true);
+      }
     } else {
       position = positionBeforeDrag!;
     }

@@ -96,7 +96,7 @@ class MainWorld extends World {
   }
 
   ZoneComponent? getZoneByVector2(Vector2 vector2) {
-    return getZoneByCoordinates(Coordinates(x: vector2.x, y: vector2.y));
+   return getZoneByCoordinates(Coordinates(x: vector2.x, y: vector2.y));
   }
 
   void removeBuildingById(int id) {

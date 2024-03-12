@@ -14,7 +14,9 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
     required this.isWater,
   }) {
     // debugMode = true;
-    isAvailable = !isWater;
+    if (isWater) {
+      isAvailable = false;
+    }
   }
 
   final Vector2 tileSize;
