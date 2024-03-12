@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:big_apple/common/components/small_building_component.dart';
+import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
@@ -97,13 +97,13 @@ class MainWorld extends World {
   }
 
   void removeBuildingById(int id) {
-    return removeWhere((component) => component is SmallBuildingComponent && component.id == id);
+    return removeWhere((component) => component is BuildingComponent && component.id == id);
   }
 
   void buildBuildingById(int id) {
-    Component? building = children.firstWhereOrNull((element) => element is SmallBuildingComponent && element.id == id);
+    Component? building = children.firstWhereOrNull((element) => element is BuildingComponent && element.id == id);
     if (building != null) {
-      (building as SmallBuildingComponent).build();
+      (building as BuildingComponent).build();
     }
   }
 
@@ -113,8 +113,8 @@ class MainWorld extends World {
 
   AudioFile getAudioFileFromZone(Coordinates coordinates) {
     List<Component> components = componentsAtPoint(Vector2(coordinates.x, coordinates.y)).toList();
-    SmallBuildingComponent? buildingComponent =
-        components.firstWhereOrNull((element) => element is SmallBuildingComponent) as SmallBuildingComponent?;
+    BuildingComponent? buildingComponent =
+        components.firstWhereOrNull((element) => element is BuildingComponent) as BuildingComponent?;
     if (buildingComponent?.isUnderConstruction == true) {
       return AudioFile.constructionSounds;
     }
@@ -129,7 +129,7 @@ class MainWorld extends World {
 
   Future<void> initBuildings(List<Building> buidlings) async {
     for (Building buidling in buidlings) {
-      SmallBuildingComponent buildingComponent = SmallBuildingComponent(
+      BuildingComponent buildingComponent = BuildingComponent(
         id: buidling.coordinates.x.toInt() + buidling.coordinates.y.toInt(),
         building: buidling,
         size: Vector2.all(tileSize.x),

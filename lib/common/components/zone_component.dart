@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
-import 'package:big_apple/common/components/small_building_component.dart';
+import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/enum/building_type.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
@@ -46,7 +46,7 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>,
 
     int id = DateTime.now().millisecondsSinceEpoch;
 
-    final buildingComponent = SmallBuildingComponent(
+    final buildingComponent = BuildingComponent(
       id: id,
       building: building,
       size: tileSize,

@@ -20,8 +20,8 @@ import 'package:big_apple/resources/values/app_duration.dart';
 /// It can be declined or approved.
 /// It can be under construction or not.
 /// Size: 256x178
-class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
-  SmallBuildingComponent({
+class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
+  BuildingComponent({
     super.key,
     required this.id,
     required this.building,
@@ -31,7 +31,7 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
           priority: building.coordinates.y.toInt() + 100,
           position: Vector2(building.coordinates.x, building.coordinates.y - 22),
         ) {
-    debugMode = true;
+    // debugMode = true;
   }
 
   Building building;
@@ -124,11 +124,11 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
       const padding = AppDimension.s4;
 
       final progress = (building.constructionTimeLeft / building.type.constructionTimeInSeconds).clamp(0.0, 1.0);
-      const barHeight = 14.0;
+      const barHeight = 32.0;
       final barWidth = size.x;
-      const borderRadius = Radius.circular(100);
+      const borderRadius = Radius.circular(12);
       final gradient = LinearGradient(
-        colors: const [Colors.yellow, Colors.grey],
+        colors: [Colors.orangeAccent.shade700, Colors.black.withOpacity(.2)],
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         stops: [1 - progress, 1 - progress],
@@ -143,14 +143,20 @@ class SmallBuildingComponent extends SpriteComponent with HasGameReference<BigAp
       final textPainter = TextPainter(
         text: TextSpan(
           text: timeText,
-          style: const TextStyle(color: Colors.black, fontSize: 14, height: 1),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            height: 1,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'ProtestStrike',
+          ),
         ),
         textDirection: TextDirection.ltr,
       );
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset((size.x - textPainter.width) / 2, -barHeight + 1),
+        Offset((size.x - textPainter.width) / 2, -barHeight + 4),
       );
     }
   }
