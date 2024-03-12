@@ -76,7 +76,7 @@ class Road extends Building<RoadType> {
     String path = '';
     switch (type) {
       case RoadType.road:
-        path = Assets.images.houseLvl1.path;
+        path = Assets.images.road.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -88,7 +88,7 @@ class Road extends Building<RoadType> {
     String path = '';
     switch (type) {
       case RoadType.road:
-        path = Assets.images.houseLvl1.path;
+        path = Assets.images.road.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();
@@ -100,7 +100,7 @@ class Road extends Building<RoadType> {
     String path = '';
     switch (type) {
       case RoadType.road:
-        path = Assets.images.houseLvl1.path;
+        path = Assets.images.road.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();

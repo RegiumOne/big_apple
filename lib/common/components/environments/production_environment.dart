@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 
-import 'package:big_apple/common/environments/app_environment.dart';
+import 'package:big_apple/common/components/environments/app_environment.dart';
 
 @prod
 @LazySingleton(as: AppEnvironment)

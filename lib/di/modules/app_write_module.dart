@@ -1,5 +1,5 @@
 import 'package:appwrite/appwrite.dart';
-import 'package:big_apple/common/environments/app_environment.dart';
+import 'package:big_apple/common/components/environments/app_environment.dart';
 import 'package:injectable/injectable.dart';
 
 @module
