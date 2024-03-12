@@ -228,7 +228,7 @@ class Commercial extends Building<CommercialType> {
     String path = '';
     switch (type) {
       case CommercialType.store:
-        path = Assets.images.houseLvl1.path;
+        path = Assets.images.initialBuilding1On1.path;
         break;
       case CommercialType.market:
         path = Assets.images.apartmentLvl1.path;

@@ -22,6 +22,12 @@ class GameFinishBuildingEvent extends GameEvent {
   final BuildingInfo building;
 }
 
+class UpdateBuildingEvent extends GameEvent {
+  const UpdateBuildingEvent(this.building);
+
+  final BuildingInfo building;
+}
+
 class GameSaveEvent extends GameEvent {
   const GameSaveEvent();
 }

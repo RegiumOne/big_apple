@@ -117,6 +117,11 @@ class BuildingComponent extends SpriteComponent
         zone?.changeAvailability(false);
         ZoneComponent? previousZone = world.getZoneByVector2(positionBeforeDrag!);
         previousZone?.changeAvailability(true);
+        game.gameBloc.add(
+          UpdateBuildingEvent(
+            building.copyWith(coordinates: Coordinates(x: newXPosition, y: newYPosition)),
+          ),
+        );
       }
     } else {
       position = positionBeforeDrag!;
