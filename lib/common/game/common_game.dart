@@ -12,4 +12,6 @@ abstract class CommonGame extends FlameGame {
 
   /// Places a building on the map
   void placeBuilding(Building type);
+  void removeBuildingById(int id);
+  void buildBuildingById(int id);
 }

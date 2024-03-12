@@ -96,7 +96,18 @@ class MainWorld extends World {
     return zoneComponent;
   }
 
-  Future<void> placeBuilding(Building type, Coordinates coordinates) async {
+  void removeBuildingById(int id) {
+    return removeWhere((component) => component is BuildingComponent && component.id == id);
+  }
+
+  void buildBuildingById(int id) {
+    Component? building = children.firstWhereOrNull((element) => element is BuildingComponent && element.id == id);
+    if (building != null) {
+      (building as BuildingComponent).build();
+    }
+  }
+
+  Future<int?> placeBuilding(Building type, Coordinates coordinates) async {
     return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
@@ -119,6 +130,7 @@ class MainWorld extends World {
   Future<void> initBuildings(List<BuildingInfo> buidlings) async {
     for (BuildingInfo buidling in buidlings) {
       BuildingComponent buildingComponent = BuildingComponent(
+        id: buidling.coordinates.x.toInt() + buidling.coordinates.y.toInt(),
         building: buidling,
         size: Vector2.all(tileSize.x),
       );

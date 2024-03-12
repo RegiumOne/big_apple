@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/dto/building.dart';
-import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/data/dto/building_info.dart';
@@ -23,31 +22,40 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld>,
   final bool isWater;
   bool isAvailable;
 
-  Future<void> addBuilding(Building building) async {
-    if (isWater) return;
-    final objectPosition = position + Vector2(32, 0);
+  Future<int?> addBuilding(Building type) async {
+    if (isWater) return null;
     if (!isAvailable) {
       log('There is already a building here');
-      return;
+      return null;
     }
     isAvailable = false;
 
+    double centeredX = position.x - position.x % 256;
+    double centeredY = position.y - position.y % 128;
+
     final buildingInfo = BuildingInfo(
-      coordinates: Coordinates(x: objectPosition.x, y: objectPosition.y),
-      building: building,
-      constructionTimeLeft: building.buildingDurationInSeconds,
+      coordinates: Coordinates(x: centeredX, y: centeredY),
+      building: type,
+      constructionTimeLeft: type.buildingDurationInSeconds,
     );
 
-    final money = game.gameBloc.state.money - (buildingInfo.building.price[ResourceType.coin] ?? 0);
-    if (money < 0 || game.gameBloc.state.availableBuilders.isEmpty) return;
+    // final money = game.gameBloc.state.money - building.type.cost;
+    // if (money < 0 || game.gameBloc.state.availableBuilders.isEmpty) return;
 
     game.gameBloc.add(GameAddBuildingEvent(buildingInfo));
 
-    final mill = BuildingComponent(
+    int id = DateTime.now().millisecondsSinceEpoch;
+
+    final buildingComponent = BuildingComponent(
+      id: id,
       building: buildingInfo,
       size: tileSize,
     );
-    await world.add(mill);
+
+    await world.add(buildingComponent);
+
     AudioService.instance.playConstructionMusic();
+
+    return id;
   }
 }

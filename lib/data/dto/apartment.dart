@@ -194,7 +194,7 @@ class Apartment extends Building<ApartmentType> {
     String path = '';
     switch (type) {
       case ApartmentType.house:
-        path = Assets.images.houseLvl1.path;
+        path = Assets.images.houseLvl1Half.path;
         break;
       case ApartmentType.apartment:
         path = Assets.images.apartmentLvl1.path;
@@ -212,7 +212,7 @@ class Apartment extends Building<ApartmentType> {
     String path = '';
     switch (type) {
       case ApartmentType.house:
-        path = Assets.images.houseLvl1.path;
+        path = Assets.images.houseLvl1Initial.path;
         break;
       case ApartmentType.apartment:
         path = Assets.images.apartmentLvl1.path;

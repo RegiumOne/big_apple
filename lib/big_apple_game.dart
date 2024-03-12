@@ -1,12 +1,5 @@
 import 'dart:async';
 
-import 'package:big_apple/common/extensions/string_extensions.dart';
-import 'package:big_apple/common/services/audio_service.dart';
-import 'package:big_apple/data/dto/building.dart';
-import 'package:big_apple/data/dto/enum/audio_file.dart';
-import 'package:big_apple/generated/assets.gen.dart';
-import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
-import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/events.dart';
@@ -15,16 +8,29 @@ import 'package:flame/game.dart';
 
 import 'package:big_apple/common/components/app_camera_component.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/common/game/common_game.dart';
+import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/building_info.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
+import 'package:big_apple/generated/assets.gen.dart';
+import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
+import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
 class BigAppleGame extends CommonGame with ScaleDetector {
-  BigAppleGame({required this.gameBloc, required this.audioBloc});
+  BigAppleGame({
+    required this.gameBloc,
+    required this.audioBloc,
+    required this.buildingBloc,
+  });
 
   final GameBloc gameBloc;
   final AudioBloc audioBloc;
+  final BuildingBloc buildingBloc;
 
   AppCameraComponent? cam;
 
@@ -39,12 +45,13 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   FutureOr<void> onLoad() async {
+    await super.onLoad();
+
     AudioService.instance.initialize();
     AudioService.instance.playMusic();
     await startGame();
     await _cacheImages();
     checkMusic();
-    await super.onLoad();
   }
 
   @override
@@ -130,10 +137,8 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     }
   }
 
-  Future<void> _cacheImages() async {
-    await images.loadAll([
-      ...Assets.images.values.map((e) => e.path.removeAssetsImagesPath()),
-    ]);
+  Future<void> _cacheImages()  {
+    return images.loadAll(Assets.images.values.map((e) => e.asset()).toList());
   }
 
   Future<void> _initCamera() async {
@@ -167,8 +172,11 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   }
 
   @override
-  void placeBuilding(Building type) {
-    level?.placeBuilding(type, getVisibleWorldCenter());
+  void placeBuilding(Building type) async {
+    int? buildingId = await level?.placeBuilding(type, getVisibleWorldCenter());
+    if (buildingId != null) {
+      buildingBloc.add(InitBuildingEvent(buildingId: buildingId));
+    }
   }
 
   // Calculate the center of the visible world
@@ -177,4 +185,10 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     final centerY = cam!.viewfinder.position.y;
     return Coordinates(x: centerX, y: centerY);
   }
+
+  @override
+  void removeBuildingById(int id) => level?.removeBuildingById(id);
+
+  @override
+  void buildBuildingById(int id) => level?.buildBuildingById(id);
 }

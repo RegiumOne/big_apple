@@ -21,7 +21,7 @@ class GameDataProvider {
   final SharedPreferences _sharedPreferences;
 
   double getMoney() {
-    return _sharedPreferences.getDouble(_GameDataProviderKeys.moneyKey) ?? 1000;
+    return _sharedPreferences.getDouble(_GameDataProviderKeys.moneyKey) ?? 10000;
   }
 
   Future<bool> setMoney(double money) async {
