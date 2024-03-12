@@ -150,7 +150,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     cam = AppCameraComponent(world: level);
     final bounds = Rectangle.fromLTWH(0, 0, level!.worldWidth, level!.worldHeight);
     cam?.setBounds(bounds);
-    final initialPosition = Vector2(1340, 6826);
+    final initialPosition = Vector2(984, 7100);
     cam?.viewfinder.position = initialPosition;
     cam?.initZoom();
 
