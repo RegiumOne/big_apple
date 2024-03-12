@@ -119,8 +119,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   void initBuildings(List<BuildingInfo> buildings) async {
-    if (level == null) return;
-    level!.initBuildings(buildings);
+    level?.initBuildings(buildings);
   }
 
   @override
@@ -137,7 +136,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     }
   }
 
-  Future<void> _cacheImages()  {
+  Future<void> _cacheImages() {
     return images.loadAll(Assets.images.values.map((e) => e.asset()).toList());
   }
 
@@ -173,9 +172,26 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   void placeBuilding(Building type) async {
-    int? buildingId = await level?.placeBuilding(type, getVisibleWorldCenter());
-    if (buildingId != null) {
-      buildingBloc.add(InitBuildingEvent(buildingId: buildingId));
+    Coordinates centerOfTheWorld = getVisibleWorldCenter();
+    BuildingInfo? buildingInfo = await level?.placeBuilding(type, centerOfTheWorld);
+
+    if (buildingInfo != null) {
+      buildingBloc.add(InitBuildingEvent(buildingInfo: buildingInfo));
+      return;
+    }
+
+    for (int i = 0; i < 20; i++) {
+      centerOfTheWorld = Coordinates(
+        x: centerOfTheWorld.x + (i % 2 == 0 ? 256 : 128),
+        y: centerOfTheWorld.y + (i % 2 == 0 ? 64 : 128),
+      );
+
+      BuildingInfo? buildingInfo = await level?.placeBuilding(type, centerOfTheWorld);
+
+      if (buildingInfo != null) {
+        buildingBloc.add(InitBuildingEvent(buildingInfo: buildingInfo));
+        return;
+      }
     }
   }
 
@@ -190,5 +206,5 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   void removeBuildingById(int id) => level?.removeBuildingById(id);
 
   @override
-  void buildBuildingById(int id) => level?.buildBuildingById(id);
+  Future<Vector2>? buildBuildingById(int id) => level?.buildBuildingById(id);
 }

@@ -14,6 +14,7 @@ part 'game_state.dart';
 @Injectable()
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc(this._gameRepository) : super(const GameInitialState()) {
+    on<UpdateBuildingEvent>(_updateBuildingHandle);
     on<GameIncreaseMoneyEvent>(_increaseMoney);
     on<GameAddBuildingEvent>(_addBuilding);
     on<GameFinishBuildingEvent>(_finishBuilding);
@@ -22,6 +23,28 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   final GameRepository _gameRepository;
+
+  void _updateBuildingHandle(
+    UpdateBuildingEvent event,
+    Emitter<GameState> emit,
+  ) async {
+    final updatedBuildings = state.buildings.map((building) {
+      if (building.id == event.building.id) {
+        return event.building;
+      }
+      return building;
+    }).toList();
+
+    emit(
+      GameIdleState(
+        money: state.money,
+        buildings: updatedBuildings,
+        builders: state.builders,
+        lastSaveDateTime: state.lastSaveDateTime,
+      ),
+    );
+    add(const GameSaveEvent());
+  }
 
   void _increaseMoney(
     GameIncreaseMoneyEvent event,

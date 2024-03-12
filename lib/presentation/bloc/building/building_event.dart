@@ -4,19 +4,19 @@ part of 'building_bloc.dart';
 sealed class BuildingEvent {}
 
 class InitBuildingEvent extends BuildingEvent {
-  InitBuildingEvent({required this.buildingId});
+  InitBuildingEvent({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }
 
 class BuildBuildingEvent extends BuildingEvent {
-  BuildBuildingEvent({required this.buildingId});
+  BuildBuildingEvent({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }
 
 class CancelBuildingEvent extends BuildingEvent {
-  CancelBuildingEvent({required this.buildingId});
+  CancelBuildingEvent({required this.buildingInfo});
 
-  final int buildingId;
+  final BuildingInfo buildingInfo;
 }

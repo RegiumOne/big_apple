@@ -1,3 +1,4 @@
+import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:big_apple/presentation/overlays/hud/widgets/resource_with_progre
 import 'package:big_apple/presentation/widgets/safe_area_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
+import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,11 +27,17 @@ class Hud extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<BuildingBloc, BuildingState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is BuidlingCancelled) {
-          game.removeBuildingById(state.buildingId);
+          game.removeBuildingById(state.buildingInfo.id);
         } else if (state is BuidlingBuild) {
-          game.buildBuildingById(state.buildingId);
+          Vector2? newCooridantes = await game.buildBuildingById(state.buildingInfo.id);
+          if (newCooridantes != null) {
+            BuildingInfo newBuildingInfo = state.buildingInfo.copyWith(
+              coordinates: Coordinates(x: newCooridantes.x, y: newCooridantes.y),
+            );
+            if (context.mounted) context.read<GameBloc>().add(GameAddBuildingEvent(newBuildingInfo));
+          }
         }
       },
       builder: (context, state) {
@@ -167,7 +175,7 @@ class Hud extends StatelessWidget {
                         icon: Assets.icons.cancel.svg(),
                         text: 'Cancel',
                         onPressed: () {
-                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingId: state.buildingId));
+                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingInfo: state.buildingInfo));
                         },
                       ),
                       const SizedBox(width: AppDimension.s6),
@@ -175,7 +183,7 @@ class Hud extends StatelessWidget {
                         icon: Assets.icons.checkmark.svg(),
                         text: 'Build',
                         onPressed: () {
-                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingId: state.buildingId));
+                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingInfo: state.buildingInfo));
                         },
                       ),
                     ],

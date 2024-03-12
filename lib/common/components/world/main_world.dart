@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'dart:developer';
+
+import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flame_tiled/flame_tiled.dart';
 
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
-import 'package:collection/collection.dart';
-import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame_tiled/flame_tiled.dart';
 
 class MainWorld extends World {
   MainWorld({
@@ -19,6 +19,7 @@ class MainWorld extends World {
 
   final Vector2 tileSize;
 
+  bool _isInited = false;
   double get worldWidth => _worldWidth;
   double get worldHeight => _worldHeight;
   int get columnCount => (_worldWidth / tileSize.x).floor();
@@ -29,8 +30,6 @@ class MainWorld extends World {
 
   late TiledComponent<FlameGame<World>> tiledMap;
 
-  final List<Vector2> _initialBusyCoordinates = [];
-
   @override
   FutureOr<void> onLoad() async {
     tiledMap = await TiledComponent.load('apple_map.tmx', tileSize);
@@ -40,25 +39,25 @@ class MainWorld extends World {
 
     await add(tiledMap);
     await _initZones();
+    _isInited = true;
   }
 
   Future<void> _initZones() async {
     TileLayer? backgroundLayer = tiledMap.tileMap.getLayer('Background');
     TileLayer? waterLayer = tiledMap.tileMap.getLayer('Water');
-    await _initZonesLayer(backgroundLayer, false);
-    await _initZonesLayer(waterLayer, true);
-  }
 
-  Future<void> _initZonesLayer(TileLayer? layer, bool isWater) async {
-    if (layer == null || layer.data == null) return;
+    if (backgroundLayer == null || backgroundLayer.data == null) return;
+    if (waterLayer == null || waterLayer.data == null) return;
 
-    int rowCount = layer.height;
-    int columnCount = layer.width;
+    int rowCount = backgroundLayer.height;
+    int columnCount = backgroundLayer.width;
 
     for (int row = 0; row < rowCount; row++) {
       for (int column = 0; column < columnCount; column++) {
-        int tile = layer.data![row * columnCount + column];
-        if (tile == 0) continue;
+        int backgroundTile = backgroundLayer.data![row * columnCount + column];
+        int waterTile = waterLayer.data![row * columnCount + column];
+
+        if (backgroundTile == 0) continue;
 
         bool isEven = row % 2 == 0;
 
@@ -68,19 +67,10 @@ class MainWorld extends World {
         Vector2 position = Vector2(x, y);
         Vector2 size = Vector2(tileSize.x / 2, tileSize.y);
 
-        //it is important that _initialBusyCoordinates are initialized first in the initBuildings method, otherwise you need to check in initBuildings too if _initZones is initialized first
-        final checkPosition = _initialBusyCoordinates.firstWhereOrNull(
-          (element) => (element - Vector2(64, 0)) == position,
-        );
-
-        if (checkPosition != null) {
-          log('Busy position: $position');
-        }
-
         ZoneComponent zoneComponent = ZoneComponent(
+          isWater: waterTile != 0,
           tileSize: Vector2.all(tileSize.x),
-          isAvailable: checkPosition == null,
-          isWater: isWater,
+          isAvailable: true,
         )
           ..position = position + Vector2(32, 0)
           ..anchor = Anchor.topLeft
@@ -96,18 +86,23 @@ class MainWorld extends World {
     return zoneComponent;
   }
 
+  ZoneComponent? getZoneByVector2(Vector2 vector2) {
+    return getZoneByCoordinates(Coordinates(x: vector2.x, y: vector2.y));
+  }
+
   void removeBuildingById(int id) {
     return removeWhere((component) => component is BuildingComponent && component.id == id);
   }
 
-  void buildBuildingById(int id) {
+  Future<Vector2>? buildBuildingById(int id) {
     Component? building = children.firstWhereOrNull((element) => element is BuildingComponent && element.id == id);
     if (building != null) {
-      (building as BuildingComponent).build();
+      return (building as BuildingComponent).build();
     }
+    return null;
   }
 
-  Future<int?> placeBuilding(Building type, Coordinates coordinates) async {
+  Future<BuildingInfo?> placeBuilding(Building type, Coordinates coordinates) async {
     return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
@@ -128,16 +123,12 @@ class MainWorld extends World {
   }
 
   Future<void> initBuildings(List<BuildingInfo> buidlings) async {
-    for (BuildingInfo buidling in buidlings) {
-      BuildingComponent buildingComponent = BuildingComponent(
-        id: buidling.coordinates.x.toInt() + buidling.coordinates.y.toInt(),
-        building: buidling,
-        size: Vector2.all(tileSize.x),
-      );
-
-      _initialBusyCoordinates.add(buildingComponent.position);
-
-      await add(buildingComponent);
+    if (!_isInited) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      return initBuildings(buidlings);
+    }
+    for (BuildingInfo building in buidlings) {
+      await getZoneByCoordinates(building.coordinates)?.addBuildingWithoutConstruction(building);
     }
   }
 }

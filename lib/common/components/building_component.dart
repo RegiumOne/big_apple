@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/components/zone_component.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -20,44 +22,57 @@ import 'package:big_apple/resources/values/app_duration.dart';
 /// It can be declined or approved.
 /// It can be under construction or not.
 /// Size: 256x178
-class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, DragCallbacks {
+class BuildingComponent extends SpriteComponent
+    with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, DragCallbacks {
   BuildingComponent({
     super.key,
-    required this.id,
     required this.building,
     required super.size,
     super.anchor = Anchor.center,
+    bool markAsBuild = false,
   }) : super(
           priority: building.coordinates.y.toInt() + 100,
-          position: Vector2(building.coordinates.x, building.coordinates.y - 22),
+          position: Vector2(building.coordinates.x, building.coordinates.y),
         ) {
+    id = building.id;
+    if (markAsBuild) {
+      _isEditing = false;
+      _isBuild = true;
+    }
     // debugMode = true;
   }
 
   BuildingInfo building;
 
-  final int id;
+  late final int id;
   double _incomeTimer = 0;
   bool _isDragging = false;
   bool _isEditing = true;
+  bool _isBuild = false;
   bool _isUnderConstruction = false;
-
   bool get isUnderConstruction => _isUnderConstruction;
 
-  Future<void> build() async {
+  Vector2? positionBeforeDrag;
+
+  void markAsBuild() {
     _isEditing = false;
+    _isBuild = true;
+  }
+
+  Future<Vector2> build() async {
+    _isEditing = false;
+    _isBuild = true;
     _isUnderConstruction = true;
+    world.getZoneByVector2(position)?.changeAvailability(false);
     await _updateSprite();
+    return position;
   }
 
   @override
   FutureOr<void> onLoad() async {
-    // _isUnderConstruction = building.constructionTimeLeft > 0;
-
-    // await _updateSprite();
-
     size = Vector2(256, 178);
     sprite = Sprite(game.images.fromCache(building.building.imageDone()));
+    position = Vector2(building.coordinates.x, building.coordinates.y);
 
     return super.onLoad();
   }
@@ -73,6 +88,8 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
 
   @override
   void onDragStart(DragStartEvent event) {
+    if (_isUnderConstruction) return;
+    positionBeforeDrag = position.clone();
     super.onDragStart(event);
     _isEditing = true;
     _isDragging = true;
@@ -80,6 +97,7 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    if (_isUnderConstruction) return;
     super.onDragUpdate(event);
     if (_isDragging) {
       position.add(event.localDelta);
@@ -88,13 +106,34 @@ class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGa
 
   @override
   void onDragEnd(DragEndEvent event) {
+    if (_isUnderConstruction) return;
     super.onDragEnd(event);
     _isDragging = false;
+    _isEditing = !_isBuild;
 
     double newXPosition = (position.x / 128).round() * 128;
     bool isOdd = (newXPosition / 128).round().isOdd;
     double newYPosition = (position.y / 128).round() * 128 + (isOdd ? 64 : 0) - 23;
-    position = Vector2(newXPosition, newYPosition);
+    Vector2 newPosition = Vector2(newXPosition, newYPosition);
+
+    ZoneComponent? zone = world.getZoneByVector2(newPosition);
+
+    if (zone?.isAvailable == true) {
+      priority = position.y.toInt() + 100;
+      position = newPosition;
+      if (_isBuild) {
+        zone?.changeAvailability(false);
+        ZoneComponent? previousZone = world.getZoneByVector2(positionBeforeDrag!);
+        previousZone?.changeAvailability(true);
+        game.gameBloc.add(
+          UpdateBuildingEvent(
+            building.copyWith(coordinates: Coordinates(x: newXPosition, y: newYPosition)),
+          ),
+        );
+      }
+    } else {
+      position = positionBeforeDrag!;
+    }
   }
 
   @override
