@@ -8,8 +8,6 @@ abstract interface class GameRepository {
 
   List<BuildingInfo> getBuildings();
 
-  Future<bool> setBuildings(List<BuildingInfo> buildings);
-
   DateTime? getLastSaveDateTime();
 
   Future<bool> setLastSaveDateTime(DateTime dateTime);

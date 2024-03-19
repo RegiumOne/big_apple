@@ -11,9 +11,10 @@ import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
@@ -118,11 +119,6 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   }
 
   @override
-  void initBuildings(List<BuildingInfo> buildings) async {
-    level?.initBuildings(buildings);
-  }
-
-  @override
   void checkMusic() {
     AudioFile audioFile = level?.getAudioFileFromZone(getVisibleWorldCenter()) ?? AudioFile.forest;
     if (overlays.isActive(Overlays.shop.name) || overlays.isActive(Overlays.settings.name)) {
@@ -166,17 +162,17 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   void _startSaveTimer() {
     _saveGameTimer?.cancel();
     _saveGameTimer = Timer.periodic(AppDuration.saveGameDuration, (timer) {
-      gameBloc.add(const GameSaveEvent());
+      // gameBloc.add(const GameSaveEvent());
     });
   }
 
   @override
-  void placeBuilding(Building type) async {
+  void placeBuilding(BuildingType type) async {
     Coordinates centerOfTheWorld = getVisibleWorldCenter();
-    BuildingInfo? buildingInfo = await level?.placeBuilding(type, centerOfTheWorld);
+    BuildingEntity? buildingEntity = await level?.placeBuilding(type, centerOfTheWorld);
 
-    if (buildingInfo != null) {
-      buildingBloc.add(InitBuildingEvent(buildingInfo: buildingInfo));
+    if (buildingEntity != null) {
+      buildingBloc.add(InitBuildingEvent(buildingEntity: buildingEntity));
       return;
     }
 
@@ -186,10 +182,10 @@ class BigAppleGame extends CommonGame with ScaleDetector {
         y: centerOfTheWorld.y + (i % 2 == 0 ? 64 : 128),
       );
 
-      BuildingInfo? buildingInfo = await level?.placeBuilding(type, centerOfTheWorld);
+      BuildingEntity? buildingInfo = await level?.placeBuilding(type, centerOfTheWorld);
 
       if (buildingInfo != null) {
-        buildingBloc.add(InitBuildingEvent(buildingInfo: buildingInfo));
+        buildingBloc.add(InitBuildingEvent(buildingEntity: buildingInfo));
         return;
       }
     }

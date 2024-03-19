@@ -1,3 +1,4 @@
+import 'package:big_apple/domain/services/game_service.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
@@ -37,8 +38,21 @@ class App extends StatelessWidget {
   }
 }
 
-class _Game extends StatelessWidget {
+class _Game extends StatefulWidget {
   const _Game();
+
+  @override
+  State<_Game> createState() => _GameState();
+}
+
+class _GameState extends State<_Game> {
+  @override
+  void initState() {
+    super.initState();
+    inject<GameService>().gameState.listen((gameStat) {
+      BlocProvider.of<GameBloc>(context).add(GameEvent.updateStat(gameStat));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

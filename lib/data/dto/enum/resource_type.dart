@@ -2,9 +2,9 @@ import 'package:big_apple/common/extensions/string_extensions.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 
 enum ResourceType {
-  coin,
-  stone,
-  metal,
+  gold,
+  coal,
+  iron,
   wood,
   builders,
   electricity,
@@ -12,11 +12,11 @@ enum ResourceType {
 
   String get title {
     switch (this) {
-      case coin:
+      case gold:
         return 'Coin';
-      case stone:
+      case coal:
         return 'Stone';
-      case metal:
+      case iron:
         return 'Metal';
       case wood:
         return 'Wood';
@@ -32,13 +32,13 @@ enum ResourceType {
   String icon({bool replacePath = true, bool isWhite = false}) {
     String path = '';
     switch (this) {
-      case coin:
+      case gold:
         path = isWhite ? Assets.icons.coinWhite.path : Assets.icons.coin.path;
         break;
-      case stone:
+      case coal:
         path = isWhite ? Assets.icons.stoneWhite.path : Assets.icons.stone.path;
         break;
-      case metal:
+      case iron:
         path = isWhite ? Assets.icons.metalWhite.path : Assets.icons.metal.path;
         break;
       case wood:
@@ -59,9 +59,9 @@ enum ResourceType {
   }
 
   static List<ResourceType> mainResources = [
-    coin,
-    stone,
-    metal,
+    gold,
+    coal,
+    iron,
     wood,
   ];
 }

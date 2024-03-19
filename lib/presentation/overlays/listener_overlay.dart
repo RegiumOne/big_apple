@@ -22,7 +22,6 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
   @override
   void initState() {
     context.read<AudioBloc>().add(const AudioInitEvent());
-    context.read<GameBloc>().add(const GameLoadEvent());
     super.initState();
   }
 
@@ -32,9 +31,6 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
       listeners: [
         BlocListener<GameBloc, GameState>(
           listener: (context, state) {
-            if (state is GameLoadedState) {
-              widget.game.initBuildings(state.buildings);
-            }
             _selectBuilding(state);
           },
         ),

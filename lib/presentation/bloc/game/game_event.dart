@@ -1,43 +1,8 @@
 part of 'game_bloc.dart';
 
-abstract class GameEvent {
-  const GameEvent();
-}
-
-class GameIncreaseMoneyEvent extends GameEvent {
-  const GameIncreaseMoneyEvent(this.money);
-
-  final double money;
-}
-
-class GameAddBuildingEvent extends GameEvent {
-  const GameAddBuildingEvent(this.building);
-
-  final BuildingInfo building;
-}
-
-class GameFinishBuildingEvent extends GameEvent {
-  const GameFinishBuildingEvent(this.building);
-
-  final BuildingInfo building;
-}
-
-class UpdateBuildingEvent extends GameEvent {
-  const UpdateBuildingEvent(this.building);
-
-  final BuildingInfo building;
-}
-
-class GameSaveEvent extends GameEvent {
-  const GameSaveEvent();
-}
-
-class GameLoadEvent extends GameEvent {
-  const GameLoadEvent();
-}
-
-class GameSelectBuildingEvent extends GameEvent {
-  const GameSelectBuildingEvent(this.building);
-
-  final BuildingInfo? building;
+@freezed
+class GameEvent with _$GameEvent {
+  const factory GameEvent.updateStat(GameStat gameStat) = _GameUpdateStatEvent;
+  const factory GameEvent.selectBuilding(BuildingEntity building) = _GameSelectBuildingEvent;
+  const factory GameEvent.hideBuilding() = _GameHideBuildingEvent;
 }

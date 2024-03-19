@@ -1,5 +1,9 @@
 import 'package:big_apple/common/extensions/int_extension.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter_flip_card/flutter_flip_card.dart';
+
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 import 'package:big_apple/data/dto/enum/passive_benefit.dart';
 import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/generated/assets.gen.dart';
@@ -11,18 +15,16 @@ import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_flip_card/flutter_flip_card.dart';
 
 class BuildingCardWidget extends StatefulWidget {
   const BuildingCardWidget({
     super.key,
-    required this.building,
+    required this.type,
     required this.availableMoney,
     required this.onBuild,
   });
 
-  final Building building;
+  final BuildingType type;
   final double availableMoney;
   final void Function() onBuild;
 
@@ -49,15 +51,15 @@ class _BuildingCardWidgetState extends State<BuildingCardWidget> {
       onTapFlipping: true,
       animationDuration: AppDuration.defaultAnimationDuration,
       backWidget: _BackWidget(
-        building: widget.building,
+        buildingType: widget.type,
         onInfo: () {
           _controller.flipcard();
         },
       ),
       frontWidget: _FrontWidget(
-        building: widget.building,
+        building: widget.type,
         availableResources: {
-          ResourceType.coin: widget.availableMoney.toInt(),
+          ResourceType.gold: widget.availableMoney.toInt(),
         },
         onBuild: widget.onBuild,
         onInfo: () {
@@ -70,11 +72,11 @@ class _BuildingCardWidgetState extends State<BuildingCardWidget> {
 
 class _BackWidget extends StatelessWidget {
   const _BackWidget({
-    required this.building,
+    required this.buildingType,
     required this.onInfo,
   });
 
-  final Building building;
+  final BuildingType buildingType;
   final void Function() onInfo;
 
   @override
@@ -104,7 +106,7 @@ class _BackWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(right: AppDimension.s22),
                 child: TextWidget(
-                  building.title,
+                  buildingType.title,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: Colors.black,
                     height: 1.2,
@@ -113,30 +115,30 @@ class _BackWidget extends StatelessWidget {
               ),
               const SizedBox(height: AppDimension.s8),
               TextWidget(
-                building.description,
+                buildingType.description,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: AppColors.colorDimGray,
                   height: 1.2,
                 ),
               ),
               const SizedBox(height: AppDimension.s12),
-              ...building.passiveBenefits.keys.map((receiveType) {
+              ...buildingType.getPassiveBenefitsByLevel(1).keys.map((receiveType) {
                 return PassiveItemWidget(
-                  receiveItem: building.passiveBenefits[receiveType] ?? 0,
+                  receiveItem: buildingType.getPassiveBenefitsByLevel(1)[receiveType] ?? 0,
                   passiveBenefit: receiveType,
                   passiveDisadvantage: null,
                 );
               }),
-              if (building.income > 0) ...[
+              if (buildingType.getIncomeByLevel(1) > 0) ...[
                 const SizedBox(height: AppDimension.s8),
                 PassiveItemWidget(
-                  receiveItem: building.income.toInt(),
+                  receiveItem: buildingType.getIncomeByLevel(1),
                   passiveBenefit: PassiveBenefit.income,
                   passiveDisadvantage: null,
                 ),
               ],
               const SizedBox(height: AppDimension.s20),
-              RequirementsWidget(building: building),
+              RequirementsWidget(buildingType: buildingType),
             ],
           ),
         ),
@@ -170,7 +172,7 @@ class _FrontWidget extends StatelessWidget {
     required this.onInfo,
   });
 
-  final Building building;
+  final BuildingType building;
   final Map<ResourceType, int> availableResources;
   final void Function() onBuild;
   final void Function() onInfo;
@@ -179,7 +181,7 @@ class _FrontWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     bool canBuild = true;
-    building.price.forEach((key, value) {
+    building.getBuildPrice().forEach((key, value) {
       if ((availableResources[key] ?? 0) < value) {
         canBuild = false;
       }
@@ -229,9 +231,9 @@ class _FrontWidget extends StatelessWidget {
                     child: Wrap(
                       spacing: AppDimension.s6,
                       runSpacing: AppDimension.s6,
-                      children: building.price.keys.map((cost) {
+                      children: building.getPriceByLevel(1).keys.map((cost) {
                         return ResourceForBuildingWidget(
-                          requiredValue: building.price[cost] ?? 0,
+                          requiredValue: building.getPriceByLevel(1)[cost] ?? 0,
                           availableValue: availableResources[cost] ?? 0,
                           resourceType: cost,
                         );
@@ -252,7 +254,7 @@ class _FrontWidget extends StatelessWidget {
               const SizedBox(height: AppDimension.s2),
               Expanded(
                 child: TextWidget(
-                  'Building time  - ${building.buildingDurationInSeconds.toInt().toTimeText()}',
+                  'Building time  - ${building.getBuildingDurationInSecondsByLevel(1).toInt().toTimeText()}',
                   style: theme.textTheme.labelSmall?.copyWith(
                     color: AppColors.colorDimGray,
                     height: 1.2,

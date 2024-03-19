@@ -1,20 +1,21 @@
 import 'dart:async';
 
-import 'package:big_apple/common/components/world/main_world.dart';
-import 'package:big_apple/common/components/zone_component.dart';
-import 'package:big_apple/common/services/audio_service.dart';
-import 'package:big_apple/data/dto/enum/audio_file.dart';
-import 'package:big_apple/data/dto/enum/manufactory_type.dart';
-import 'package:big_apple/data/dto/enum/road_type.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import 'package:big_apple/big_apple_game.dart';
+import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/common/extensions/int_extension.dart';
-import 'package:big_apple/data/dto/building_info.dart';
+import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
+import 'package:big_apple/di/injector.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
+import 'package:big_apple/domain/services/building_service.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
@@ -25,19 +26,15 @@ import 'package:big_apple/resources/values/app_duration.dart';
 /// It can be dragged and dropped to a new position.
 /// It can be declined or approved.
 /// It can be under construction or not.
-/// Size: 256x178
 class BuildingComponent extends SpriteComponent
     with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, DragCallbacks, TapCallbacks {
   BuildingComponent({
     super.key,
     required this.building,
-    required super.size,
     super.anchor = Anchor.center,
     bool markAsBuild = false,
   }) : super(
-          priority: building.coordinates.y.toInt() +
-              (building.building.type == ManufactoryType.coalElectricStation ? 100 : 0),
-          position: Vector2(building.coordinates.x, building.coordinates.y),
+          priority: building.y.toInt() + (building.type == BuildingType.coalElectricStation ? 100 : 0),
         ) {
     id = building.id;
     if (markAsBuild) {
@@ -49,12 +46,12 @@ class BuildingComponent extends SpriteComponent
 
   @override
   void onTapUp(TapUpEvent event) {
-    game.gameBloc.add(GameSelectBuildingEvent(building));
+    game.gameBloc.add(GameEvent.selectBuilding(building));
     AudioService.instance.playSound(AudioFile.mouseClick);
     super.onTapUp(event);
   }
 
-  BuildingInfo building;
+  BuildingEntity building;
 
   late final int id;
   double _incomeTimer = 0;
@@ -75,6 +72,9 @@ class BuildingComponent extends SpriteComponent
     _isEditing = false;
     _isBuild = true;
     _isUnderConstruction = true;
+    building = building.copyWith(
+      constructionTimeLeft: building.type.getBuildingDurationInSecondsByLevel(building.level).toDouble(),
+    );
     world.getZoneByVector2(position)?.changeAvailability(false);
     await _updateSprite();
     return position;
@@ -82,17 +82,22 @@ class BuildingComponent extends SpriteComponent
 
   @override
   FutureOr<void> onLoad() async {
-    sprite = Sprite(game.images.fromCache(building.building.imageDone()));
+    sprite = Sprite(game.images.fromCache(building.type.imageDone()));
 
-    if (building.building.type == ManufactoryType.coalElectricStation) {
+    double newXPosition = (building.x / 128).round() * 128;
+    bool isOdd = (newXPosition / 128).round().isOdd;
+    double newYPosition = (building.y / 128).round() * 128 + (isOdd ? 0 : 64);
+    Vector2 newPosition = Vector2(newXPosition, newYPosition);
+
+    if (building.type == BuildingType.coalElectricStation) {
       size = Vector2(512, 533);
-      position = Vector2(building.coordinates.x, building.coordinates.y - 54);
-    } else if (building.building.type == RoadType.road) {
+      position = newPosition - Vector2(0, 54);
+    } else if (building.type == BuildingType.road) {
       size = Vector2(256, 133);
-      position = Vector2(building.coordinates.x, building.coordinates.y + 28);
+      position = newPosition + Vector2(0, 28);
     } else {
       size = Vector2(256, 256);
-      position = Vector2(building.coordinates.x, building.coordinates.y - 45);
+      position = newPosition;
     }
 
     return super.onLoad();
@@ -140,7 +145,7 @@ class BuildingComponent extends SpriteComponent
     ZoneComponent? zone = world.getZoneByVector2(newPosition);
 
     if (zone?.isAvailable == true) {
-      if (building.building.type == RoadType.road) {
+      if (building.type == BuildingType.road) {
         position = newPosition + Vector2(0, 28);
       } else {
         position = newPosition - Vector2(0, 45);
@@ -150,11 +155,7 @@ class BuildingComponent extends SpriteComponent
         zone?.changeAvailability(false);
         ZoneComponent? previousZone = world.getZoneByVector2(positionBeforeDrag!);
         previousZone?.changeAvailability(true);
-        game.gameBloc.add(
-          UpdateBuildingEvent(
-            building.copyWith(coordinates: Coordinates(x: newXPosition, y: newYPosition)),
-          ),
-        );
+        inject<BuildingService>().updateLocation(building.id, x, y);
       }
     } else {
       position = positionBeforeDrag!;
@@ -175,7 +176,7 @@ class BuildingComponent extends SpriteComponent
         anchor: Anchor.topLeft,
       );
       Sprite(
-        game.images.fromCache(building.building.imageDone()),
+        game.images.fromCache(building.type.imageDone()),
       ).render(
         canvas,
         position: Vector2(0, 0),
@@ -187,7 +188,9 @@ class BuildingComponent extends SpriteComponent
     if (_isUnderConstruction) {
       const padding = AppDimension.s4;
 
-      final progress = (building.constructionTimeLeft / building.building.buildingDurationInSeconds).clamp(0.0, 1.0);
+      final progress =
+          (building.constructionTimeLeft / building.type.getBuildingDurationInSecondsByLevel(building.level))
+              .clamp(0.0, 1.0);
       const barHeight = 32.0;
       final barWidth = size.x;
       const borderRadius = Radius.circular(12);
@@ -234,7 +237,6 @@ class BuildingComponent extends SpriteComponent
     if (constructionTimer <= 0) {
       _isUnderConstruction = false;
       building = building.copyWith(constructionTimeLeft: 0);
-      game.gameBloc.add(GameFinishBuildingEvent(building));
       game.audioBloc.add(const AudioCheckMusicEvent());
     }
 
@@ -245,14 +247,15 @@ class BuildingComponent extends SpriteComponent
     String spritePath;
 
     if (_isUnderConstruction) {
-      double progress = 1 - (building.constructionTimeLeft / building.building.buildingDurationInSeconds);
+      double progress =
+          1 - (building.constructionTimeLeft / building.type.getBuildingDurationInSecondsByLevel(building.level));
       if (progress < 0.5) {
-        spritePath = building.building.imageInitial();
+        spritePath = building.type.imageInitial();
       } else {
-        spritePath = building.building.imageHalf();
+        spritePath = building.type.imageHalf();
       }
     } else {
-      spritePath = building.building.imageDone();
+      spritePath = building.type.imageDone();
     }
 
     sprite = Sprite(game.images.fromCache(spritePath));
@@ -265,7 +268,6 @@ class BuildingComponent extends SpriteComponent
     _incomeTimer += dt;
 
     if (_incomeTimer >= AppDuration.buildingIncomeIntervalInSeconds) {
-      game.gameBloc.add(GameIncreaseMoneyEvent(building.building.income));
       _incomeTimer = 0;
     }
   }

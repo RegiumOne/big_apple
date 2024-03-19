@@ -9,12 +9,10 @@ import 'package:big_apple/resources/values/app_dimension.dart';
 class LevelWidget extends StatelessWidget {
   const LevelWidget({
     super.key,
-    required this.maxLvlValue,
     required this.currentLvlValue,
     required this.level,
   });
 
-  final double maxLvlValue;
   final double currentLvlValue;
   final int level;
 
@@ -30,7 +28,7 @@ class LevelWidget extends StatelessWidget {
             left: 26,
             right: 0,
             bottom: 6,
-            child: ProgressBarWidget(maxValue: maxLvlValue, currentValue: currentLvlValue),
+            child: ProgressBarWidget(maxValue: 1, currentValue: currentLvlValue),
           ),
           Positioned(
             right: -14,

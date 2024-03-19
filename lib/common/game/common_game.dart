@@ -1,6 +1,6 @@
-import 'package:big_apple/data/dto/building.dart';
-import 'package:big_apple/data/dto/building_info.dart';
 import 'package:flame/game.dart';
+
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 
 abstract class CommonGame extends FlameGame {
   Future<void> startGame({bool isNewGame = false});
@@ -8,10 +8,9 @@ abstract class CommonGame extends FlameGame {
   void pauseGame();
   void resumeGame();
   void checkMusic();
-  void initBuildings(List<BuildingInfo> buildings);
 
   /// Places a building on the map
-  void placeBuilding(Building type);
+  void placeBuilding(BuildingType type);
   void removeBuildingById(int id);
   Future<Vector2>? buildBuildingById(int id);
 }
