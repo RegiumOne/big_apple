@@ -37,6 +37,10 @@ class AppColors {
   static const Color colorDimGray = Color(0xFF646464);
   static const Color colorSlateGray = Color(0xFF858585);
   static const Color colorPaleSilver = Color(0xB2D9D3C4);
+  static const Color blackGlass = Color(0x45000000);
+  static const Color colorSemiTransparentCharcoal = Color(0x87000000);
+  static const Color colorCopper = Color(0xFFB07C5B);
+  static const Color colorLightGrey = Color(0x54DED7C4);
 
   static const Gradient redGradientTopBottom = LinearGradient(
     colors: [

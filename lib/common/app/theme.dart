@@ -10,6 +10,10 @@ ThemeData _mainTheme() => ThemeData(
 
 TextTheme _textTheme() {
   return const TextTheme(
+    headlineSmall: TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w400,
+    ),
     titleLarge: TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.w500,

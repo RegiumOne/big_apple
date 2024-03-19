@@ -136,7 +136,7 @@ class _FirstColumnWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: AppDimension.s8),
-                  Assets.icons.lvl.svg(
+                  Assets.icons.ecologyLevel.svg(
                     width: AppDimension.s24,
                     height: AppDimension.s24,
                   ),

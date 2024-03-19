@@ -7,13 +7,11 @@ import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/widgets/background_center_widget.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
-import 'package:big_apple/presentation/widgets/circle_button_widget.dart';
-import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -47,7 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Center(
-        child: _BackgroundWidget(
+        child: BackgroundCenterWidget(
           title: 'Settings',
           onClose: () {
             widget.game.overlays.remove(Overlays.settings.name);
@@ -272,100 +270,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       context.read<AuthBloc>().add(AuthLoginEvent(oAuthProvider));
     }
-  }
-}
-
-class _BackgroundWidget extends StatelessWidget {
-  const _BackgroundWidget({
-    required this.title,
-    required this.onClose,
-    required this.child,
-  });
-
-  final String title;
-  final void Function() onClose;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          constraints: const BoxConstraints(
-            maxHeight: 320,
-            maxWidth: 482,
-          ),
-          padding: const EdgeInsets.only(
-            top: AppDimension.s12,
-            bottom: AppDimension.s14,
-            left: AppDimension.s16,
-            right: AppDimension.s16,
-          ),
-          decoration: const BoxDecoration(
-            color: AppColors.colorBronze,
-            borderRadius: BorderRadius.all(Radius.circular(AppDimension.r30)),
-            boxShadow: [AppColors.shadowSoftBlack],
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(AppDimension.s6),
-            decoration: const BoxDecoration(
-              color: AppColors.colorAlabaster,
-              borderRadius: BorderRadius.all(Radius.circular(AppDimension.r20)),
-              boxShadow: [AppColors.shadowSoftBlack],
-            ),
-            child: DottedBorder(
-              borderType: BorderType.RRect,
-              color: AppColors.colorBronze,
-              padding: EdgeInsets.zero,
-              dashPattern: const [5, 5],
-              radius: const Radius.circular(AppDimension.r16),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: AppDimension.s26,
-                  bottom: AppDimension.s16,
-                  left: AppDimension.s14,
-                  right: AppDimension.s14,
-                ),
-                child: child,
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: -10,
-          right: -10,
-          child: CircleButtonWidget(
-            iconSvg: Assets.icons.close,
-            onTap: onClose,
-          ),
-        ),
-        Positioned(
-          top: -10,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: Container(
-              height: AppDimension.s44,
-              alignment: Alignment.center,
-              constraints: const BoxConstraints(maxWidth: 166),
-              decoration: const BoxDecoration(
-                gradient: AppColors.sunriseGlowGradient,
-                borderRadius: BorderRadius.all(Radius.circular(AppDimension.r20)),
-                boxShadow: [AppColors.shadowElevatedSoft],
-              ),
-              child: TextWidget(
-                title,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  shadows: [AppColors.shadowCrispEdge],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

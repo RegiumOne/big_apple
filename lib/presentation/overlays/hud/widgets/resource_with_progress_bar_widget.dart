@@ -32,11 +32,13 @@ class ResourceWithProgressBarWidget extends StatelessWidget {
             left: 0,
             right: 8,
             bottom: 2,
-            child: ProgressBarWidget(
-              maxValue: maxValue,
-              currentValue: value,
-              alignment: Alignment.centerRight,
-              gradient: AppColors.orangeGradientTopBottom,
+            child: Center(
+              child: ProgressBarWidget(
+                maxValue: maxValue,
+                currentValue: value,
+                alignment: Alignment.centerRight,
+                gradient: AppColors.greenGradientTopBottom,
+              ),
             ),
           ),
           Positioned(

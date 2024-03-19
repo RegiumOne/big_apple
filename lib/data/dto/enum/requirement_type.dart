@@ -17,7 +17,7 @@ enum RequirementType {
     String path = '';
     switch (this) {
       case ecologyLvl:
-        path = Assets.icons.lvl.path;
+        path = Assets.icons.ecologyLevel.path;
         break;
     }
     if (replacePath) return path.removeAssetsImagesPath();

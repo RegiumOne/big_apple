@@ -6,12 +6,14 @@ import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
+import 'package:big_apple/presentation/overlays/hud/widgets/ecology_level_widget.dart';
 import 'package:big_apple/presentation/widgets/building_button.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/presentation/overlays/hud/widgets/level_widget.dart';
 import 'package:big_apple/presentation/overlays/hud/widgets/main_info_widget.dart';
 import 'package:big_apple/presentation/overlays/hud/widgets/resource_with_progress_bar_widget.dart';
 import 'package:big_apple/presentation/widgets/safe_area_widget.dart';
+import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flame/components.dart';
@@ -62,7 +64,7 @@ class Hud extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(
                           top: AppDimension.s8,
-                          right: AppDimension.s38,
+                          right: AppDimension.s20,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,48 +74,15 @@ class Hud extends StatelessWidget {
                                 double level = state.gameStat.ecologyLevel;
                                 double currentLvlValue = level - level.floor();
                                 return LevelWidget(
+                                  maxLvlValue: 1,
                                   currentLvlValue: currentLvlValue,
                                   level: level.floor(),
                                 );
                               },
                             ),
                             const SizedBox(height: AppDimension.s10),
-                            Row(
-                              children: [
-                                ButtonWidget(
-                                  height: AppDimension.s42,
-                                  width: AppDimension.s42,
-                                  gradient: AppColors.blueGradientTopBottom,
-                                  gradientPress: AppColors.darkBlueGradient,
-                                  shadowColor: AppColors.colorRoyalBlue,
-                                  iconSize: AppDimension.s24,
-                                  childShadowColor: AppColors.colorMediumTransparencyBlack,
-                                  childShadowOffset: const Offset(2, 2),
-                                  iconPadding: const EdgeInsets.only(left: AppDimension.s2),
-                                  iconSvg: Assets.icons.settings,
-                                  onPressed: () {
-                                    game.overlays.remove(Overlays.hud.name);
-                                    game.overlays.add(Overlays.settings.name);
-                                  },
-                                ),
-                                const SizedBox(width: AppDimension.s8),
-                                ButtonWidget(
-                                  height: AppDimension.s42,
-                                  width: AppDimension.s42,
-                                  gradient: AppColors.blueGradientTopBottom,
-                                  gradientPress: AppColors.darkBlueGradient,
-                                  shadowColor: AppColors.colorRoyalBlue,
-                                  iconSize: AppDimension.s24,
-                                  childShadowColor: AppColors.colorMediumTransparencyBlack,
-                                  childShadowOffset: const Offset(2, 2),
-                                  iconPadding: const EdgeInsets.only(left: AppDimension.s2),
-                                  iconSvg: Assets.icons.info,
-                                  onPressed: () {
-                                    game.overlays.remove(Overlays.hud.name);
-                                    game.overlays.add(Overlays.information.name);
-                                  },
-                                ),
-                              ],
+                            const EcologyLevelWidget(
+                              level: 100,
                             ),
                           ],
                         ),
@@ -132,7 +101,7 @@ class Hud extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(
                           top: AppDimension.s8,
-                          left: AppDimension.s20,
+                          left: AppDimension.s22,
                         ),
                         child: BlocBuilder<GameHudBloc, GameHudState>(
                           builder: (context, state) => Column(
@@ -142,12 +111,6 @@ class Hud extends StatelessWidget {
                                 value: state.gameStat.gold,
                                 maxValue: state.gameStat.maxGold,
                                 icon: Assets.icons.coin,
-                              ),
-                              const SizedBox(height: AppDimension.s6),
-                              ResourceWithProgressBarWidget(
-                                value: state.gameStat.coal,
-                                maxValue: state.gameStat.maxCoal,
-                                icon: Assets.icons.stone,
                               ),
                               const SizedBox(height: AppDimension.s6),
                               ResourceWithProgressBarWidget(
@@ -208,21 +171,61 @@ class Hud extends StatelessWidget {
                   bottom: 0,
                   left: 0,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      ButtonWidget(
+                        height: AppDimension.s42,
+                        width: AppDimension.s42,
+                        gradient: AppColors.blueGradientTopBottom,
+                        gradientPress: AppColors.darkBlueGradient,
+                        shadowColor: AppColors.colorRoyalBlue,
+                        iconSize: AppDimension.s24,
+                        childShadowColor: AppColors.colorMediumTransparencyBlack,
+                        childShadowOffset: const Offset(2, 2),
+                        iconPadding: const EdgeInsets.only(left: AppDimension.s2),
+                        iconSvg: Assets.icons.settings,
+                        onPressed: () {
+                          game.overlays.remove(Overlays.hud.name);
+                          game.overlays.add(Overlays.settings.name);
+                        },
+                      ),
+                      // const SizedBox(width: AppDimension.s8),
+                      // ButtonWidget(
+                      //   height: AppDimension.s42,
+                      //   width: AppDimension.s42,
+                      //   gradient: AppColors.blueGradientTopBottom,
+                      //   gradientPress: AppColors.darkBlueGradient,
+                      //   shadowColor: AppColors.colorRoyalBlue,
+                      //   iconSize: AppDimension.s24,
+                      //   childShadowColor: AppColors.colorMediumTransparencyBlack,
+                      //   childShadowOffset: const Offset(2, 2),
+                      //   iconPadding: const EdgeInsets.only(left: AppDimension.s2),
+                      //   iconSvg: Assets.icons.info,
+                      //   onPressed: () {
+                      //     game.overlays.remove(Overlays.hud.name);
+                      //     game.overlays.add(Overlays.information.name);
+                      //   },
+                      // ),
+                      const SizedBox(height: AppDimension.s12),
                       ButtonWidget(
                         gap: AppDimension.s2,
                         borderRadius: AppDimension.r10,
-                        iconSvg: Assets.icons.port,
+                        iconSvg: Assets.icons.storage,
                         gradient: AppColors.blueGradientTopBottom,
                         gradientPress: AppColors.darkBlueGradient,
                         shadowColor: AppColors.colorRoyalBlue,
                         childShadowColor: AppColors.colorMediumTransparencyBlack,
                         childShadowOffset: const Offset(2, 2),
-                        text: 'Port',
+                        text: 'Storage',
                         onPressed: () {
                           game.overlays.remove(Overlays.hud.name);
                           game.overlays.add(Overlays.port.name);
                         },
+                      ),
+                      const SizedBox(height: AppDimension.s12),
+                      _PortButtonWidget(
+                        game: game,
+                        amount: 1,
                       ),
                     ],
                   ),
@@ -231,6 +234,76 @@ class Hud extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _PortButtonWidget extends StatelessWidget {
+  const _PortButtonWidget({
+    required this.game,
+    required this.amount,
+  });
+
+  final CommonGame game;
+  final int amount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        ButtonWidget(
+          gap: AppDimension.s2,
+          borderRadius: AppDimension.r10,
+          iconSvg: Assets.icons.port,
+          gradient: AppColors.blueGradientTopBottom,
+          gradientPress: AppColors.darkBlueGradient,
+          shadowColor: AppColors.colorRoyalBlue,
+          childShadowColor: AppColors.colorMediumTransparencyBlack,
+          childShadowOffset: const Offset(2, 2),
+          text: 'Port',
+          onPressed: () {
+            game.overlays.remove(Overlays.hud.name);
+            game.overlays.add(Overlays.port.name);
+          },
+        ),
+        if (amount > 0)
+          Positioned(
+            top: -4,
+            right: -9,
+            child: IgnorePointer(
+              child: Container(
+                height: AppDimension.s22,
+                width: AppDimension.s22,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  gradient: AppColors.sunsetPassionGradient,
+                  borderRadius: BorderRadius.circular(AppDimension.r100),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: AppColors.colorLightSemiTransparentBlack,
+                      offset: Offset(0, 4),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: TextWidget(
+                  '$amount',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.white,
+                    height: 1,
+                    shadows: [
+                      const BoxShadow(
+                        color: AppColors.colorMediumTransparencyBlack,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

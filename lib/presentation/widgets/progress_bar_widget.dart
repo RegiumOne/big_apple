@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ProgressBarWidget extends StatelessWidget {
   const ProgressBarWidget({
@@ -23,21 +27,18 @@ class ProgressBarWidget extends StatelessWidget {
             ? 1
             : currentValue / maxValue
         : 0;
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.colorBronze,
-          borderRadius: BorderRadius.circular(AppDimension.r30),
-          boxShadow: const [AppColors.shadowSoftBlack],
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.blackGlass,
+        borderRadius: BorderRadius.circular(AppDimension.r20),
+        border: Border.all(
+          color: AppColors.colorSemiTransparentCharcoal,
+          strokeAlign: BorderSide.strokeAlignOutside,
         ),
-        padding: const EdgeInsets.symmetric(vertical: AppDimension.s2, horizontal: AppDimension.s2),
+      ),
+      child: _BlurredWidget(
         child: Container(
           alignment: alignment,
-          decoration: BoxDecoration(
-            gradient: AppColors.espressoSunriseGradient,
-            borderRadius: BorderRadius.circular(AppDimension.r20),
-            boxShadow: const [AppColors.shadowSoftBlack],
-          ),
           child: FractionallySizedBox(
             widthFactor: fillPercentage,
             child: Container(
@@ -48,6 +49,25 @@ class ProgressBarWidget extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _BlurredWidget extends StatelessWidget {
+  const _BlurredWidget({
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppDimension.r30),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+        child: child,
       ),
     );
   }

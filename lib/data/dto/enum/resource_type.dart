@@ -42,7 +42,7 @@ enum ResourceType {
         path = isWhite ? Assets.icons.metalWhite.path : Assets.icons.metal.path;
         break;
       case wood:
-        path = isWhite ? Assets.icons.wood.path : Assets.icons.wood.path;
+        path = isWhite ? Assets.icons.woodWhite.path : Assets.icons.wood.path;
         break;
       case builders:
         path = Assets.icons.worker.path;

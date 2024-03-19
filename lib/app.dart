@@ -59,8 +59,9 @@ class _GameState extends State<_Game> {
             ),
             onNewLevel: (gameStatistic, buildinds, newLevel) {
               debugPrint('New level: $newLevel');
-              // TODO(hrubalskyi): Implement new level UI
-              return;
+              return BlocProvider.of<GameHudBloc>(context).add(
+                const GameHudEvent.newLevel(),
+              );
             },
           ),
         );
