@@ -5,17 +5,17 @@ import 'package:injectable/injectable.dart';
 import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:big_apple/domain/entities/game_stat.dart';
 
-part 'game_event.dart';
-part 'game_state.dart';
-part 'game_bloc.freezed.dart';
+part 'game_hud_event.dart';
+part 'game_hud_state.dart';
+part 'game_hud_bloc.freezed.dart';
 
 @Injectable()
-class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(GameState.initial()) {
-    on<GameEvent>(
+class GameHudBloc extends Bloc<GameHudEvent, GameHudState> {
+  GameHudBloc() : super(GameHudState.initial()) {
+    on<GameHudEvent>(
       (event, emit) {
         event.when(
-          updateStat: (gameStat) => _updateStatHandle(gameStat, emit),
+          updateStatistic: (gameStat) => _updateStatHandle(gameStat, emit),
           selectBuilding: (gameStat) => _selectBuildingState(gameStat, emit),
           hideBuilding: () => _selectBuildingState(null, emit),
         );
@@ -24,11 +24,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _updateStatHandle(
-    GameStat gameStat,
-    Emitter<GameState> emit,
+    GameStatistic gameStat,
+    Emitter<GameHudState> emit,
   ) {
     emit(
-      GameState(
+      GameHudState(
         gameStat: gameStat,
         selectedBuilding: state.selectedBuilding,
       ),
@@ -37,10 +37,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _selectBuildingState(
     BuildingEntity? building,
-    Emitter<GameState> emit,
+    Emitter<GameHudState> emit,
   ) {
     emit(
-      GameState(
+      GameHudState(
         gameStat: state.gameStat,
         selectedBuilding: building,
       ),

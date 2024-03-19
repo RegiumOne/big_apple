@@ -10,11 +10,11 @@ abstract class DatabaseService {
   DatabaseService({required this.database});
 
   AppDatabase database;
-
-  Future<(GameStat, List<BuildingEntity>)> loadGame() async {
+  
+  Future<(GameStatistic, List<BuildingEntity>)> loadGame() async {
     GameStatDtoData? gameStatDtoData = await database.select(database.gameStatDto).getSingleOrNull();
 
-    GameStat gameStat = gameStatDtoData?.toEntity() ?? GameStat.initial();
+    GameStatistic gameStat = gameStatDtoData?.toEntity() ?? GameStatistic.initial();
 
     if (gameStatDtoData == null) {
       await database.into(database.gameStatDto).insert(
@@ -41,7 +41,7 @@ abstract class DatabaseService {
     return (gameStat, buildings.toEntity());
   }
 
-  Future<void> insertBuildingToDB(BuildingEntity building) async {
+  Future<void> saveBuilding(BuildingEntity building) async {
     await database.transaction(() async {
       await database.into(database.buildingDto).insert(
             BuildingDtoCompanion.insert(
@@ -60,7 +60,7 @@ abstract class DatabaseService {
     });
   }
 
-  Future<void> updateBuildingLocation(int buildingId, double x, double y) async {
+  Future<void> saveNewBuildingLocation(int buildingId, double x, double y) async {
     await (database.update(database.buildingDto)..where((t) => t.id.equals(buildingId))).write(
       BuildingDtoCompanion(
         x: Value(x),
@@ -69,7 +69,7 @@ abstract class DatabaseService {
     );
   }
 
-  Future<void> updateGameStat(GameStat gameStat) async {
+  Future<void> saveGameStat(GameStatistic gameStat) async {
     await (database.update(database.gameStatDto)).write(
       GameStatDtoCompanion(
         gold: Value(gameStat.gold),

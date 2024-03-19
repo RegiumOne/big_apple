@@ -4,14 +4,14 @@ import 'package:big_apple/data/datasources/local/database/resources_dto.dart';
 import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/domain/entities/building_entity.dart';
 
-class GameStat {
-  GameStat({
+class GameStatistic {
+  GameStatistic({
     this.id = -1,
     this.gold = 500,
     this.maxGold = 1000,
     this.coal = 0,
     this.maxCoal = 100,
-    this.iron = 0,
+    this.iron = 50,
     this.maxIron = 100,
     this.maxBuilders = 2,
     this.electricity = 15,
@@ -21,9 +21,9 @@ class GameStat {
     this.clover = 50,
   });
 
-  factory GameStat.initial() => GameStat();
+  factory GameStatistic.initial() => GameStatistic();
 
-  factory GameStat.empty() => GameStat(
+  factory GameStatistic.empty() => GameStatistic(
         id: -1,
         gold: 0,
         maxGold: 0,
@@ -39,7 +39,7 @@ class GameStat {
         clover: 0,
       );
 
-  GameStat copyWith({
+  GameStatistic copyWith({
     double? maxGold,
     double? gold,
     double? coal,
@@ -53,7 +53,7 @@ class GameStat {
     int? maxBuilders,
     int? clover,
   }) {
-    return GameStat(
+    return GameStatistic(
       maxGold: maxGold ?? this.maxGold,
       gold: gold ?? this.gold,
       coal: coal ?? this.coal,

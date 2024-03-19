@@ -9,7 +9,7 @@ import 'package:big_apple/data/dto/enum/passive_benefit.dart';
 import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/data/dto/enum/upgrade_menu.dart';
 import 'package:big_apple/domain/entities/building_entity.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/widgets/background_bottom_widget.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
 import 'package:big_apple/presentation/widgets/passive_item_widget.dart';
@@ -64,7 +64,7 @@ class _UpgradeScreenState extends State<UpgradeScreen> {
       onClose: () {
         _hideShop();
       },
-      child: BlocBuilder<GameBloc, GameState>(
+      child: BlocBuilder<GameHudBloc, GameHudState>(
         builder: (context, state) {
           BuildingEntity building = state.selectedBuilding!;
           bool canBeUpgraded = state.gameStat.canBeBuilt(building.type, building.level + 1);
@@ -276,6 +276,6 @@ class _UpgradeScreenState extends State<UpgradeScreen> {
   }
 
   void _hideShop() {
-    context.read<GameBloc>().add(const GameEvent.hideBuilding());
+    context.read<GameHudBloc>().add(const GameHudEvent.hideBuilding());
   }
 }

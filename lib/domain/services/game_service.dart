@@ -1,10 +1,8 @@
-import 'package:big_apple/domain/entities/building_entity.dart';
-import 'package:big_apple/domain/entities/game_stat.dart';
+import 'package:big_apple/data/services/game_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract interface class GameService {
-  BehaviorSubject<GameStat> get gameState;
-  BehaviorSubject<List<BuildingEntity>> get buildingsState;
+  BehaviorSubject<GameState> get state;
 
   Future<void> init();
 }

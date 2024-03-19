@@ -18,7 +18,7 @@ import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
@@ -29,7 +29,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     required this.buildingBloc,
   });
 
-  final GameBloc gameBloc;
+  final GameHudBloc gameBloc;
   final AudioBloc audioBloc;
   final BuildingBloc buildingBloc;
 

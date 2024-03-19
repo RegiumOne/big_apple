@@ -20,7 +20,7 @@ class GameStatDto extends Table {
 }
 
 extension GameStatDtoX on GameStatDtoData {
-  GameStat toEntity() => GameStat(
+  GameStatistic toEntity() => GameStatistic(
         id: id,
         gold: gold,
         maxGold: maxGold,

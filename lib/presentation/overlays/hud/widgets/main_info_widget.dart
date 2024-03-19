@@ -15,7 +15,7 @@ class MainInfoWidget extends StatelessWidget {
     super.key,
   });
 
-  final GameStat gameStat;
+  final GameStatistic gameStat;
 
   @override
   Widget build(BuildContext context) =>
@@ -27,7 +27,7 @@ class _LandscapeWidget extends StatelessWidget {
     required this.gameStat,
   });
 
-  final GameStat gameStat;
+  final GameStatistic gameStat;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _PortraitWidget extends StatelessWidget {
     required this.gameStat,
   });
 
-  final GameStat gameStat;
+  final GameStatistic gameStat;
 
   @override
   Widget build(BuildContext context) {

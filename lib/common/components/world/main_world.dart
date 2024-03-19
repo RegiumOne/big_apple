@@ -47,7 +47,11 @@ class MainWorld extends World {
     _isInited = true;
 
     inject<GameService>().init();
-    inject<GameService>().buildingsState.listen(initBuildings);
+    inject<GameService>().state.listen((state) {
+      state.whenOrNull(
+        initBuildings: (gameStatistic, buildinds) => initBuildings(buildinds),
+      );
+    });
   }
 
   Future<void> _initZones() async {

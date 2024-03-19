@@ -4,7 +4,7 @@ import 'package:big_apple/domain/services/building_service.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/building_button.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
@@ -67,7 +67,7 @@ class Hud extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            BlocBuilder<GameBloc, GameState>(
+                            BlocBuilder<GameHudBloc, GameHudState>(
                               builder: (context, state) {
                                 double level = state.gameStat.ecologyLevel;
                                 double currentLvlValue = level - level.floor();
@@ -122,7 +122,7 @@ class Hud extends StatelessWidget {
                     Expanded(
                       flex: 482,
                       child: Center(
-                        child: BlocBuilder<GameBloc, GameState>(
+                        child: BlocBuilder<GameHudBloc, GameHudState>(
                           builder: (context, state) => MainInfoWidget(gameStat: state.gameStat),
                         ),
                       ),
@@ -134,7 +134,7 @@ class Hud extends StatelessWidget {
                           top: AppDimension.s8,
                           left: AppDimension.s20,
                         ),
-                        child: BlocBuilder<GameBloc, GameState>(
+                        child: BlocBuilder<GameHudBloc, GameHudState>(
                           builder: (context, state) => Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

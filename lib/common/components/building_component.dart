@@ -18,7 +18,7 @@ import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:big_apple/domain/services/building_service.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
 
@@ -27,7 +27,7 @@ import 'package:big_apple/resources/values/app_duration.dart';
 /// It can be declined or approved.
 /// It can be under construction or not.
 class BuildingComponent extends SpriteComponent
-    with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, DragCallbacks, TapCallbacks {
+    with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, TapCallbacks, DragCallbacks {
   BuildingComponent({
     super.key,
     required this.building,
@@ -46,7 +46,7 @@ class BuildingComponent extends SpriteComponent
 
   @override
   void onTapUp(TapUpEvent event) {
-    game.gameBloc.add(GameEvent.selectBuilding(building));
+    game.gameBloc.add(GameHudEvent.selectBuilding(building));
     AudioService.instance.playSound(AudioFile.mouseClick);
     super.onTapUp(event);
   }

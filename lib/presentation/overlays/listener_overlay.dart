@@ -1,6 +1,6 @@
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        BlocListener<GameBloc, GameState>(
+        BlocListener<GameHudBloc, GameHudState>(
           listener: (context, state) {
             _selectBuilding(state);
           },
@@ -48,7 +48,7 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
     );
   }
 
-  void _selectBuilding(GameState state) {
+  void _selectBuilding(GameHudState state) {
     if (state.selectedBuilding != null && !widget.game.overlays.isActive(Overlays.upgrade.name)) {
       widget.game.overlays.remove(Overlays.hud.name);
       widget.game.overlays.add(Overlays.upgrade.name);

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/overlays/screens/shop/widgets/building_card.dart';
 import 'package:big_apple/presentation/widgets/background_bottom_widget.dart';
@@ -92,7 +92,7 @@ class _ShopScreenState extends State<ShopScreen> {
       onClose: () {
         _hideShop();
       },
-      child: BlocBuilder<GameBloc, GameState>(
+      child: BlocBuilder<GameHudBloc, GameHudState>(
         builder: (context, state) => Row(
           children: List.generate(
             buildings.length,
