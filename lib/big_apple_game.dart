@@ -20,7 +20,6 @@ import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
 import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
-import 'package:big_apple/resources/values/app_duration.dart';
 
 class BigAppleGame extends CommonGame with ScaleDetector {
   BigAppleGame({
@@ -37,7 +36,6 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   MainWorld? level;
 
-  Timer? _saveGameTimer;
 
   StreamSubscription? _camSubscription;
 
@@ -93,7 +91,6 @@ class BigAppleGame extends CommonGame with ScaleDetector {
   @override
   Future<void> startGame({bool isNewGame = false}) async {
     await _initCamera();
-    _startSaveTimer();
   }
 
   @override
@@ -101,21 +98,18 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     if (cam != null && level != null) {
       removeAll([cam!, level!]);
     }
-    _saveGameTimer?.cancel();
   }
 
   @override
   void pauseGame() {
     AudioService.instance.pauseMusic();
     pauseEngine();
-    _saveGameTimer?.cancel();
   }
 
   @override
   void resumeGame() {
     resumeEngine();
     AudioService.instance.resumeMusic();
-    _startSaveTimer();
   }
 
   @override
@@ -156,13 +150,6 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
     _camSubscription = cam?.onChangeStream.listen((_) {
       checkMusic();
-    });
-  }
-
-  void _startSaveTimer() {
-    _saveGameTimer?.cancel();
-    _saveGameTimer = Timer.periodic(AppDuration.saveGameDuration, (timer) {
-      // gameBloc.add(const GameSaveEvent());
     });
   }
 
