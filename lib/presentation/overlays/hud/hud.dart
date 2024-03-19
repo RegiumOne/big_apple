@@ -1,8 +1,10 @@
-import 'package:big_apple/data/dto/building_info.dart';
+import 'package:big_apple/di/injector.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
+import 'package:big_apple/domain/services/building_service.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/presentation/bloc/building/building_bloc.dart';
-import 'package:big_apple/presentation/bloc/game/game_bloc.dart';
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/building_button.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
@@ -29,14 +31,16 @@ class Hud extends StatelessWidget {
     return BlocConsumer<BuildingBloc, BuildingState>(
       listener: (context, state) async {
         if (state is BuidlingCancelled) {
-          game.removeBuildingById(state.buildingInfo.id);
+          game.removeBuildingById(state.buildingEntity.id);
         } else if (state is BuidlingBuild) {
-          Vector2? newCooridantes = await game.buildBuildingById(state.buildingInfo.id);
+          Vector2? newCooridantes = await game.buildBuildingById(state.buildingEntity.id);
           if (newCooridantes != null) {
-            BuildingInfo newBuildingInfo = state.buildingInfo.copyWith(
-              coordinates: Coordinates(x: newCooridantes.x, y: newCooridantes.y),
+            BuildingEntity building = state.buildingEntity.copyWith(
+              x: newCooridantes.x,
+              y: newCooridantes.y,
             );
-            if (context.mounted) context.read<GameBloc>().add(GameAddBuildingEvent(newBuildingInfo));
+
+            inject<BuildingService>().build(building);
           }
         }
       },
@@ -63,10 +67,15 @@ class Hud extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const LevelWidget(
-                              maxLvlValue: 100,
-                              currentLvlValue: 50,
-                              level: 2,
+                            BlocBuilder<GameHudBloc, GameHudState>(
+                              builder: (context, state) {
+                                double level = state.gameStat.ecologyLevel;
+                                double currentLvlValue = level - level.floor();
+                                return LevelWidget(
+                                  currentLvlValue: currentLvlValue,
+                                  level: level.floor(),
+                                );
+                              },
                             ),
                             const SizedBox(height: AppDimension.s10),
                             Row(
@@ -113,16 +122,8 @@ class Hud extends StatelessWidget {
                     Expanded(
                       flex: 482,
                       child: Center(
-                        child: BlocBuilder<GameBloc, GameState>(
-                          builder: (context, state) {
-                            return MainInfoWidget(
-                              clover: 300,
-                              energy: 300,
-                              population: 999000,
-                              totalBuilders: state.builders.length,
-                              availableBuilders: state.availableBuilders.length,
-                            );
-                          },
+                        child: BlocBuilder<GameHudBloc, GameHudState>(
+                          builder: (context, state) => MainInfoWidget(gameStat: state.gameStat),
                         ),
                       ),
                     ),
@@ -133,31 +134,29 @@ class Hud extends StatelessWidget {
                           top: AppDimension.s8,
                           left: AppDimension.s20,
                         ),
-                        child: BlocBuilder<GameBloc, GameState>(
-                          builder: (context, state) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ResourceWithProgressBarWidget(
-                                  maxValue: 1000,
-                                  value: state.money,
-                                  icon: Assets.icons.coin,
-                                ),
-                                const SizedBox(height: AppDimension.s6),
-                                ResourceWithProgressBarWidget(
-                                  maxValue: 500,
-                                  value: 150,
-                                  icon: Assets.icons.stone,
-                                ),
-                                const SizedBox(height: AppDimension.s6),
-                                ResourceWithProgressBarWidget(
-                                  maxValue: 1000,
-                                  value: 1000,
-                                  icon: Assets.icons.metal,
-                                ),
-                              ],
-                            );
-                          },
+                        child: BlocBuilder<GameHudBloc, GameHudState>(
+                          builder: (context, state) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ResourceWithProgressBarWidget(
+                                value: state.gameStat.gold,
+                                maxValue: state.gameStat.maxGold,
+                                icon: Assets.icons.coin,
+                              ),
+                              const SizedBox(height: AppDimension.s6),
+                              ResourceWithProgressBarWidget(
+                                value: state.gameStat.coal,
+                                maxValue: state.gameStat.maxCoal,
+                                icon: Assets.icons.stone,
+                              ),
+                              const SizedBox(height: AppDimension.s6),
+                              ResourceWithProgressBarWidget(
+                                value: state.gameStat.iron,
+                                maxValue: state.gameStat.maxIron,
+                                icon: Assets.icons.metal,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -175,7 +174,7 @@ class Hud extends StatelessWidget {
                         icon: Assets.icons.cancel.svg(),
                         text: 'Cancel',
                         onPressed: () {
-                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingInfo: state.buildingInfo));
+                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingEntity: state.buildingEntity));
                         },
                       ),
                       const SizedBox(width: AppDimension.s6),
@@ -183,7 +182,7 @@ class Hud extends StatelessWidget {
                         icon: Assets.icons.checkmark.svg(),
                         text: 'Build',
                         onPressed: () {
-                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingInfo: state.buildingInfo));
+                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingEntity: state.buildingEntity));
                         },
                       ),
                     ],

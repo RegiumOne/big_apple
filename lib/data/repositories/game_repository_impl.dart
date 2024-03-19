@@ -20,9 +20,6 @@ class GameRepositoryImpl implements GameRepository {
   List<BuildingInfo> getBuildings() => _gameDataProvider.getBuildings();
 
   @override
-  Future<bool> setBuildings(List<BuildingInfo> buildings) => _gameDataProvider.setBuildings(buildings);
-
-  @override
   DateTime? getLastSaveDateTime() => _gameDataProvider.getLastSaveDateTime();
 
   @override

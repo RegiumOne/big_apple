@@ -1,4 +1,5 @@
 import 'package:big_apple/common/utils/screen_size.dart';
+import 'package:big_apple/domain/entities/game_stat.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
@@ -10,55 +11,23 @@ import 'package:big_apple/resources/values/app_dimension.dart';
 
 class MainInfoWidget extends StatelessWidget {
   const MainInfoWidget({
+    required this.gameStat,
     super.key,
-    required this.clover,
-    required this.energy,
-    required this.population,
-    required this.totalBuilders,
-    required this.availableBuilders,
   });
 
-  final int clover;
-  final int energy;
-  final int population;
-  final int totalBuilders;
-  final int availableBuilders;
+  final GameStatistic gameStat;
 
   @override
-  Widget build(BuildContext context) {
-    final isLarge = isLargeScreen(context);
-    return isLarge
-        ? _LandscapeWidget(
-            clover: clover,
-            energy: energy,
-            population: population,
-            totalBuilders: totalBuilders,
-            availableBuilders: availableBuilders,
-          )
-        : _PortraitWidget(
-            clover: clover,
-            energy: energy,
-            population: population,
-            totalBuilders: totalBuilders,
-            availableBuilders: availableBuilders,
-          );
-  }
+  Widget build(BuildContext context) =>
+      isLargeScreen(context) ? _LandscapeWidget(gameStat: gameStat) : _PortraitWidget(gameStat: gameStat);
 }
 
 class _LandscapeWidget extends StatelessWidget {
   const _LandscapeWidget({
-    required this.clover,
-    required this.energy,
-    required this.population,
-    required this.totalBuilders,
-    required this.availableBuilders,
+    required this.gameStat,
   });
 
-  final int clover;
-  final int energy;
-  final int population;
-  final int totalBuilders;
-  final int availableBuilders;
+  final GameStatistic gameStat;
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +39,7 @@ class _LandscapeWidget extends StatelessWidget {
             width: AppDimension.s128,
             child: ResourceWidget(
               icon: Assets.icons.clover,
-              value: '$clover',
-              onAdd: () {},
+              value: '${gameStat.clover}',
             ),
           ),
           const SizedBox(width: AppDimension.s14),
@@ -79,7 +47,7 @@ class _LandscapeWidget extends StatelessWidget {
             width: AppDimension.s82,
             child: ResourceWidget(
               icon: Assets.icons.energy,
-              value: '$energy',
+              value: '${gameStat.electricity}',
               iconHeight: AppDimension.s32,
               iconWidth: AppDimension.s34,
               iconTopPadding: 0,
@@ -92,14 +60,13 @@ class _LandscapeWidget extends StatelessWidget {
             width: AppDimension.s96,
             child: ResourceWidget(
               icon: Assets.icons.worker,
-              value: '$availableBuilders/$totalBuilders',
+              value: '${gameStat.builders}/${gameStat.maxBuilders}',
               iconHeight: AppDimension.s32,
               iconWidth: AppDimension.s28,
               iconLeftPadding: AppDimension.s12,
               iconTopPadding: AppDimension.s2,
               iconBottomPadding: 0,
               textLeftPadding: AppDimension.s28,
-              onAdd: () {},
             ),
           ),
           const SizedBox(width: AppDimension.s14),
@@ -107,7 +74,7 @@ class _LandscapeWidget extends StatelessWidget {
             width: AppDimension.s82,
             child: ResourceWidget(
               icon: Assets.icons.population,
-              value: formatNumber(population),
+              value: formatNumber(gameStat.peoples),
               iconHeight: AppDimension.s36,
               iconWidth: AppDimension.s30,
               iconBottomPadding: 0,
@@ -122,18 +89,10 @@ class _LandscapeWidget extends StatelessWidget {
 
 class _PortraitWidget extends StatelessWidget {
   const _PortraitWidget({
-    required this.clover,
-    required this.energy,
-    required this.population,
-    required this.totalBuilders,
-    required this.availableBuilders,
+    required this.gameStat,
   });
 
-  final int clover;
-  final int energy;
-  final int population;
-  final int totalBuilders;
-  final int availableBuilders;
+  final GameStatistic gameStat;
 
   @override
   Widget build(BuildContext context) {
@@ -141,19 +100,18 @@ class _PortraitWidget extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 128,
+            flex: 6,
             child: ResourceWidget(
               icon: Assets.icons.clover,
-              value: '$clover',
-              onAdd: () {},
+              value: '${gameStat.clover}',
             ),
           ),
-          const Spacer(flex: 14),
+          const Spacer(flex: 1),
           Expanded(
-            flex: 82,
+            flex: 6,
             child: ResourceWidget(
               icon: Assets.icons.energy,
-              value: '$energy',
+              value: '${gameStat.electricity}',
               iconHeight: AppDimension.s32,
               iconWidth: AppDimension.s34,
               iconTopPadding: 0,
@@ -161,27 +119,26 @@ class _PortraitWidget extends StatelessWidget {
               textLeftPadding: AppDimension.s36,
             ),
           ),
-          const Spacer(flex: 14),
+          const Spacer(flex: 1),
           Expanded(
-            flex: 96,
+            flex: 5,
             child: ResourceWidget(
               icon: Assets.icons.worker,
-              value: '$availableBuilders/$totalBuilders',
+              value: '${gameStat.builders}/${gameStat.maxBuilders}',
               iconHeight: AppDimension.s32,
               iconWidth: AppDimension.s28,
               iconLeftPadding: AppDimension.s12,
               iconTopPadding: AppDimension.s2,
               iconBottomPadding: 0,
               textLeftPadding: AppDimension.s28,
-              onAdd: () {},
             ),
           ),
-          const Spacer(flex: 14),
+          const Spacer(flex: 1),
           Expanded(
-            flex: 82,
+            flex: 6,
             child: ResourceWidget(
               icon: Assets.icons.population,
-              value: formatNumber(population),
+              value: formatNumber(gameStat.peoples),
               iconHeight: AppDimension.s36,
               iconWidth: AppDimension.s30,
               iconBottomPadding: 0,

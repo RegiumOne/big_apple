@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:big_apple/common/services/audio_service.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 import 'package:big_apple/common/components/building_component.dart';
-import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:flame/components.dart';
 
 class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> {
@@ -27,22 +27,21 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
     isAvailable = availability;
   }
 
-  Future<void> addBuildingWithoutConstruction(BuildingInfo info) async {
+  Future<void> addBuildingWithoutConstruction(BuildingEntity buildingEntity) async {
     if (!isAvailable || isWater) {
       log('There is no available space for a building');
     }
     isAvailable = false;
 
     BuildingComponent buildingComponent = BuildingComponent(
-      building: info,
+      building: buildingEntity,
       markAsBuild: true,
-      size: Vector2.all(tileSize.x),
     );
 
     await world.add(buildingComponent);
   }
 
-  Future<BuildingInfo?> addBuilding(Building type) async {
+  Future<BuildingEntity?> addBuilding(BuildingType type) async {
     if (!isAvailable || isWater) {
       log('There is no available space for a building');
       return null;
@@ -51,22 +50,19 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
     double centeredX = position.x - position.x % 256;
     double centeredY = position.y - position.y % 128;
 
-    BuildingInfo buildingInfo = BuildingInfo(
+    BuildingEntity buildingEntity = BuildingEntity.initial(
       id: DateTime.now().millisecondsSinceEpoch,
-      coordinates: Coordinates(x: centeredX, y: centeredY - 22),
-      building: type,
-      constructionTimeLeft: type.buildingDurationInSeconds,
+      x: centeredX,
+      y: centeredY,
+      type: type,
     );
 
-    BuildingComponent buildingComponent = BuildingComponent(
-      building: buildingInfo,
-      size: tileSize,
-    );
+    BuildingComponent buildingComponent = BuildingComponent(building: buildingEntity);
 
     await world.add(buildingComponent);
 
     AudioService.instance.playConstructionMusic();
 
-    return buildingInfo;
+    return buildingEntity;
   }
 }

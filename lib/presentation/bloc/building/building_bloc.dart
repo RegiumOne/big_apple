@@ -1,4 +1,4 @@
-import 'package:big_apple/data/dto/building_info.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
@@ -15,14 +15,14 @@ class BuildingBloc extends Bloc<BuildingEvent, BuildingState> {
   }
 
   void _handleInitBuildingEvent(InitBuildingEvent event, Emitter<BuildingState> emit) {
-    emit(BuildingPreparing(buildingInfo: event.buildingInfo));
+    emit(BuildingPreparing(buildingEntity: event.buildingEntity));
   }
 
   void _handleBuildBuildingEvent(BuildBuildingEvent event, Emitter<BuildingState> emit) {
-    emit(BuidlingBuild(buildingInfo: event.buildingInfo));
+    emit(BuidlingBuild(buildingEntity: event.buildingEntity));
   }
 
   void _handleCancelBuildingEvent(CancelBuildingEvent event, Emitter<BuildingState> emit) {
-    emit(BuidlingCancelled(buildingInfo: event.buildingInfo));
+    emit(BuidlingCancelled(buildingEntity: event.buildingEntity));
   }
 }

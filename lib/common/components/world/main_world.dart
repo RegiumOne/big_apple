@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:big_apple/common/components/port_component.dart';
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
+import 'package:big_apple/di/injector.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
+import 'package:big_apple/domain/services/game_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -8,7 +12,6 @@ import 'package:flame_tiled/flame_tiled.dart';
 
 import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
-import 'package:big_apple/data/dto/building.dart';
 import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
 
@@ -40,7 +43,15 @@ class MainWorld extends World {
 
     await add(tiledMap);
     await _initZones();
+
     _isInited = true;
+
+    inject<GameService>().init();
+    inject<GameService>().state.listen((state) {
+      state.whenOrNull(
+        initBuildings: (gameStatistic, buildinds) => initBuildings(buildinds),
+      );
+    });
   }
 
   Future<void> _initZones() async {
@@ -82,6 +93,7 @@ class MainWorld extends World {
   }
 
   Future<void> _initPort() async {
+    await Future.delayed(const Duration(milliseconds: 100));
     PortComponent port = PortComponent();
     await add(port);
   }
@@ -108,7 +120,7 @@ class MainWorld extends World {
     return null;
   }
 
-  Future<BuildingInfo?> placeBuilding(Building type, Coordinates coordinates) async {
+  Future<BuildingEntity?> placeBuilding(BuildingType type, Coordinates coordinates) async {
     return getZoneByCoordinates(coordinates)?.addBuilding(type);
   }
 
@@ -128,7 +140,9 @@ class MainWorld extends World {
     return AudioFile.forest;
   }
 
-  Future<void> initBuildings(List<BuildingInfo> buidlings) async {
+  Future<void> initBuildings(List<BuildingEntity> buidlings) async {
+    await Future.delayed(const Duration(milliseconds: 400));
+
     if (!_isInited) {
       await Future.delayed(const Duration(milliseconds: 100));
       return initBuildings(buidlings);
@@ -136,8 +150,9 @@ class MainWorld extends World {
 
     await _initPort();
 
-    for (BuildingInfo building in buidlings) {
-      await getZoneByCoordinates(building.coordinates)?.addBuildingWithoutConstruction(building);
+    for (BuildingEntity building in buidlings) {
+      Coordinates coordinates = Coordinates(x: building.x, y: building.y);
+      await getZoneByCoordinates(coordinates)?.addBuildingWithoutConstruction(building);
     }
   }
 }

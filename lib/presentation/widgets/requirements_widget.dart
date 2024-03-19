@@ -1,5 +1,5 @@
 import 'package:big_apple/common/utils/formatters.dart';
-import 'package:big_apple/data/dto/building.dart';
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 import 'package:big_apple/data/dto/enum/passive_disadvantage.dart';
 import 'package:big_apple/data/dto/enum/requirement_type.dart';
 import 'package:big_apple/presentation/widgets/text_widget.dart';
@@ -11,10 +11,10 @@ import 'package:flutter_svg/svg.dart';
 class RequirementsWidget extends StatelessWidget {
   const RequirementsWidget({
     super.key,
-    required this.building,
+    required this.buildingType,
   });
 
-  final Building building;
+  final BuildingType buildingType;
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +34,20 @@ class RequirementsWidget extends StatelessWidget {
           spacing: AppDimension.s6,
           runSpacing: AppDimension.s6,
           children: [
-            ...building.requirements.keys.map((requirementType) {
-              return _RequirementsForBuildingWidget(
-                requiredValue: building.requirements[requirementType] ?? 0,
-                requirementType: requirementType,
-                passiveDisadvantage: null,
-              );
-            }),
-            ...building.passiveDisadvantages.keys.map((requirementType) {
-              return _RequirementsForBuildingWidget(
-                requiredValue: building.passiveDisadvantages[requirementType] ?? 0,
-                requirementType: null,
-                passiveDisadvantage: requirementType,
-              );
-            }),
+            ...buildingType.getRequirementsByLevel(1).keys.map(
+                  (requirementType) => _RequirementsForBuildingWidget(
+                    requiredValue: buildingType.getRequirementsByLevel(1)[requirementType] ?? 0,
+                    requirementType: requirementType,
+                    passiveDisadvantage: null,
+                  ),
+                ),
+            ...buildingType.getPassiveDisadvantagesByLevel(1).keys.map(
+                  (requirementType) => _RequirementsForBuildingWidget(
+                    requiredValue: buildingType.getPassiveDisadvantagesByLevel(1)[requirementType] ?? 0,
+                    requirementType: null,
+                    passiveDisadvantage: requirementType,
+                  ),
+                ),
           ],
         ),
       ],
