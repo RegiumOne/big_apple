@@ -179,7 +179,7 @@ class _SecondColumnWidget extends StatelessWidget {
             left: AppDimension.s14,
             right: AppDimension.s14,
             top: AppDimension.s10,
-            bottom: AppDimension.s16,
+            bottom: AppDimension.s8,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +201,7 @@ class _SecondColumnWidget extends StatelessWidget {
               const SizedBox(height: AppDimension.s6),
               Wrap(
                 spacing: AppDimension.s10,
-                runSpacing: AppDimension.s10,
+                runSpacing: AppDimension.s4,
                 children: [
                   ...ResourceType.values.map(
                     (e) => Row(
@@ -229,45 +229,49 @@ class _SecondColumnWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: AppDimension.s8),
-        Container(
-          decoration: BoxDecoration(
-            color: AppColors.colorPaleSilver,
-            borderRadius: BorderRadius.circular(AppDimension.r10),
-          ),
-          padding: const EdgeInsets.only(
-            left: AppDimension.s14,
-            right: AppDimension.s14,
-            top: AppDimension.s10,
-            bottom: AppDimension.s14,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  TextWidget(
-                    'EcoCoins',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: AppColors.colorBronze,
-                      height: 1,
+        Flexible(
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.colorPaleSilver,
+              borderRadius: BorderRadius.circular(AppDimension.r10),
+            ),
+            padding: const EdgeInsets.only(
+              left: AppDimension.s14,
+              right: AppDimension.s14,
+              top: AppDimension.s10,
+              bottom: AppDimension.s10,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    TextWidget(
+                      'EcoCoins',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: AppColors.colorBronze,
+                        height: 1,
+                      ),
+                    ),
+                    const SizedBox(width: AppDimension.s8),
+                    Assets.icons.clover.svg(
+                      width: AppDimension.s20,
+                      height: AppDimension.s20,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppDimension.s6),
+                Flexible(
+                  child: TextWidget(
+                    'a special resource with which you can buy special houses and or cards',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: AppColors.colorTaupe,
+                      height: 1.2,
                     ),
                   ),
-                  const SizedBox(width: AppDimension.s8),
-                  Assets.icons.clover.svg(
-                    width: AppDimension.s20,
-                    height: AppDimension.s20,
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppDimension.s6),
-              TextWidget(
-                'a special resource with which you can buy special houses and or cards',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppColors.colorTaupe,
-                  height: 1.2,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

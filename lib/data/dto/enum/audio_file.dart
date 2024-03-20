@@ -2,6 +2,7 @@ import 'package:big_apple/common/extensions/string_extensions.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 
 enum AudioFile {
+  positiveNotificationNewLevel,
   forest,
   riverStream,
   constructionSounds,
@@ -17,6 +18,9 @@ enum AudioFile {
   String get assetsPath {
     String assets = '';
     switch (this) {
+      case positiveNotificationNewLevel:
+        assets = Assets.audio.positiveNotificationNewLevel;
+        break;
       case town1:
         assets = Assets.audio.town1;
         break;

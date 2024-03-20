@@ -15,6 +15,7 @@ class ResourceWithTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -28,7 +29,10 @@ class ResourceWithTextWidget extends StatelessWidget {
           right: 0,
           bottom: -6,
           child: Center(
-            child: _TextWithBorderWidget(value: value),
+            child: TextWithBorderWidget(
+              text: '$value',
+              style: theme.textTheme.titleMedium,
+            ),
           ),
         ),
       ],
@@ -36,22 +40,23 @@ class ResourceWithTextWidget extends StatelessWidget {
   }
 }
 
-class _TextWithBorderWidget extends StatelessWidget {
-  const _TextWithBorderWidget({
-    required this.value,
+class TextWithBorderWidget extends StatelessWidget {
+  const TextWithBorderWidget({
+    super.key,
+    required this.text,
+    required this.style,
   });
 
-  final int value;
+  final String text;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Stack(
       children: [
         TextWidget(
-          '$value',
-          style: theme.textTheme.titleMedium?.copyWith(
+          text,
+          style: style?.copyWith(
             height: 1,
             foreground: Paint()
               ..style = PaintingStyle.stroke
@@ -60,8 +65,8 @@ class _TextWithBorderWidget extends StatelessWidget {
           ),
         ),
         TextWidget(
-          '$value',
-          style: theme.textTheme.titleMedium?.copyWith(
+          text,
+          style: style?.copyWith(
             color: Colors.white,
             height: 1,
             shadows: [

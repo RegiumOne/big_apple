@@ -2,12 +2,13 @@ import 'dart:ui';
 
 import 'package:big_apple/common/game/common_game.dart';
 import 'package:big_apple/common/services/audio_service.dart';
+import 'package:big_apple/data/dto/enum/audio_file.dart';
 import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/background_center_widget.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
-import 'package:big_apple/presentation/widgets/resource_with_text_Widget.dart';
+import 'package:big_apple/presentation/widgets/resource_with_text_widget.dart';
 import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
@@ -29,7 +30,7 @@ class NewLevelScreen extends StatefulWidget {
 class _NewLevelScreenState extends State<NewLevelScreen> {
   @override
   void initState() {
-    AudioService.instance.playPopupWindowMusic();
+    AudioService.instance.playSound(AudioFile.positiveNotificationNewLevel, isImportant: true);
     super.initState();
   }
 

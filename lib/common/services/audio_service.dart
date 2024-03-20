@@ -44,9 +44,9 @@ class AudioService {
     });
   }
 
-  Future<void> playSound(AudioFile sound) async {
+  Future<void> playSound(AudioFile sound, {bool isImportant = false}) async {
     if (_isEnabledSound) {
-      await FlameAudio.play(sound.assetsPath, volume: _soundVolume);
+      await FlameAudio.play(sound.assetsPath, volume: _soundVolume + (isImportant ? 0.2 : 0.0));
     }
   }
 

@@ -41,6 +41,10 @@ class AppColors {
   static const Color colorSemiTransparentCharcoal = Color(0x87000000);
   static const Color colorCopper = Color(0xFFB07C5B);
   static const Color colorLightGrey = Color(0x54DED7C4);
+  static const Color colorDarkChocolate = Color(0xFF492004);
+  static const Color colorBrown = Color(0xFF895534);
+  static const Color colorSilver = Color(0xFFACACAC);
+  static const Color colorDoveGray = Color(0xFF6B6A6A);
 
   static const Gradient redGradientTopBottom = LinearGradient(
     colors: [
@@ -144,7 +148,7 @@ class AppColors {
   static const Gradient espressoSunriseGradient = LinearGradient(
     colors: [
       Color(0xFF5C361E),
-      Color(0xFF895534),
+      colorBrown,
     ],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -198,7 +202,7 @@ class AppColors {
   static const Gradient brownGradientLeftRight = LinearGradient(
     colors: [
       Color(0xFF5C361E),
-      Color(0xFF895534),
+      colorBrown,
     ],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
