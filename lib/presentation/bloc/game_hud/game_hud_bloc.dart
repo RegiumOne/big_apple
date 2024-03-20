@@ -18,6 +18,7 @@ class GameHudBloc extends Bloc<GameHudEvent, GameHudState> {
           updateStatistic: (gameStat) => _updateStatHandle(gameStat, emit),
           selectBuilding: (gameStat) => _selectBuildingState(gameStat, emit),
           hideBuilding: () => _selectBuildingState(null, emit),
+          newLevel: () => _showNewLevel(emit),
         );
       },
     );
@@ -31,6 +32,7 @@ class GameHudBloc extends Bloc<GameHudEvent, GameHudState> {
       GameHudState(
         gameStat: gameStat,
         selectedBuilding: state.selectedBuilding,
+        showNewLevel: false,
       ),
     );
   }
@@ -43,6 +45,19 @@ class GameHudBloc extends Bloc<GameHudEvent, GameHudState> {
       GameHudState(
         gameStat: state.gameStat,
         selectedBuilding: building,
+        showNewLevel: false,
+      ),
+    );
+  }
+
+  void _showNewLevel(
+    Emitter<GameHudState> emit,
+  ) {
+    emit(
+      GameHudState(
+        gameStat: state.gameStat,
+        selectedBuilding: null,
+        showNewLevel: true,
       ),
     );
   }

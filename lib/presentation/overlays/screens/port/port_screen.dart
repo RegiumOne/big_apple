@@ -5,11 +5,11 @@ import 'package:big_apple/data/dto/enum/resource_type.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/background_bottom_widget.dart';
+import 'package:big_apple/presentation/widgets/resource_with_text_widget.dart';
 import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class PortScreen extends StatefulWidget {
   const PortScreen({
@@ -90,23 +90,9 @@ class _PortScreenState extends State<PortScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          SvgPicture.asset(
-                            e.icon(),
-                            width: AppDimension.s50,
-                            height: AppDimension.s50,
-                          ),
-                          const Positioned(
-                            left: 0,
-                            right: 0,
-                            bottom: -8,
-                            child: Center(
-                              child: _TextWithBorderWidget(value: 100),
-                            ),
-                          ),
-                        ],
+                      ResourceWithTextWidget(
+                        resourceTypeIcon: e.icon(),
+                        value: 100,
                       ),
                       const SizedBox(height: AppDimension.s8),
                       TextWidget(
@@ -130,47 +116,5 @@ class _PortScreenState extends State<PortScreen> {
   void _hideShop() {
     widget.game.overlays.add(Overlays.hud.name);
     widget.game.overlays.remove(Overlays.port.name);
-  }
-}
-
-class _TextWithBorderWidget extends StatelessWidget {
-  const _TextWithBorderWidget({
-    required this.value,
-  });
-
-  final int value;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Stack(
-      children: [
-        TextWidget(
-          '$value',
-          style: theme.textTheme.titleMedium?.copyWith(
-            height: 1,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 2
-              ..color = Colors.black,
-          ),
-        ),
-        TextWidget(
-          '$value',
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: Colors.white,
-            height: 1,
-            shadows: [
-              const Shadow(
-                color: Colors.black,
-                offset: Offset(1, 1),
-                blurRadius: 0,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }

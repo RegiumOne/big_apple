@@ -21,6 +21,7 @@ mixin _$GameHudEvent {
     required TResult Function(GameStatistic gameStat) updateStatistic,
     required TResult Function(BuildingEntity building) selectBuilding,
     required TResult Function() hideBuilding,
+    required TResult Function() newLevel,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -28,6 +29,7 @@ mixin _$GameHudEvent {
     TResult? Function(GameStatistic gameStat)? updateStatistic,
     TResult? Function(BuildingEntity building)? selectBuilding,
     TResult? Function()? hideBuilding,
+    TResult? Function()? newLevel,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -35,6 +37,7 @@ mixin _$GameHudEvent {
     TResult Function(GameStatistic gameStat)? updateStatistic,
     TResult Function(BuildingEntity building)? selectBuilding,
     TResult Function()? hideBuilding,
+    TResult Function()? newLevel,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -43,6 +46,7 @@ mixin _$GameHudEvent {
     required TResult Function(_GameHudUpdateStatEvent value) updateStatistic,
     required TResult Function(_GameHudSelectBuildingEvent value) selectBuilding,
     required TResult Function(_GameHudHideBuildingEvent value) hideBuilding,
+    required TResult Function(_GameHudNewLevelEvent value) newLevel,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -50,6 +54,7 @@ mixin _$GameHudEvent {
     TResult? Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult? Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult? Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult? Function(_GameHudNewLevelEvent value)? newLevel,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -57,6 +62,7 @@ mixin _$GameHudEvent {
     TResult Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult Function(_GameHudNewLevelEvent value)? newLevel,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -151,6 +157,7 @@ class _$GameHudUpdateStatEventImpl implements _GameHudUpdateStatEvent {
     required TResult Function(GameStatistic gameStat) updateStatistic,
     required TResult Function(BuildingEntity building) selectBuilding,
     required TResult Function() hideBuilding,
+    required TResult Function() newLevel,
   }) {
     return updateStatistic(gameStat);
   }
@@ -161,6 +168,7 @@ class _$GameHudUpdateStatEventImpl implements _GameHudUpdateStatEvent {
     TResult? Function(GameStatistic gameStat)? updateStatistic,
     TResult? Function(BuildingEntity building)? selectBuilding,
     TResult? Function()? hideBuilding,
+    TResult? Function()? newLevel,
   }) {
     return updateStatistic?.call(gameStat);
   }
@@ -171,6 +179,7 @@ class _$GameHudUpdateStatEventImpl implements _GameHudUpdateStatEvent {
     TResult Function(GameStatistic gameStat)? updateStatistic,
     TResult Function(BuildingEntity building)? selectBuilding,
     TResult Function()? hideBuilding,
+    TResult Function()? newLevel,
     required TResult orElse(),
   }) {
     if (updateStatistic != null) {
@@ -185,6 +194,7 @@ class _$GameHudUpdateStatEventImpl implements _GameHudUpdateStatEvent {
     required TResult Function(_GameHudUpdateStatEvent value) updateStatistic,
     required TResult Function(_GameHudSelectBuildingEvent value) selectBuilding,
     required TResult Function(_GameHudHideBuildingEvent value) hideBuilding,
+    required TResult Function(_GameHudNewLevelEvent value) newLevel,
   }) {
     return updateStatistic(this);
   }
@@ -195,6 +205,7 @@ class _$GameHudUpdateStatEventImpl implements _GameHudUpdateStatEvent {
     TResult? Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult? Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult? Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult? Function(_GameHudNewLevelEvent value)? newLevel,
   }) {
     return updateStatistic?.call(this);
   }
@@ -205,6 +216,7 @@ class _$GameHudUpdateStatEventImpl implements _GameHudUpdateStatEvent {
     TResult Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult Function(_GameHudNewLevelEvent value)? newLevel,
     required TResult orElse(),
   }) {
     if (updateStatistic != null) {
@@ -295,6 +307,7 @@ class _$GameHudSelectBuildingEventImpl implements _GameHudSelectBuildingEvent {
     required TResult Function(GameStatistic gameStat) updateStatistic,
     required TResult Function(BuildingEntity building) selectBuilding,
     required TResult Function() hideBuilding,
+    required TResult Function() newLevel,
   }) {
     return selectBuilding(building);
   }
@@ -305,6 +318,7 @@ class _$GameHudSelectBuildingEventImpl implements _GameHudSelectBuildingEvent {
     TResult? Function(GameStatistic gameStat)? updateStatistic,
     TResult? Function(BuildingEntity building)? selectBuilding,
     TResult? Function()? hideBuilding,
+    TResult? Function()? newLevel,
   }) {
     return selectBuilding?.call(building);
   }
@@ -315,6 +329,7 @@ class _$GameHudSelectBuildingEventImpl implements _GameHudSelectBuildingEvent {
     TResult Function(GameStatistic gameStat)? updateStatistic,
     TResult Function(BuildingEntity building)? selectBuilding,
     TResult Function()? hideBuilding,
+    TResult Function()? newLevel,
     required TResult orElse(),
   }) {
     if (selectBuilding != null) {
@@ -329,6 +344,7 @@ class _$GameHudSelectBuildingEventImpl implements _GameHudSelectBuildingEvent {
     required TResult Function(_GameHudUpdateStatEvent value) updateStatistic,
     required TResult Function(_GameHudSelectBuildingEvent value) selectBuilding,
     required TResult Function(_GameHudHideBuildingEvent value) hideBuilding,
+    required TResult Function(_GameHudNewLevelEvent value) newLevel,
   }) {
     return selectBuilding(this);
   }
@@ -339,6 +355,7 @@ class _$GameHudSelectBuildingEventImpl implements _GameHudSelectBuildingEvent {
     TResult? Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult? Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult? Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult? Function(_GameHudNewLevelEvent value)? newLevel,
   }) {
     return selectBuilding?.call(this);
   }
@@ -349,6 +366,7 @@ class _$GameHudSelectBuildingEventImpl implements _GameHudSelectBuildingEvent {
     TResult Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult Function(_GameHudNewLevelEvent value)? newLevel,
     required TResult orElse(),
   }) {
     if (selectBuilding != null) {
@@ -412,6 +430,7 @@ class _$GameHudHideBuildingEventImpl implements _GameHudHideBuildingEvent {
     required TResult Function(GameStatistic gameStat) updateStatistic,
     required TResult Function(BuildingEntity building) selectBuilding,
     required TResult Function() hideBuilding,
+    required TResult Function() newLevel,
   }) {
     return hideBuilding();
   }
@@ -422,6 +441,7 @@ class _$GameHudHideBuildingEventImpl implements _GameHudHideBuildingEvent {
     TResult? Function(GameStatistic gameStat)? updateStatistic,
     TResult? Function(BuildingEntity building)? selectBuilding,
     TResult? Function()? hideBuilding,
+    TResult? Function()? newLevel,
   }) {
     return hideBuilding?.call();
   }
@@ -432,6 +452,7 @@ class _$GameHudHideBuildingEventImpl implements _GameHudHideBuildingEvent {
     TResult Function(GameStatistic gameStat)? updateStatistic,
     TResult Function(BuildingEntity building)? selectBuilding,
     TResult Function()? hideBuilding,
+    TResult Function()? newLevel,
     required TResult orElse(),
   }) {
     if (hideBuilding != null) {
@@ -446,6 +467,7 @@ class _$GameHudHideBuildingEventImpl implements _GameHudHideBuildingEvent {
     required TResult Function(_GameHudUpdateStatEvent value) updateStatistic,
     required TResult Function(_GameHudSelectBuildingEvent value) selectBuilding,
     required TResult Function(_GameHudHideBuildingEvent value) hideBuilding,
+    required TResult Function(_GameHudNewLevelEvent value) newLevel,
   }) {
     return hideBuilding(this);
   }
@@ -456,6 +478,7 @@ class _$GameHudHideBuildingEventImpl implements _GameHudHideBuildingEvent {
     TResult? Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult? Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult? Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult? Function(_GameHudNewLevelEvent value)? newLevel,
   }) {
     return hideBuilding?.call(this);
   }
@@ -466,6 +489,7 @@ class _$GameHudHideBuildingEventImpl implements _GameHudHideBuildingEvent {
     TResult Function(_GameHudUpdateStatEvent value)? updateStatistic,
     TResult Function(_GameHudSelectBuildingEvent value)? selectBuilding,
     TResult Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult Function(_GameHudNewLevelEvent value)? newLevel,
     required TResult orElse(),
   }) {
     if (hideBuilding != null) {
@@ -480,9 +504,125 @@ abstract class _GameHudHideBuildingEvent implements GameHudEvent {
 }
 
 /// @nodoc
+abstract class _$$GameHudNewLevelEventImplCopyWith<$Res> {
+  factory _$$GameHudNewLevelEventImplCopyWith(_$GameHudNewLevelEventImpl value,
+          $Res Function(_$GameHudNewLevelEventImpl) then) =
+      __$$GameHudNewLevelEventImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GameHudNewLevelEventImplCopyWithImpl<$Res>
+    extends _$GameHudEventCopyWithImpl<$Res, _$GameHudNewLevelEventImpl>
+    implements _$$GameHudNewLevelEventImplCopyWith<$Res> {
+  __$$GameHudNewLevelEventImplCopyWithImpl(_$GameHudNewLevelEventImpl _value,
+      $Res Function(_$GameHudNewLevelEventImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$GameHudNewLevelEventImpl implements _GameHudNewLevelEvent {
+  const _$GameHudNewLevelEventImpl();
+
+  @override
+  String toString() {
+    return 'GameHudEvent.newLevel()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GameHudNewLevelEventImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(GameStatistic gameStat) updateStatistic,
+    required TResult Function(BuildingEntity building) selectBuilding,
+    required TResult Function() hideBuilding,
+    required TResult Function() newLevel,
+  }) {
+    return newLevel();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(GameStatistic gameStat)? updateStatistic,
+    TResult? Function(BuildingEntity building)? selectBuilding,
+    TResult? Function()? hideBuilding,
+    TResult? Function()? newLevel,
+  }) {
+    return newLevel?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(GameStatistic gameStat)? updateStatistic,
+    TResult Function(BuildingEntity building)? selectBuilding,
+    TResult Function()? hideBuilding,
+    TResult Function()? newLevel,
+    required TResult orElse(),
+  }) {
+    if (newLevel != null) {
+      return newLevel();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GameHudUpdateStatEvent value) updateStatistic,
+    required TResult Function(_GameHudSelectBuildingEvent value) selectBuilding,
+    required TResult Function(_GameHudHideBuildingEvent value) hideBuilding,
+    required TResult Function(_GameHudNewLevelEvent value) newLevel,
+  }) {
+    return newLevel(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_GameHudUpdateStatEvent value)? updateStatistic,
+    TResult? Function(_GameHudSelectBuildingEvent value)? selectBuilding,
+    TResult? Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult? Function(_GameHudNewLevelEvent value)? newLevel,
+  }) {
+    return newLevel?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GameHudUpdateStatEvent value)? updateStatistic,
+    TResult Function(_GameHudSelectBuildingEvent value)? selectBuilding,
+    TResult Function(_GameHudHideBuildingEvent value)? hideBuilding,
+    TResult Function(_GameHudNewLevelEvent value)? newLevel,
+    required TResult orElse(),
+  }) {
+    if (newLevel != null) {
+      return newLevel(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GameHudNewLevelEvent implements GameHudEvent {
+  const factory _GameHudNewLevelEvent() = _$GameHudNewLevelEventImpl;
+}
+
+/// @nodoc
 mixin _$GameHudState {
   GameStatistic get gameStat => throw _privateConstructorUsedError;
   BuildingEntity? get selectedBuilding => throw _privateConstructorUsedError;
+  bool get showNewLevel => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameHudStateCopyWith<GameHudState> get copyWith =>
@@ -495,7 +635,10 @@ abstract class $GameHudStateCopyWith<$Res> {
           GameHudState value, $Res Function(GameHudState) then) =
       _$GameHudStateCopyWithImpl<$Res, GameHudState>;
   @useResult
-  $Res call({GameStatistic gameStat, BuildingEntity? selectedBuilding});
+  $Res call(
+      {GameStatistic gameStat,
+      BuildingEntity? selectedBuilding,
+      bool showNewLevel});
 }
 
 /// @nodoc
@@ -513,6 +656,7 @@ class _$GameHudStateCopyWithImpl<$Res, $Val extends GameHudState>
   $Res call({
     Object? gameStat = null,
     Object? selectedBuilding = freezed,
+    Object? showNewLevel = null,
   }) {
     return _then(_value.copyWith(
       gameStat: null == gameStat
@@ -523,6 +667,10 @@ class _$GameHudStateCopyWithImpl<$Res, $Val extends GameHudState>
           ? _value.selectedBuilding
           : selectedBuilding // ignore: cast_nullable_to_non_nullable
               as BuildingEntity?,
+      showNewLevel: null == showNewLevel
+          ? _value.showNewLevel
+          : showNewLevel // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -535,7 +683,10 @@ abstract class _$$GameHudStateImplCopyWith<$Res>
       __$$GameHudStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({GameStatistic gameStat, BuildingEntity? selectedBuilding});
+  $Res call(
+      {GameStatistic gameStat,
+      BuildingEntity? selectedBuilding,
+      bool showNewLevel});
 }
 
 /// @nodoc
@@ -551,6 +702,7 @@ class __$$GameHudStateImplCopyWithImpl<$Res>
   $Res call({
     Object? gameStat = null,
     Object? selectedBuilding = freezed,
+    Object? showNewLevel = null,
   }) {
     return _then(_$GameHudStateImpl(
       gameStat: null == gameStat
@@ -561,6 +713,10 @@ class __$$GameHudStateImplCopyWithImpl<$Res>
           ? _value.selectedBuilding
           : selectedBuilding // ignore: cast_nullable_to_non_nullable
               as BuildingEntity?,
+      showNewLevel: null == showNewLevel
+          ? _value.showNewLevel
+          : showNewLevel // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -569,16 +725,20 @@ class __$$GameHudStateImplCopyWithImpl<$Res>
 
 class _$GameHudStateImpl implements _GameHudState {
   const _$GameHudStateImpl(
-      {required this.gameStat, required this.selectedBuilding});
+      {required this.gameStat,
+      required this.selectedBuilding,
+      required this.showNewLevel});
 
   @override
   final GameStatistic gameStat;
   @override
   final BuildingEntity? selectedBuilding;
+  @override
+  final bool showNewLevel;
 
   @override
   String toString() {
-    return 'GameHudState(gameStat: $gameStat, selectedBuilding: $selectedBuilding)';
+    return 'GameHudState(gameStat: $gameStat, selectedBuilding: $selectedBuilding, showNewLevel: $showNewLevel)';
   }
 
   @override
@@ -589,11 +749,14 @@ class _$GameHudStateImpl implements _GameHudState {
             (identical(other.gameStat, gameStat) ||
                 other.gameStat == gameStat) &&
             (identical(other.selectedBuilding, selectedBuilding) ||
-                other.selectedBuilding == selectedBuilding));
+                other.selectedBuilding == selectedBuilding) &&
+            (identical(other.showNewLevel, showNewLevel) ||
+                other.showNewLevel == showNewLevel));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, gameStat, selectedBuilding);
+  int get hashCode =>
+      Object.hash(runtimeType, gameStat, selectedBuilding, showNewLevel);
 
   @JsonKey(ignore: true)
   @override
@@ -605,12 +768,15 @@ class _$GameHudStateImpl implements _GameHudState {
 abstract class _GameHudState implements GameHudState {
   const factory _GameHudState(
       {required final GameStatistic gameStat,
-      required final BuildingEntity? selectedBuilding}) = _$GameHudStateImpl;
+      required final BuildingEntity? selectedBuilding,
+      required final bool showNewLevel}) = _$GameHudStateImpl;
 
   @override
   GameStatistic get gameStat;
   @override
   BuildingEntity? get selectedBuilding;
+  @override
+  bool get showNewLevel;
   @override
   @JsonKey(ignore: true)
   _$$GameHudStateImplCopyWith<_$GameHudStateImpl> get copyWith =>

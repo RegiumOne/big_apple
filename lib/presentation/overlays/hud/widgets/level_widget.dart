@@ -1,4 +1,5 @@
 import 'package:big_apple/presentation/widgets/progress_bar_widget.dart';
+import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:big_apple/generated/assets.gen.dart';
@@ -9,10 +10,12 @@ import 'package:big_apple/resources/values/app_dimension.dart';
 class LevelWidget extends StatelessWidget {
   const LevelWidget({
     super.key,
+    required this.maxLvlValue,
     required this.currentLvlValue,
     required this.level,
   });
 
+  final double maxLvlValue;
   final double currentLvlValue;
   final int level;
 
@@ -24,26 +27,27 @@ class LevelWidget extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            top: 6,
-            left: 26,
+            top: 0,
+            left: 23,
             right: 0,
-            bottom: 6,
-            child: ProgressBarWidget(maxValue: 1, currentValue: currentLvlValue),
+            bottom: 0,
+            child: Center(
+              child: SizedBox(
+                height: AppDimension.s30,
+                child: ProgressBarWidget(maxValue: maxLvlValue, currentValue: currentLvlValue),
+              ),
+            ),
           ),
-          Positioned(
-            right: -14,
-            bottom: -6,
-            child: _LabelWidget(level: level),
-          ),
-          const _IconWidget(),
+          LevelIconWidget(level: level),
         ],
       ),
     );
   }
 }
 
-class _LabelWidget extends StatelessWidget {
-  const _LabelWidget({
+class LevelIconWidget extends StatelessWidget {
+  const LevelIconWidget({
+    super.key,
     required this.level,
   });
 
@@ -51,59 +55,33 @@ class _LabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimension.s10, vertical: AppDimension.s4),
-      decoration: BoxDecoration(
-        gradient: AppColors.blueGradientLeftRight,
-        borderRadius: BorderRadius.circular(AppDimension.r100),
-      ),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: '$level',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.white,
-                height: 1,
-              ),
-            ),
-            TextSpan(
-              text: ' lvl',
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: Colors.white,
-                height: 1,
-              ),
-            ),
-          ],
+    return Stack(
+      children: [
+        IconWithShadowWidget(
+          iconSvg: Assets.icons.level,
+          iconHeight: AppDimension.s52,
+          iconWidth: AppDimension.s52,
+          iconColor: null,
+          shadowOffset: const Offset(2, 2),
+          shadowColor: AppColors.colorMediumTransparencyBlack,
         ),
-      ),
-    );
-  }
-}
-
-class _IconWidget extends StatelessWidget {
-  const _IconWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: AppDimension.s42,
-      width: AppDimension.s42,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.only(left: AppDimension.s2),
-      decoration: BoxDecoration(
-        gradient: AppColors.blueGradientTopBottom,
-        borderRadius: BorderRadius.circular(AppDimension.r10),
-      ),
-      child: IconWithShadowWidget(
-        iconSvg: Assets.icons.lvl,
-        iconHeight: AppDimension.s28,
-        iconWidth: AppDimension.s32,
-        iconColor: null,
-        shadowOffset: const Offset(2, 2),
-        shadowColor: AppColors.colorLightSemiTransparentBlack,
-      ),
+        Positioned.fill(
+          child: Center(
+            child: TextWidget(
+              level.toString(),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Colors.white,
+                shadows: [
+                  const Shadow(
+                    color: AppColors.colorMediumTransparencyBlack,
+                    offset: Offset(2, 2),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -31,6 +31,9 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
       listeners: [
         BlocListener<GameHudBloc, GameHudState>(
           listener: (context, state) {
+            if (state.showNewLevel) {
+              widget.game.overlays.add(Overlays.newLevel.name);
+            }
             _selectBuilding(state);
           },
         ),
