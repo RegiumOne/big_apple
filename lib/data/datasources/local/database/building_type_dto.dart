@@ -27,6 +27,27 @@ enum BuildingCategory {
   manufactory,
   road;
 
+  int get maxLevel => 3;
+
+  static BuildingCategory getCategoryFromBuildingType(BuildingType buildingType) {
+    switch (buildingType) {
+      case BuildingType.house:
+      case BuildingType.apartment:
+      case BuildingType.skyscraper:
+        return apartments;
+      case BuildingType.store:
+      case BuildingType.market:
+      case BuildingType.cityMall:
+        return commercial;
+      case BuildingType.coalElectricStation:
+      case BuildingType.atomicElectricityStation:
+      case BuildingType.windElectricityStation:
+        return manufactory;
+      case BuildingType.road:
+        return road;
+    }
+  }
+
   static List<BuildingType> getBuildings(BuildingCategory category) {
     switch (category) {
       case BuildingCategory.apartments:
@@ -466,7 +487,7 @@ extension BuildingTypeX on BuildingType {
     return income[level] ?? 0;
   }
 
-   Map<ResourceType, int> getBuildPrice() => getPriceByLevel(1);
+  Map<ResourceType, int> getBuildPrice() => getPriceByLevel(1);
 
   Map<ResourceType, int> getPriceByLevel(int level) {
     Map<int, Map<ResourceType, int>> price = {};

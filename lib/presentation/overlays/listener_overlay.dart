@@ -34,7 +34,6 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
             if (state.showNewLevel) {
               widget.game.overlays.add(Overlays.newLevel.name);
             }
-            _selectBuilding(state);
           },
         ),
         BlocListener<AudioBloc, AudioState>(
@@ -49,15 +48,5 @@ class _ListenerOverlayState extends State<ListenerOverlay> {
       ],
       child: const SizedBox.shrink(),
     );
-  }
-
-  void _selectBuilding(GameHudState state) {
-    if (state.selectedBuilding != null && !widget.game.overlays.isActive(Overlays.upgrade.name)) {
-      widget.game.overlays.remove(Overlays.hud.name);
-      widget.game.overlays.add(Overlays.upgrade.name);
-    } else if (state.selectedBuilding == null && widget.game.overlays.isActive(Overlays.upgrade.name)) {
-      widget.game.overlays.remove(Overlays.upgrade.name);
-      widget.game.overlays.add(Overlays.hud.name);
-    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,211 +66,221 @@ class _UpgradeScreenState extends State<UpgradeScreen> {
         _hideShop();
       },
       child: BlocBuilder<GameHudBloc, GameHudState>(
-        builder: (context, state) {
-          BuildingEntity building = state.selectedBuilding!;
-          bool canBeUpgraded = state.gameStat.canBeBuilt(building.type, building.level + 1);
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 142,
-                child: Container(
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: AppColors.colorPaleTaupe,
-                    borderRadius: BorderRadius.all(Radius.circular(AppDimension.s10)),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimension.s14,
-                    vertical: AppDimension.s10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        'Now [lvl ${building.level}]',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black,
-                          height: 1.2,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimension.s8),
-                      ...building.type.getPassiveBenefitsByLevel(building.level).keys.map((receiveType) {
-                        return PassiveItemWidget(
-                          receiveItem: building.type.getPassiveBenefitsByLevel(building.level)[receiveType] ?? 0,
-                          passiveBenefit: receiveType,
-                          passiveDisadvantage: null,
-                        );
-                      }),
-                      if ((building.type.getIncomeByLevel(building.level)) > 0) ...[
-                        const SizedBox(height: AppDimension.s8),
-                        PassiveItemWidget(
-                          receiveItem: building.type.getIncomeByLevel(building.level).toInt(),
-                          passiveBenefit: PassiveBenefit.income,
-                          passiveDisadvantage: null,
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppDimension.s12),
-              Expanded(
-                flex: 267,
-                child: Container(
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: AppColors.colorPaleTaupe,
-                    borderRadius: BorderRadius.all(Radius.circular(AppDimension.s10)),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimension.s14,
-                    vertical: AppDimension.s10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextWidget(
-                        'After [lvl ${building.level + 1}]',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black,
-                          height: 1.2,
-                        ),
-                      ),
-                      const SizedBox(height: AppDimension.s8),
-                      ...building.type.getPassiveBenefitsByLevel(building.level + 1).keys.map((receiveType) {
-                        return PassiveItemWidget(
-                          receiveItem: building.type.getPassiveBenefitsByLevel(building.level + 1)[receiveType] ?? 0,
-                          passiveBenefit: receiveType,
-                          passiveDisadvantage: null,
-                        );
-                      }),
-                      if ((building.type.getIncomeByLevel(building.level + 1)) > 0) ...[
-                        const SizedBox(height: AppDimension.s8),
-                        PassiveItemWidget(
-                          receiveItem: building.type.getIncomeByLevel(building.level + 1).toInt(),
-                          passiveBenefit: PassiveBenefit.income,
-                          passiveDisadvantage: null,
-                        ),
-                      ],
-                      const SizedBox(height: AppDimension.s16),
-                      RequirementsWidget(buildingType: building.type),
-                      const SizedBox(height: AppDimension.s16),
-                      TextWidget(
-                        'Cost',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: Colors.black,
-                          height: 1.2,
-                        ),
-                      ),
-                      Wrap(
-                        spacing: AppDimension.s6,
-                        runSpacing: AppDimension.s6,
-                        children: building.type.getPriceByLevel(building.level + 1).keys.map((cost) {
-                          int availabeResource = 0;
+        builder: (context, hudState) {
+          BuildingEntity? building = hudState.selectedBuilding;
+          bool canBeUpgraded = hudState.selectedBuilding == null
+              ? false
+              : hudState.gameStat.canBeBuilt(building!.type, building.level + 1);
 
-                          if (cost == ResourceType.gold) {
-                            availabeResource = state.gameStat.gold.toInt();
-                          } else if (cost == ResourceType.coal) {
-                            availabeResource = state.gameStat.coal.toInt();
-                          } else if (cost == ResourceType.iron) {
-                            availabeResource = state.gameStat.iron.toInt();
-                          } else if (cost == ResourceType.electricity) {
-                            availabeResource = state.gameStat.electricity;
-                          } else if (cost == ResourceType.population) {
-                            availabeResource = state.gameStat.peoples;
-                          }
-
-                          return ResourceForBuildingWidget(
-                            requiredValue: building.type.getPriceByLevel(building.level + 1)[cost] ?? 0,
-                            availableValue: availabeResource,
-                            resourceType: cost,
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppDimension.s12),
-              Expanded(
-                flex: 254,
-                child: Container(
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: AppColors.colorPaleTaupe,
-                    borderRadius: BorderRadius.all(Radius.circular(AppDimension.s10)),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimension.s14,
-                    vertical: AppDimension.s10,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextWidget(
-                              building.type.title,
+          return building == null
+              ? const SizedBox.shrink()
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 142,
+                      child: Container(
+                        height: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: AppColors.colorPaleTaupe,
+                          borderRadius: BorderRadius.all(Radius.circular(AppDimension.s10)),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimension.s14,
+                          vertical: AppDimension.s10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                              'Now [lvl ${building.level}]',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: Colors.black,
                                 height: 1.2,
                               ),
                             ),
-                          ),
-                          Container(
-                            height: AppDimension.s20,
-                            width: AppDimension.s96,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(horizontal: AppDimension.s6, vertical: AppDimension.s2),
-                            decoration: const BoxDecoration(
-                              color: AppColors.colorAlabaster,
-                              borderRadius: BorderRadius.all(Radius.circular(AppDimension.s6)),
-                            ),
-                            child: TextWidget(
-                              '[next level - lvl ${building.level + 1}]',
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: AppColors.colorBronze,
-                                height: 1,
+                            const SizedBox(height: AppDimension.s8),
+                            ...building.type.getPassiveBenefitsByLevel(building.level).keys.map((receiveType) {
+                              return PassiveItemWidget(
+                                receiveItem: building.type.getPassiveBenefitsByLevel(building.level)[receiveType] ?? 0,
+                                passiveBenefit: receiveType,
+                                passiveDisadvantage: null,
+                              );
+                            }),
+                            if (building.type.getIncomeByLevel(building.level) > 0) ...[
+                              const SizedBox(height: AppDimension.s8),
+                              PassiveItemWidget(
+                                receiveItem: building.type.getIncomeByLevel(building.level).toInt(),
+                                passiveBenefit: PassiveBenefit.income,
+                                passiveDisadvantage: null,
                               ),
-                              maxLines: 1,
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: AppDimension.s12),
+                    Expanded(
+                      flex: 267,
+                      child: Container(
+                        height: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: AppColors.colorPaleTaupe,
+                          borderRadius: BorderRadius.all(Radius.circular(AppDimension.s10)),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimension.s14,
+                          vertical: AppDimension.s10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextWidget(
+                              'After [lvl ${building.level + 1}]',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.black,
+                                height: 1.2,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: AppDimension.s6),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Image.asset(building.type.imageDone(replacePath: false)),
+                            const SizedBox(height: AppDimension.s8),
+                            ...building.type.getPassiveBenefitsByLevel(building.level + 1).keys.map((receiveType) {
+                              return PassiveItemWidget(
+                                receiveItem:
+                                    building.type.getPassiveBenefitsByLevel(building.level + 1)[receiveType] ?? 0,
+                                passiveBenefit: receiveType,
+                                passiveDisadvantage: null,
+                              );
+                            }),
+                            if (building.type.getIncomeByLevel(building.level + 1) > 0) ...[
+                              const SizedBox(height: AppDimension.s8),
+                              PassiveItemWidget(
+                                receiveItem: building.type.getIncomeByLevel(building.level + 1).toInt(),
+                                passiveBenefit: PassiveBenefit.income,
+                                passiveDisadvantage: null,
+                              ),
+                            ],
+                            const SizedBox(height: AppDimension.s16),
+                            RequirementsWidget(buildingType: building.type),
+                            const SizedBox(height: AppDimension.s16),
+                            TextWidget(
+                              'Cost',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.black,
+                                height: 1.2,
+                              ),
+                            ),
+                            Wrap(
+                              spacing: AppDimension.s6,
+                              runSpacing: AppDimension.s6,
+                              children: building.type.getPriceByLevel(building.level + 1).keys.map((cost) {
+                                int availabeResource = 0;
+
+                                if (cost == ResourceType.gold) {
+                                  availabeResource = hudState.gameStat.gold.toInt();
+                                } else if (cost == ResourceType.coal) {
+                                  availabeResource = hudState.gameStat.coal.toInt();
+                                } else if (cost == ResourceType.iron) {
+                                  availabeResource = hudState.gameStat.iron.toInt();
+                                } else if (cost == ResourceType.electricity) {
+                                  availabeResource = hudState.gameStat.electricity;
+                                } else if (cost == ResourceType.population) {
+                                  availabeResource = hudState.gameStat.peoples;
+                                }
+
+                                return ResourceForBuildingWidget(
+                                  requiredValue: building.type.getPriceByLevel(building.level + 1)[cost] ?? 0,
+                                  availableValue: availabeResource,
+                                  resourceType: cost,
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: AppDimension.s6),
-                      IgnorePointer(
-                        ignoring: !canBeUpgraded,
-                        child: ButtonWidget(
-                          width: double.infinity,
-                          height: AppDimension.s32,
-                          borderRadius: AppDimension.r6,
-                          gradient:
-                              canBeUpgraded ? AppColors.blueGradientTopBottom : AppColors.disablesGradientTopBottom,
-                          gradientPress: AppColors.darkBlueGradient,
-                          shadowColor: canBeUpgraded ? AppColors.colorRoyalBlue : AppColors.colorSlateGray,
-                          childShadowColor: AppColors.colorMediumTransparencyBlack,
-                          childShadowOffset: const Offset(2, 2),
-                          text: canBeUpgraded ? 'Upgrade' : 'Can’t be upgrade',
-                          onPressed: () {
-                            // TODO(Sasha071201): upgrade logic
-                          },
+                    ),
+                    const SizedBox(width: AppDimension.s12),
+                    Expanded(
+                      flex: 254,
+                      child: Container(
+                        height: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: AppColors.colorPaleTaupe,
+                          borderRadius: BorderRadius.all(Radius.circular(AppDimension.s10)),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppDimension.s14,
+                          vertical: AppDimension.s10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextWidget(
+                                    building.type.title,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: Colors.black,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: AppDimension.s20,
+                                  width: AppDimension.s96,
+                                  alignment: Alignment.center,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: AppDimension.s6,
+                                    vertical: AppDimension.s2,
+                                  ),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.colorAlabaster,
+                                    borderRadius: BorderRadius.all(Radius.circular(AppDimension.s6)),
+                                  ),
+                                  child: TextWidget(
+                                    '[next level - lvl ${building.level + 1}]',
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      color: AppColors.colorBronze,
+                                      height: 1,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: AppDimension.s6),
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Image.asset(building.type.imageDone(replacePath: false)),
+                              ),
+                            ),
+                            const SizedBox(height: AppDimension.s6),
+                            IgnorePointer(
+                              ignoring: !canBeUpgraded,
+                              child: ButtonWidget(
+                                width: double.infinity,
+                                height: AppDimension.s32,
+                                borderRadius: AppDimension.r6,
+                                gradient: canBeUpgraded
+                                    ? AppColors.blueGradientTopBottom
+                                    : AppColors.disablesGradientTopBottom,
+                                gradientPress: AppColors.darkBlueGradient,
+                                shadowColor: canBeUpgraded ? AppColors.colorRoyalBlue : AppColors.colorSlateGray,
+                                childShadowColor: AppColors.colorMediumTransparencyBlack,
+                                childShadowOffset: const Offset(2, 2),
+                                text: canBeUpgraded ? 'Upgrade' : 'Can’t be upgrade',
+                                onPressed: () {
+                                  // TODO(Sasha071201): upgrade logic
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          );
+                    ),
+                  ],
+                );
         },
       ),
     );
@@ -277,5 +288,7 @@ class _UpgradeScreenState extends State<UpgradeScreen> {
 
   void _hideShop() {
     context.read<GameHudBloc>().add(const GameHudEvent.hideBuilding());
+    widget.game.overlays.add(Overlays.hud.name);
+    widget.game.overlays.remove(Overlays.upgrade.name);
   }
 }
