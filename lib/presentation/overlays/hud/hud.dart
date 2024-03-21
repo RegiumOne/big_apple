@@ -189,23 +189,6 @@ class Hud extends StatelessWidget {
                           game.overlays.add(Overlays.settings.name);
                         },
                       ),
-                      // const SizedBox(width: AppDimension.s8),
-                      // ButtonWidget(
-                      //   height: AppDimension.s42,
-                      //   width: AppDimension.s42,
-                      //   gradient: AppColors.blueGradientTopBottom,
-                      //   gradientPress: AppColors.darkBlueGradient,
-                      //   shadowColor: AppColors.colorRoyalBlue,
-                      //   iconSize: AppDimension.s24,
-                      //   childShadowColor: AppColors.colorMediumTransparencyBlack,
-                      //   childShadowOffset: const Offset(2, 2),
-                      //   iconPadding: const EdgeInsets.only(left: AppDimension.s2),
-                      //   iconSvg: Assets.icons.info,
-                      //   onPressed: () {
-                      //     game.overlays.remove(Overlays.hud.name);
-                      //     game.overlays.add(Overlays.information.name);
-                      //   },
-                      // ),
                       const SizedBox(height: AppDimension.s12),
                       ButtonWidget(
                         gap: AppDimension.s2,
@@ -219,7 +202,7 @@ class Hud extends StatelessWidget {
                         text: 'Storage',
                         onPressed: () {
                           game.overlays.remove(Overlays.hud.name);
-                          game.overlays.add(Overlays.port.name);
+                          game.overlays.add(Overlays.portImport.name);
                         },
                       ),
                       const SizedBox(height: AppDimension.s12),
@@ -264,7 +247,7 @@ class _PortButtonWidget extends StatelessWidget {
           text: 'Port',
           onPressed: () {
             game.overlays.remove(Overlays.hud.name);
-            game.overlays.add(Overlays.port.name);
+            game.overlays.add(Overlays.portStorage.name);
           },
         ),
         if (amount > 0)

@@ -9,6 +9,7 @@ import 'package:big_apple/presentation/bloc/auth/auth_bloc.dart';
 import 'package:big_apple/presentation/overlays/app_overlay.dart';
 import 'package:big_apple/presentation/widgets/background_center_widget.dart';
 import 'package:big_apple/presentation/widgets/button_widget.dart';
+import 'package:big_apple/presentation/widgets/text_widget.dart';
 import 'package:big_apple/resources/values/app_colors.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:flutter/material.dart';
@@ -215,7 +216,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Expanded(
                     flex: 142,
                     child: ButtonWidget.withText(
-                      onPressed: () {},
+                      onPressed: null,
                       text: 'Privacy policy',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.colorBronze,
@@ -227,7 +228,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Expanded(
                     flex: 160,
                     child: ButtonWidget.withText(
-                      onPressed: () {},
+                      onPressed: null,
                       text: 'Terms of Service',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.colorBronze,
@@ -239,7 +240,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Expanded(
                     flex: 94,
                     child: ButtonWidget.withText(
-                      onPressed: () {},
+                      onPressed: null,
                       text: 'Credits',
                       style: theme.textTheme.bodyLarge?.copyWith(
                         color: AppColors.colorBronze,
@@ -247,15 +248,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(width: AppDimension.s10),
+                  ButtonWidget.withColor(
+                    height: AppDimension.s38,
+                    width: AppDimension.s38,
+                    borderRadius: AppDimension.r10,
+                    color: AppColors.colorBrown,
+                    shadowColor: AppColors.colorDarkChocolate,
+                    iconSize: AppDimension.s24,
+                    iconSvg: Assets.icons.info,
+                    onPressed: () {
+                      widget.game.overlays.remove(Overlays.settings.name);
+                      widget.game.overlays.add(Overlays.information.name);
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: AppDimension.s8),
-              Text(
-                'Your ID is: 9999999999999',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppColors.colorTaupe,
-                  height: 1.16,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextWidget(
+                      'Your ID is: 9999999999999',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppColors.colorTaupe,
+                        height: 1.16,
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: TextWidget(
+                      'Delete account',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppColors.colorTaupe,
+                        height: 1.16,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
