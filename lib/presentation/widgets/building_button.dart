@@ -14,7 +14,7 @@ class BuildingButton extends StatefulWidget {
     required this.text,
   });
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Widget icon;
   final String text;
 
@@ -31,103 +31,109 @@ class _BuildingButtonState extends State<BuildingButton> {
     final borderRadiusResult = BorderRadius.circular(AppDimension.r10);
     final double bottomPadding = _isPressed ? 0 : AppDimension.s4;
     final double topPadding = _isPressed ? AppDimension.s4 : 0;
-    return SizedBox(
-      width: AppDimension.s64,
-      height: AppDimension.s64,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          AnimatedPositioned(
-            duration: AppDuration.defaultAnimationDuration,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            top: topPadding,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: const Border(
-                  left: BorderSide(
+    return IgnorePointer(
+      ignoring: widget.onPressed == null,
+      child: Opacity(
+        opacity: widget.onPressed == null ? 0.4 : 1,
+        child: SizedBox(
+          width: AppDimension.s64,
+          height: AppDimension.s64,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              AnimatedPositioned(
+                duration: AppDuration.defaultAnimationDuration,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                top: topPadding,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: const Border(
+                      left: BorderSide(
+                        color: AppColors.colorMediumTransparencyBlack,
+                        width: AppDimension.s2,
+                      ),
+                      right: BorderSide(
+                        color: AppColors.colorMediumTransparencyBlack,
+                        width: AppDimension.s2,
+                      ),
+                      top: BorderSide(
+                        color: AppColors.colorMediumTransparencyBlack,
+                        width: AppDimension.s2,
+                      ),
+                      bottom: BorderSide(
+                        color: AppColors.colorMediumTransparencyBlack,
+                        width: AppDimension.s6,
+                      ),
+                    ),
                     color: AppColors.colorMediumTransparencyBlack,
-                    width: AppDimension.s2,
-                  ),
-                  right: BorderSide(
-                    color: AppColors.colorMediumTransparencyBlack,
-                    width: AppDimension.s2,
-                  ),
-                  top: BorderSide(
-                    color: AppColors.colorMediumTransparencyBlack,
-                    width: AppDimension.s2,
-                  ),
-                  bottom: BorderSide(
-                    color: AppColors.colorMediumTransparencyBlack,
-                    width: AppDimension.s6,
+                    borderRadius: borderRadiusResult,
                   ),
                 ),
-                color: AppColors.colorMediumTransparencyBlack,
-                borderRadius: borderRadiusResult,
               ),
-            ),
-          ),
-          AnimatedPositioned(
-            duration: AppDuration.defaultAnimationDuration,
-            bottom: bottomPadding,
-            left: 0,
-            right: 0,
-            top: topPadding,
-            child: AnimatedContainer(
-              margin: const EdgeInsets.all(2),
-              duration: AppDuration.defaultAnimationDuration,
-              decoration: BoxDecoration(
-                // gradient: _isPressed ? AppColors.redGradient : AppColors.redGradient,
-                // color: _isPressed ? AppColors.colorMediumTransparencyBlack : AppColors.colorMediumTransparencyBlack,
-                borderRadius: BorderRadius.circular(AppDimension.r8),
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTapDown: (_) {
-                    setState(() {
-                      _isPressed = true;
-                    });
-                    AudioService.instance.playSound(AudioFile.mouseClick);
-                  },
-                  onTapUp: (_) {
-                    setState(() => _isPressed = false);
-                  },
-                  onTapCancel: () {
-                    setState(() => _isPressed = false);
-                  },
-                  borderRadius: borderRadiusResult,
-                  onTap: widget.onPressed,
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        widget.icon,
-                        const SizedBox(height: AppDimension.s4),
-                        TextWidget(
-                          widget.text,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            height: 1.2,
-                            color: Colors.white,
-                            shadows: [
-                              const BoxShadow(
-                                color: AppColors.colorMediumTransparencyBlack,
-                                offset: Offset(2, 2),
+              AnimatedPositioned(
+                duration: AppDuration.defaultAnimationDuration,
+                bottom: bottomPadding,
+                left: 0,
+                right: 0,
+                top: topPadding,
+                child: AnimatedContainer(
+                  margin: const EdgeInsets.all(2),
+                  duration: AppDuration.defaultAnimationDuration,
+                  decoration: BoxDecoration(
+                    // gradient: _isPressed ? AppColors.redGradient : AppColors.redGradient,
+                    // color: _isPressed ? AppColors.colorMediumTransparencyBlack : AppColors.colorMediumTransparencyBlack,
+                    borderRadius: BorderRadius.circular(AppDimension.r8),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTapDown: (_) {
+                        setState(() {
+                          _isPressed = true;
+                        });
+                        AudioService.instance.playSound(AudioFile.mouseClick);
+                      },
+                      onTapUp: (_) {
+                        setState(() => _isPressed = false);
+                      },
+                      onTapCancel: () {
+                        setState(() => _isPressed = false);
+                      },
+                      borderRadius: borderRadiusResult,
+                      onTap: widget.onPressed,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            widget.icon,
+                            const SizedBox(height: AppDimension.s4),
+                            TextWidget(
+                              widget.text,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                height: 1.2,
+                                color: Colors.white,
+                                shadows: [
+                                  const BoxShadow(
+                                    color: AppColors.colorMediumTransparencyBlack,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

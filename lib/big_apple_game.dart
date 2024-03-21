@@ -36,7 +36,6 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   MainWorld? level;
 
-
   StreamSubscription? _camSubscription;
 
   @override
@@ -124,6 +123,7 @@ class BigAppleGame extends CommonGame with ScaleDetector {
     } else if (audioFile == AudioFile.constructionSounds) {
       AudioService.instance.playConstructionMusic();
     }
+    gameBloc.add(const GameHudEvent.hideBuilding());
   }
 
   Future<void> _cacheImages() {

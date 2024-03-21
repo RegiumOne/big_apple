@@ -28,6 +28,7 @@ class AppDimension {
   static const double s50 = 50;
   static const double s52 = 52;
   static const double s54 = 54;
+  static const double s62 = 62;
   static const double s64 = 64;
   static const double s66 = 66;
   static const double s82 = 82;

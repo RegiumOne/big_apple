@@ -1,3 +1,4 @@
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 import 'package:big_apple/di/injector.dart';
 import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:big_apple/domain/services/building_service.dart';
@@ -50,170 +51,225 @@ class Hud extends StatelessWidget {
         bool buildingPreparing = state is BuildingPreparing;
 
         return SafeAreaWidget(
-          child: Stack(
-            children: [
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 150,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: AppDimension.s8,
-                          right: AppDimension.s20,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BlocBuilder<GameHudBloc, GameHudState>(
-                              builder: (context, state) {
-                                double level = state.gameStat.ecologyLevel;
-                                double currentLvlValue = level - level.floor();
-                                return LevelWidget(
+          child: BlocBuilder<GameHudBloc, GameHudState>(
+            builder: (context, hudState) {
+              double level = hudState.gameStat.ecologyLevel;
+              double currentLvlValue = level - level.floor();
+
+              bool buildingSelected = hudState.selectedBuilding != null;
+              final buildingCategory = hudState.selectedBuilding == null
+                  ? null
+                  : BuildingCategory.getCategoryFromBuildingType(hudState.selectedBuilding!.type);
+
+              bool isDisabledOtherButtons = buildingPreparing || buildingSelected;
+
+              final noIncome = hudState.selectedBuilding == null
+                  ? true
+                  : (hudState.selectedBuilding!.type.getIncomeByLevel(hudState.selectedBuilding!.level) > 0);
+              return Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 150,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              top: AppDimension.s8,
+                              right: AppDimension.s20,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                LevelWidget(
                                   maxLvlValue: 1,
                                   currentLvlValue: currentLvlValue,
                                   level: level.floor(),
-                                );
-                              },
+                                ),
+                                const SizedBox(height: AppDimension.s10),
+                                const EcologyLevelWidget(
+                                  level: 100,
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: AppDimension.s10),
-                            const EcologyLevelWidget(
-                              level: 100,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 482,
-                      child: Center(
-                        child: BlocBuilder<GameHudBloc, GameHudState>(
-                          builder: (context, state) => MainInfoWidget(gameStat: state.gameStat),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 150,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: AppDimension.s8,
-                          left: AppDimension.s22,
-                        ),
-                        child: BlocBuilder<GameHudBloc, GameHudState>(
-                          builder: (context, state) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ResourceWithProgressBarWidget(
-                                value: state.gameStat.gold,
-                                maxValue: state.gameStat.maxGold,
-                                icon: Assets.icons.coin,
-                              ),
-                              const SizedBox(height: AppDimension.s6),
-                              ResourceWithProgressBarWidget(
-                                value: state.gameStat.iron,
-                                maxValue: state.gameStat.maxIron,
-                                icon: Assets.icons.metal,
-                              ),
-                            ],
                           ),
                         ),
+                        Expanded(
+                          flex: 482,
+                          child: Center(
+                            child: MainInfoWidget(gameStat: hudState.gameStat),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 150,
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              top: AppDimension.s8,
+                              left: AppDimension.s22,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ResourceWithProgressBarWidget(
+                                  value: hudState.gameStat.gold,
+                                  maxValue: hudState.gameStat.maxGold,
+                                  icon: Assets.icons.coin,
+                                ),
+                                const SizedBox(height: AppDimension.s6),
+                                ResourceWithProgressBarWidget(
+                                  value: hudState.gameStat.iron,
+                                  maxValue: hudState.gameStat.maxIron,
+                                  icon: Assets.icons.metal,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (buildingSelected)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BuildingButton(
+                            icon: Assets.images.infoBlue.image(
+                              width: AppDimension.s30,
+                              height: AppDimension.s30,
+                            ),
+                            text: 'Info',
+                            onPressed: null,
+                          ),
+                          const SizedBox(width: AppDimension.s6),
+                          BuildingButton(
+                            icon: Assets.images.upgrade.image(
+                              width: AppDimension.s30,
+                              height: AppDimension.s30,
+                            ),
+                            text: 'Upgrade',
+                            onPressed: buildingCategory?.maxLevel == hudState.selectedBuilding?.level
+                                ? null
+                                : () {
+                                    game.overlays.remove(Overlays.hud.name);
+                                    game.overlays.add(Overlays.upgrade.name);
+                                  },
+                          ),
+                          const SizedBox(width: AppDimension.s6),
+                          if (buildingCategory != BuildingCategory.apartments &&
+                              buildingCategory != BuildingCategory.road)
+                            BuildingButton(
+                              icon: Assets.images.coinWithShadow.image(
+                                width: AppDimension.s30,
+                                height: AppDimension.s30,
+                              ),
+                              text: 'Collect',
+                              // TODO(Sasha071201): Add collect income
+                              onPressed: noIncome ? () {} : null,
+                            ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              if (buildingPreparing)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      BuildingButton(
-                        icon: Assets.icons.cancel.svg(),
-                        text: 'Cancel',
-                        onPressed: () {
-                          context.read<BuildingBloc>().add(CancelBuildingEvent(buildingEntity: state.buildingEntity));
-                        },
+                  if (buildingPreparing)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          BuildingButton(
+                            icon: Assets.icons.cancel.svg(),
+                            text: 'Cancel',
+                            onPressed: () {
+                              context
+                                  .read<BuildingBloc>()
+                                  .add(CancelBuildingEvent(buildingEntity: state.buildingEntity));
+                            },
+                          ),
+                          const SizedBox(width: AppDimension.s6),
+                          BuildingButton(
+                            icon: Assets.icons.checkmark.svg(),
+                            text: 'Build',
+                            onPressed: () {
+                              context
+                                  .read<BuildingBloc>()
+                                  .add(BuildBuildingEvent(buildingEntity: state.buildingEntity));
+                            },
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: AppDimension.s6),
-                      BuildingButton(
-                        icon: Assets.icons.checkmark.svg(),
-                        text: 'Build',
-                        onPressed: () {
-                          context.read<BuildingBloc>().add(BuildBuildingEvent(buildingEntity: state.buildingEntity));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              if (!buildingPreparing)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: ButtonWidget(
-                    borderRadius: AppDimension.r10,
-                    iconSvg: Assets.icons.store,
-                    childShadowColor: AppColors.colorMediumTransparencyBlack,
-                    text: 'Store',
-                    onPressed: () {
-                      game.overlays.remove(Overlays.hud.name);
-                      game.overlays.add(Overlays.shop.name);
-                    },
-                  ),
-                ),
-              if (!buildingPreparing)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ButtonWidget(
-                        height: AppDimension.s42,
-                        width: AppDimension.s42,
-                        gradient: AppColors.blueGradientTopBottom,
-                        gradientPress: AppColors.darkBlueGradient,
-                        shadowColor: AppColors.colorRoyalBlue,
-                        iconSize: AppDimension.s24,
-                        childShadowColor: AppColors.colorMediumTransparencyBlack,
-                        childShadowOffset: const Offset(2, 2),
-                        iconPadding: const EdgeInsets.only(left: AppDimension.s2),
-                        iconSvg: Assets.icons.settings,
-                        onPressed: () {
-                          game.overlays.remove(Overlays.hud.name);
-                          game.overlays.add(Overlays.settings.name);
-                        },
-                      ),
-                      const SizedBox(height: AppDimension.s12),
-                      ButtonWidget(
-                        gap: AppDimension.s2,
+                    ),
+                  if (!isDisabledOtherButtons)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: ButtonWidget(
                         borderRadius: AppDimension.r10,
-                        iconSvg: Assets.icons.storage,
-                        gradient: AppColors.blueGradientTopBottom,
-                        gradientPress: AppColors.darkBlueGradient,
-                        shadowColor: AppColors.colorRoyalBlue,
+                        iconSvg: Assets.icons.store,
                         childShadowColor: AppColors.colorMediumTransparencyBlack,
-                        childShadowOffset: const Offset(2, 2),
-                        text: 'Storage',
+                        text: 'Store',
                         onPressed: () {
                           game.overlays.remove(Overlays.hud.name);
-                          game.overlays.add(Overlays.portImport.name);
+                          game.overlays.add(Overlays.shop.name);
                         },
                       ),
-                      const SizedBox(height: AppDimension.s12),
-                      _PortButtonWidget(
-                        game: game,
-                        amount: 1,
+                    ),
+                  if (!isDisabledOtherButtons)
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ButtonWidget(
+                            height: AppDimension.s42,
+                            width: AppDimension.s42,
+                            gradient: AppColors.blueGradientTopBottom,
+                            gradientPress: AppColors.darkBlueGradient,
+                            shadowColor: AppColors.colorRoyalBlue,
+                            iconSize: AppDimension.s24,
+                            childShadowColor: AppColors.colorMediumTransparencyBlack,
+                            childShadowOffset: const Offset(2, 2),
+                            iconPadding: const EdgeInsets.only(left: AppDimension.s2),
+                            iconSvg: Assets.icons.settings,
+                            onPressed: () {
+                              game.overlays.remove(Overlays.hud.name);
+                              game.overlays.add(Overlays.settings.name);
+                            },
+                          ),
+                          const SizedBox(height: AppDimension.s12),
+                          ButtonWidget(
+                            gap: AppDimension.s2,
+                            borderRadius: AppDimension.r10,
+                            iconSvg: Assets.icons.storage,
+                            gradient: AppColors.blueGradientTopBottom,
+                            gradientPress: AppColors.darkBlueGradient,
+                            shadowColor: AppColors.colorRoyalBlue,
+                            childShadowColor: AppColors.colorMediumTransparencyBlack,
+                            childShadowOffset: const Offset(2, 2),
+                            text: 'Storage',
+                            onPressed: () {
+                              game.overlays.remove(Overlays.hud.name);
+                              game.overlays.add(Overlays.portImport.name);
+                            },
+                          ),
+                          const SizedBox(height: AppDimension.s12),
+                          _PortButtonWidget(
+                            game: game,
+                            amount: 1,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-            ],
+                    ),
+                ],
+              );
+            },
           ),
         );
       },

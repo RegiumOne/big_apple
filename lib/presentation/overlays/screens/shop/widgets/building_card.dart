@@ -37,7 +37,7 @@ class _BuildingCardWidgetState extends State<BuildingCardWidget> {
 
   @override
   void didUpdateWidget(covariant BuildingCardWidget oldWidget) {
-    if (_controller.state?.isFront == false) {
+    if (_controller.state?.isFront == false && widget.type != oldWidget.type) {
       _controller.flipcard();
     }
     super.didUpdateWidget(oldWidget);

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
@@ -18,9 +18,13 @@ import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:big_apple/domain/services/building_service.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
-import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
 import 'package:big_apple/resources/values/app_duration.dart';
+
+const double _markerHeight = 70;
+const double _markerWidth = _markerHeight - 10;
+const double _markerResourceSize = 32;
+const double _markerResourcePaddingTop = 7;
 
 /// A component that represents a small building in the game.
 /// It can be dragged and dropped to a new position.
@@ -46,9 +50,17 @@ class BuildingComponent extends SpriteComponent
 
   @override
   void onTapUp(TapUpEvent event) {
+    if (_isUnderConstruction || _isEditing) return;
     game.gameBloc.add(GameHudEvent.selectBuilding(building));
     AudioService.instance.playSound(AudioFile.mouseClick);
     super.onTapUp(event);
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    // TODO(Sasha071201): collect resources when you need
+    collectResources();
+    super.onTapDown(event);
   }
 
   BuildingEntity building;
@@ -61,7 +73,18 @@ class BuildingComponent extends SpriteComponent
   bool _isUnderConstruction = false;
   bool get isUnderConstruction => _isUnderConstruction;
 
-  Vector2? positionBeforeDrag;
+  bool _isMarkerEnabled = false;
+  double _markerAnimationAppearanceProgress = 0;
+  double _markerAnimationAppearanceTimer = 0;
+
+  double _markerOpacity = 1.0;
+  double _resourceOpacity = 1.0;
+  double _resourceOffsetY = 0.0;
+  bool _isCollectingResources = false;
+
+  double _animationCollectingTimer = 0.0;
+
+  Vector2? _positionBeforeDrag;
 
   void markAsBuild() {
     _isEditing = false;
@@ -82,6 +105,8 @@ class BuildingComponent extends SpriteComponent
 
   @override
   FutureOr<void> onLoad() async {
+    // TODO(Sasha071201): enable marker when you have enough resources
+    enableMarker();
     sprite = Sprite(game.images.fromCache(building.type.imageDone()));
 
     double newXPosition = (building.x / 128).round() * 128;
@@ -110,12 +135,35 @@ class BuildingComponent extends SpriteComponent
     if (_isUnderConstruction) {
       _construction(dt);
     }
+
+    if (_isMarkerEnabled && _markerAnimationAppearanceTimer < AppDuration.defaultAnimationSpeed) {
+      _markerAnimationAppearanceTimer += dt;
+      _markerAnimationAppearanceProgress =
+          (_markerAnimationAppearanceTimer / AppDuration.defaultAnimationSpeed).clamp(0.0, 1.0);
+    }
+
+    if (_isCollectingResources) {
+      _animationCollectingTimer += dt;
+
+      const animationDuration = AppDuration.collectAnimationSpeed;
+      if (_animationCollectingTimer <= animationDuration) {
+        _markerOpacity = 1.0 - (_animationCollectingTimer / (animationDuration / 2)).clamp(0.0, 1.0);
+        _resourceOpacity =
+            1.0 - ((_animationCollectingTimer - animationDuration / 2) / (animationDuration / 2)).clamp(0.0, 1.0);
+        _resourceOffsetY = -50.0 * (_animationCollectingTimer / (animationDuration / 2)).clamp(0.0, 1.0);
+      } else {
+        _isCollectingResources = false;
+        _markerOpacity = 1.0;
+        _resourceOpacity = 1.0;
+        _resourceOffsetY = 0.0;
+      }
+    }
   }
 
   @override
   void onDragStart(DragStartEvent event) {
     if (_isUnderConstruction) return;
-    positionBeforeDrag = position.clone();
+    _positionBeforeDrag = position.clone();
     super.onDragStart(event);
     _isEditing = true;
     _isDragging = true;
@@ -153,12 +201,12 @@ class BuildingComponent extends SpriteComponent
       priority = position.y.toInt() + 100;
       if (_isBuild) {
         zone?.changeAvailability(false);
-        ZoneComponent? previousZone = world.getZoneByVector2(positionBeforeDrag!);
+        ZoneComponent? previousZone = world.getZoneByVector2(_positionBeforeDrag!);
         previousZone?.changeAvailability(true);
         inject<BuildingService>().updateLocation(building.id, x, y);
       }
     } else {
-      position = positionBeforeDrag!;
+      position = _positionBeforeDrag!;
     }
   }
 
@@ -182,6 +230,30 @@ class BuildingComponent extends SpriteComponent
         position: Vector2(0, 0),
         size: Vector2(size.x, size.y),
         anchor: Anchor.topLeft,
+      );
+    }
+
+    if (_isMarkerEnabled) {
+      Paint markerPaint = Paint()..color = Colors.white.withOpacity(_markerOpacity);
+      Sprite(
+        game.images.fromCache(Assets.images.resourceMarker.asset()),
+      ).render(
+        canvas,
+        position: Vector2(size.x / 2, size.y / 8),
+        size: Vector2(_markerWidth, _markerHeight) * _markerAnimationAppearanceProgress,
+        anchor: Anchor.topCenter,
+        overridePaint: markerPaint,
+      );
+
+      Paint coinPaint = Paint()..color = Colors.white.withOpacity(_resourceOpacity);
+      Sprite(
+        game.images.fromCache(Assets.images.coin.asset()),
+      ).render(
+        canvas,
+        position: Vector2(size.x / 2, (size.y / 8) + _markerResourcePaddingTop + _resourceOffsetY),
+        size: Vector2(_markerResourceSize, _markerResourceSize) * _markerAnimationAppearanceProgress,
+        anchor: Anchor.topCenter,
+        overridePaint: coinPaint,
       );
     }
 
@@ -259,6 +331,25 @@ class BuildingComponent extends SpriteComponent
     }
 
     sprite = Sprite(game.images.fromCache(spritePath));
+  }
+
+  void enableMarker() {
+    _isMarkerEnabled = true;
+    _markerAnimationAppearanceProgress = 0;
+    _markerAnimationAppearanceTimer = 0;
+  }
+
+  void disableMarker() {
+    _isMarkerEnabled = true;
+    _markerAnimationAppearanceProgress = 0;
+    _markerAnimationAppearanceTimer = 0;
+  }
+
+  void collectResources() {
+    if (_isMarkerEnabled) {
+      _isCollectingResources = true;
+      _animationCollectingTimer = 0.0;
+    }
   }
 
   // ignore: unused_element
