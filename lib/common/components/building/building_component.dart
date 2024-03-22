@@ -1,21 +1,15 @@
 import 'dart:async';
-import 'package:big_apple/presentation/bloc/game_hud/game_hud_bloc.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 
 import 'package:big_apple/big_apple_game.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
-import 'package:big_apple/common/components/zone_component.dart';
 import 'package:big_apple/common/extensions/asset_gen_extension.dart';
 import 'package:big_apple/common/extensions/int_extension.dart';
-import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
-import 'package:big_apple/data/dto/enum/audio_file.dart';
-import 'package:big_apple/di/injector.dart';
 import 'package:big_apple/domain/entities/building_entity.dart';
-import 'package:big_apple/domain/services/building_service.dart';
 import 'package:big_apple/generated/assets.gen.dart';
 import 'package:big_apple/presentation/bloc/audio/audio_bloc.dart';
 import 'package:big_apple/resources/values/app_dimension.dart';
@@ -30,10 +24,8 @@ const double _markerResourcePaddingTop = 7;
 /// It can be dragged and dropped to a new position.
 /// It can be declined or approved.
 /// It can be under construction or not.
-class BuildingComponent extends SpriteComponent
-    with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld>, TapCallbacks, DragCallbacks {
+class BuildingComponent extends SpriteComponent with HasGameReference<BigAppleGame>, HasWorldReference<MainWorld> {
   BuildingComponent({
-    super.key,
     required this.building,
     super.anchor = Anchor.center,
     bool markAsBuild = false,
@@ -41,35 +33,13 @@ class BuildingComponent extends SpriteComponent
           priority: building.y.toInt() + (building.type == BuildingType.coalElectricStation ? 100 : 0),
         ) {
     id = building.id;
-    if (markAsBuild) {
-      _isEditing = false;
-      _isBuild = true;
-    }
     // debugMode = true;
   }
-
-  @override
-  void onTapUp(TapUpEvent event) {
-    if (_isUnderConstruction || _isEditing) return;
-    game.gameBloc.add(GameHudEvent.selectBuilding(building));
-    AudioService.instance.playSound(AudioFile.mouseClick);
-    super.onTapUp(event);
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    // TODO(Sasha071201): collect resources when you need
-    collectResources();
-    super.onTapDown(event);
-  }
-
   BuildingEntity building;
 
   late final int id;
   double _incomeTimer = 0;
-  bool _isDragging = false;
-  bool _isEditing = true;
-  bool _isBuild = false;
+
   bool _isUnderConstruction = false;
   bool get isUnderConstruction => _isUnderConstruction;
 
@@ -84,16 +54,8 @@ class BuildingComponent extends SpriteComponent
 
   double _animationCollectingTimer = 0.0;
 
-  Vector2? _positionBeforeDrag;
-
-  void markAsBuild() {
-    _isEditing = false;
-    _isBuild = true;
-  }
-
+  @mustCallSuper
   Future<Vector2> build() async {
-    _isEditing = false;
-    _isBuild = true;
     _isUnderConstruction = true;
     building = building.copyWith(
       constructionTimeLeft: building.type.getBuildingDurationInSecondsByLevel(building.level).toDouble(),
@@ -111,7 +73,7 @@ class BuildingComponent extends SpriteComponent
 
     double newXPosition = (building.x / 128).round() * 128;
     bool isOdd = (newXPosition / 128).round().isOdd;
-    double newYPosition = (building.y / 128).round() * 128 + (isOdd ? 0 : 64);
+    double newYPosition = (building.y / 128).round() * 128 + (isOdd ? 0 : -64);
     Vector2 newPosition = Vector2(newXPosition, newYPosition);
 
     if (building.type == BuildingType.coalElectricStation) {
@@ -160,80 +122,12 @@ class BuildingComponent extends SpriteComponent
     }
   }
 
-  @override
-  void onDragStart(DragStartEvent event) {
-    if (_isUnderConstruction) return;
-    _positionBeforeDrag = position.clone();
-    super.onDragStart(event);
-    _isEditing = true;
-    _isDragging = true;
-  }
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    if (_isUnderConstruction) return;
-    super.onDragUpdate(event);
-    if (_isDragging) {
-      position.add(event.localDelta);
-    }
-  }
-
-  @override
-  void onDragEnd(DragEndEvent event) {
-    if (_isUnderConstruction) return;
-    super.onDragEnd(event);
-    _isDragging = false;
-    _isEditing = !_isBuild;
-
-    double newXPosition = (position.x / 128).round() * 128;
-    bool isOdd = (newXPosition / 128).round().isOdd;
-    double newYPosition = (position.y / 128).round() * 128 + (isOdd ? 64 : 0) - 23;
-    Vector2 newPosition = Vector2(newXPosition, newYPosition);
-
-    ZoneComponent? zone = world.getZoneByVector2(newPosition);
-
-    if (zone?.isAvailable == true) {
-      if (building.type == BuildingType.road) {
-        position = newPosition + Vector2(0, 28);
-      } else {
-        position = newPosition - Vector2(0, 45);
-      }
-      priority = position.y.toInt() + 100;
-      if (_isBuild) {
-        zone?.changeAvailability(false);
-        ZoneComponent? previousZone = world.getZoneByVector2(_positionBeforeDrag!);
-        previousZone?.changeAvailability(true);
-        inject<BuildingService>().updateLocation(building.id, x, y);
-      }
-    } else {
-      position = _positionBeforeDrag!;
-    }
-  }
-
+  @mustCallSuper
   @override
   void render(Canvas canvas) {
     super.render(canvas);
 
-    if (_isEditing) {
-      Sprite(
-        game.images.fromCache(Assets.images.moveBuilding1x1.asset()),
-      ).render(
-        canvas,
-        position: Vector2(0, 0),
-        size: Vector2(size.x, size.y),
-        anchor: Anchor.topLeft,
-      );
-      Sprite(
-        game.images.fromCache(building.type.imageDone()),
-      ).render(
-        canvas,
-        position: Vector2(0, 0),
-        size: Vector2(size.x, size.y),
-        anchor: Anchor.topLeft,
-      );
-    }
-
-    if (_isMarkerEnabled) {
+    if (!_isMarkerEnabled) {
       Paint markerPaint = Paint()..color = Colors.white.withOpacity(_markerOpacity);
       Sprite(
         game.images.fromCache(Assets.images.resourceMarker.asset()),

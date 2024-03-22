@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:big_apple/common/components/building/draggable_building_component.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
@@ -62,13 +63,26 @@ class BigAppleGame extends CommonGame with ScaleDetector {
 
   @override
   void onScaleUpdate(ScaleUpdateInfo info) {
+    super.onScaleUpdate(info);
+    if (globalDraggableBuildingComponent != null) {
+      globalDraggableBuildingComponent?.onDragUpdate(info.delta.global);
+      return;
+    }
     if (info.pointerCount == 1) {
       cam?.onPanUpdate(info.delta.global);
     } else if (info.pointerCount == 2) {
       bool zoomIn = info.scale.global.x > 1.0;
       cam?.onScaleUpdate(zoomIn);
     }
-    super.onScaleUpdate(info);
+  }
+
+  @override
+  void onScaleEnd(ScaleEndInfo info) {
+    if (globalDraggableBuildingComponent != null) {
+      globalDraggableBuildingComponent?.onDragEnd();
+      return;
+    }
+    super.onScaleEnd(info);
   }
 
   @override

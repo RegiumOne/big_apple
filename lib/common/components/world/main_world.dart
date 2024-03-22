@@ -1,19 +1,19 @@
 import 'dart:async';
 
-import 'package:big_apple/common/components/port_component.dart';
-import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
-import 'package:big_apple/di/injector.dart';
-import 'package:big_apple/domain/entities/building_entity.dart';
-import 'package:big_apple/domain/services/game_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-import 'package:big_apple/common/components/building_component.dart';
+import 'package:big_apple/common/components/building/building_component.dart';
+import 'package:big_apple/common/components/port_component.dart';
 import 'package:big_apple/common/components/zone_component.dart';
+import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
 import 'package:big_apple/data/dto/building_info.dart';
 import 'package:big_apple/data/dto/enum/audio_file.dart';
+import 'package:big_apple/di/injector.dart';
+import 'package:big_apple/domain/entities/building_entity.dart';
+import 'package:big_apple/domain/services/game_service.dart';
 
 class MainWorld extends World {
   MainWorld({
