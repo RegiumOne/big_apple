@@ -1,8 +1,9 @@
 import 'dart:developer';
 
+import 'package:big_apple/common/components/building/draggable_building_component.dart';
+import 'package:big_apple/common/components/building/tappable_building_component.dart';
 import 'package:big_apple/common/services/audio_service.dart';
 import 'package:big_apple/data/datasources/local/database/building_type_dto.dart';
-import 'package:big_apple/common/components/building_component.dart';
 import 'package:big_apple/common/components/world/main_world.dart';
 import 'package:big_apple/domain/entities/building_entity.dart';
 import 'package:flame/components.dart';
@@ -31,9 +32,10 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
     if (!isAvailable || isWater) {
       log('There is no available space for a building');
     }
+
     isAvailable = false;
 
-    BuildingComponent buildingComponent = BuildingComponent(
+    TappableBuildingComponent buildingComponent = TappableBuildingComponent(
       building: buildingEntity,
       markAsBuild: true,
     );
@@ -57,7 +59,10 @@ class ZoneComponent extends PositionComponent with HasWorldReference<MainWorld> 
       type: type,
     );
 
-    BuildingComponent buildingComponent = BuildingComponent(building: buildingEntity);
+    DraggableBuildingComponent buildingComponent = DraggableBuildingComponent(
+      building: buildingEntity,
+      buildPreparation: true,
+    );
 
     await world.add(buildingComponent);
 
